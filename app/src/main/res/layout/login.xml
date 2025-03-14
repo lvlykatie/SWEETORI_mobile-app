@@ -89,7 +89,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="500dp" />
+        tools:layout_editor_absoluteY="489dp" />
 
     <ImageButton
         android:id="@+id/imageButton4"
@@ -98,7 +98,7 @@
         android:background="#00FFFFFF"
         app:srcCompat="@drawable/Login_With_Facebook_Button"
         tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="624dp" />
+        tools:layout_editor_absoluteY="600dp" />
 
     <ImageButton
         android:id="@+id/imageButton6"
@@ -107,6 +107,38 @@
         android:background="#00FFFFFF"
         app:srcCompat="@drawable/Login_With_Google_Button"
         tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="565dp" />
+        tools:layout_editor_absoluteY="542dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Forgot password?"
+        android:textColor="@color/color01"
+        android:textStyle="italic"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="657dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Haven't got an account?"
+        tools:layout_editor_absoluteX="95dp"
+        tools:layout_editor_absoluteY="681dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Register"
+        android:textColor="@color/color01"
+        android:textStyle="italic"
+        tools:layout_editor_absoluteX="245dp"
+        tools:layout_editor_absoluteY="680dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
