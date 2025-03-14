@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/forgetpass_curve"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="SWEETORI"
+        android:textColor="#000000"
+        android:textSize="64sp"
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="162dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Discover flawless beauty with us"
+        android:textColor="@color/color02"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="272dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Sign in to continued"
+        android:textSize="17sp"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="322dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="356dp"
+        android:layout_height="38dp"
+        android:background="@drawable/editText_bg"
+        android:clickable="true"
+        android:ems="10"
+        android:fontFamily="@font/poppins"
+        android:gravity="center_vertical"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:text="Your password"
+        android:textColor="#9098B1"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="432dp" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="356dp"
+        android:layout_height="38dp"
+        android:background="@drawable/editText_bg"
+        android:clickable="true"
+        android:ems="10"
+        android:fontFamily="@font/poppins"
+        android:gravity="center_vertical"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:text="Your email"
+        android:textColor="#9098B1"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="378dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:background="@drawable/sign_button_bg"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Sign In"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        tools:layout_editor_absoluteX="130dp"
+        tools:layout_editor_absoluteY="500dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/Login_With_Facebook_Button"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="624dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/Login_With_Google_Button"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="565dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
