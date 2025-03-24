@@ -32,7 +32,7 @@
                         android:id="@+id/imageView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/header"
+                        app:srcCompat="@drawable/Header"
                         tools:ignore="MissingConstraints"
                         tools:layout_editor_absoluteX="0dp"
                         tools:layout_editor_absoluteY="-17dp" />
@@ -41,7 +41,7 @@
                         android:id="@+id/imageView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/searching_bar"
+                        app:srcCompat="@drawable/Searching_bar"
                         tools:ignore="MissingConstraints"
                         tools:layout_editor_absoluteX="16dp"
                         tools:layout_editor_absoluteY="53dp" />
