@@ -77,7 +77,32 @@
                         tools:layout_editor_absoluteY="53dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+
+                    <TextView
+                    android:id="@+id/txt_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Filter"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:layout_marginEnd="8dp" />
+
+                    <ImageButton
+                    android:id="@+id/imgbtn_filter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="#00FFFFFF"
+                    app:srcCompat="@drawable/filter" />
+                </LinearLayout>
             </LinearLayout>
+
         </ScrollView>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -51,7 +51,7 @@
         android:id="@+id/editTextTextPassword"
         android:layout_width="356dp"
         android:layout_height="38dp"
-        android:background="@drawable/editText_bg"
+        android:background="@drawable/edit_text_bg"
         android:clickable="true"
         android:ems="10"
         android:fontFamily="@font/poppins"
@@ -67,7 +67,7 @@
         android:id="@+id/editTextText2"
         android:layout_width="356dp"
         android:layout_height="38dp"
-        android:background="@drawable/editText_bg"
+        android:background="@drawable/edit_text_bg"
         android:clickable="true"
         android:ems="10"
         android:fontFamily="@font/poppins"
@@ -97,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        app:srcCompat="@drawable/Login_With_Facebook_Button"
+        app:srcCompat="@drawable/login_with_facebook_button"
         tools:layout_editor_absoluteX="46dp"
         tools:layout_editor_absoluteY="600dp" />
 
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        app:srcCompat="@drawable/Login_With_Google_Button"
+        app:srcCompat="@drawable/login_with_google_button"
         tools:layout_editor_absoluteX="46dp"
         tools:layout_editor_absoluteY="542dp" />
 

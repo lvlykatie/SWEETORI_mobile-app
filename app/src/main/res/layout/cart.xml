@@ -77,6 +77,60 @@
                         tools:layout_editor_absoluteY="53dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Danh sách sản phẩm -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_above="@id/layoutTotal"
+                    android:layout_alignParentTop="true"
+                    android:padding="8dp"/>
+
+                <!-- Thanh tổng tiền cố định -->
+                <LinearLayout
+                    android:id="@+id/layoutTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@android:color/white"
+                    android:padding="16dp"
+                    android:elevation="8dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"> <!-- Bỏ gravity space-between -->
+
+                        <TextView
+                            android:id="@+id/txtTotalQuantity"
+                            android:text="Total quantity: 0"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/> <!-- Thêm weight -->
+
+                        <TextView
+                            android:id="@+id/txtTotalPrice"
+                            android:text="Total: 0 VND"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/imgbtn_buynow_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"
+                        app:srcCompat="@drawable/buynow_cart" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

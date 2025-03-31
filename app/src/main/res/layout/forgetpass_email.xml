@@ -42,7 +42,7 @@
         android:id="@+id/editTextText9"
         android:layout_width="356dp"
         android:layout_height="38dp"
-        android:background="@drawable/editText_bg"
+        android:background="@drawable/edit_text_bg"
         android:clickable="true"
         android:ems="10"
         android:fontFamily="@font/poppins"
