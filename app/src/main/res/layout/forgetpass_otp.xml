@@ -94,7 +94,7 @@
         android:id="@+id/editTextNumber"
         android:layout_width="177dp"
         android:layout_height="43dp"
-        android:background="@drawable/editText_bg"
+        android:background="@drawable/edit_text_bg"
         android:ems="10"
         android:fontFamily="@font/poppins"
         android:inputType="number"
