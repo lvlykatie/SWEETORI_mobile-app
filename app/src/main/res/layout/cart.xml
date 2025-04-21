@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/header"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="-17dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/searching_bar"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="53dp" />
+
+                    <EditText
+                        android:id="@+id/editTextText3"
+                        android:layout_width="207dp"
+                        android:layout_height="27dp"
+                        android:ems="10"
+                        android:inputType="text"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="51dp"
+                        tools:layout_editor_absoluteY="55dp" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        app:srcCompat="@drawable/chat_icon"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="306dp"
+                        tools:layout_editor_absoluteY="55dp" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        app:srcCompat="@drawable/more_icon"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="361dp"
+                        tools:layout_editor_absoluteY="53dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Danh sách sản phẩm -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_above="@id/layoutTotal"
+                    android:layout_alignParentTop="true"
+                    android:padding="8dp"/>
+
+                <!-- Thanh tổng tiền cố định -->
+                <LinearLayout
+                    android:id="@+id/layoutTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="@android:color/white"
+                    android:padding="16dp"
+                    android:elevation="8dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"> <!-- Bỏ gravity space-between -->
+
+                        <TextView
+                            android:id="@+id/txtTotalQuantity"
+                            android:text="Total quantity: 0"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/> <!-- Thêm weight -->
+
+                        <TextView
+                            android:id="@+id/txtTotalPrice"
+                            android:text="Total: 0 VND"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/imgbtn_buynow_cart"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"
+                        app:srcCompat="@drawable/buynow_cart" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+                app:backgroundTint="@color/white"
+
+                app:fabCradleMargin="8dp"
+                app:fabCradleRoundedCornerRadius="50dp"
+                app:fabCradleVerticalOffset="6dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView14"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/cart_icon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView13"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/voucher_icon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/imageView12"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/home_icon" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView16"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/notification" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView17"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/account_icon" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_icon"
+                app:backgroundTint="@color/color02"
+                app:layout_anchor="@id/appBar"
+                app:maxImageSize="35dp"
+                app:tint="@color/white">
+
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
