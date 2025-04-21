@@ -1,156 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homepage"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/header"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-18dp" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:cropToPadding="false"
-        app:srcCompat="@drawable/header"
-        tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:id="@+id/header1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="27dp"
+            android:layout_marginHorizontal="1dp"
+            android:elevation="4dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/header1Content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginHorizontal="24dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/uit"
+                    android:clickable="true"
+                    android:background="@drawable/circle_background"
+                    android:scaleType="centerCrop"
+                    android:clipToOutline="true" />
+                <LinearLayout
+                    android:id="@+id/welcomeText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="12dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:text="Hello, Lisa"
+                        />
+                    <TextView
+                        android:id="@+id/tvWelcomeText"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:text="How are you today?"
+                        />
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/chatbot"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:src="@drawable/chat_icon"
+                    android:scaleType="fitXY"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@drawable/search_view_background"
+        android:focusable="true"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/constraintHeader"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="120dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:backgroundTint="@color/white"
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+        android:layout_gravity="bottom"
+        android:id="@+id/appBar"
+
+        app:fabCradleMargin="8dp"
+        app:fabCradleRoundedCornerRadius="50dp"
+        app:fabCradleVerticalOffset="6dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:backgroundTint="@color/white"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            android:layout_gravity="bottom"
-            android:id="@+id/appBar"
-
-            app:fabCradleMargin="8dp"
-            app:fabCradleRoundedCornerRadius="50dp"
-            app:fabCradleVerticalOffset="6dp">
-
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/cart_icon" />
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:gravity="center">
 
-                    <ImageView
-                        android:id="@+id/imageView14"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/cart_icon" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView13"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/voucher_icon" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/imageView12"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/home_icon" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView16"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/notification" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView17"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/account_icon" />
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/voucher_icon" />
             </LinearLayout>
-        </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/home_icon"
-            app:backgroundTint="@color/color02"
-            app:layout_anchor="@id/appBar"
-            app:maxImageSize="35dp"
-            app:tint="@color/white">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:visibility="visible"/>
 
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/notification" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/account_icon" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/home_icon"
+        app:backgroundTint="@color/color02"
+        app:layout_anchor="@id/appBar"
+        app:maxImageSize="35dp"
+        app:tint="@color/white">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,82 +4,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/product_detail">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/header"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-18dp" />
+
+        <LinearLayout
+            android:id="@+id/header1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="27dp"
+            android:layout_marginHorizontal="1dp"
+            android:elevation="4dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/header1Content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginHorizontal="24dp"
+                android:orientation="horizontal">
+                <SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="300dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/search_view_background"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:layout_marginEnd="20dp" />
+                <ImageView
+                    android:id="@+id/chatbot"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:src="@drawable/chat_icon"
+                    android:scaleType="fitXY"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- ScrollView chứa toàn bộ nội dung chính -->
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Header với search bar -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/header"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="-17dp" />
-
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/searching_bar"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="16dp"
-                    tools:layout_editor_absoluteY="53dp" />
-
-                <EditText
-                    android:id="@+id/editTextText3"
-                    android:layout_width="207dp"
-                    android:layout_height="27dp"
-                    android:ems="10"
-                    android:inputType="text"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="51dp"
-                    tools:layout_editor_absoluteY="55dp" />
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00FFFFFF"
-                    app:srcCompat="@drawable/chat_icon"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="306dp"
-                    tools:layout_editor_absoluteY="55dp" />
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#00FFFFFF"
-                    app:srcCompat="@drawable/more_icon"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="361dp"
-                    tools:layout_editor_absoluteY="53dp" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/constraintHeader">
 
             <!-- Nội dung chi tiết sản phẩm -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <!-- Ảnh sản phẩm -->
                 <ImageView
@@ -475,7 +475,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/notification" />
+                        app:srcCompat="@drawable/notification_icon" />
                 </LinearLayout>
 
                 <LinearLayout
