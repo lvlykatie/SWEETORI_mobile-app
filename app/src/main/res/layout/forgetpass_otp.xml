@@ -3,103 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/forgetpass_otp">
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/signup_curve"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="H,16:7"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitle" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:text="SWEETORI"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_bold"
+        app:layout_constraintTop_toBottomOf="@id/imageViewTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+    <TextView
+        android:id="@+id/textViewSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create new password"
+        android:textSize="16sp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Resend"
-        android:textColor="@color/color01"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteX="225dp"
-        tools:layout_editor_absoluteY="484dp" />
-
+        android:textColor="@color/color02"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/textViewSlogan1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Didn't get OTP?"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="484dp" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Change email"
-        android:textColor="@color/color01"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteX="153dp"
-        tools:layout_editor_absoluteY="634dp" />
+        android:text="Enter the verification code sent to your email"
+        android:textSize="10sp"
+        android:fontFamily="@font/poppins_thin"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewSlogan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+    <EditText
+        android:id="@+id/editTextOTPCode"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:hint="OTP"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="6"
+        android:background="@drawable/edit_text_bg"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textColorHint="#9098B1"
+        app:layout_constraintTop_toBottomOf="@id/textViewSlogan1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/btnConfirm"
         android:layout_width="150dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/sign_button_bg"
-        android:fontFamily="@font/poppins_semibold"
         android:text="Confirm"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="425dp" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-35dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/signup_curve" />
-
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="SWEETORI"
-        android:textColor="#000000"
-        android:textSize="64sp"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="187dp" />
-
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Create new password"
-        android:textColor="@color/color02"
-        android:textSize="22sp"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="271dp" />
-
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Enter the verification code sent to you."
         android:textSize="17sp"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="309dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextOTPCode" />
+    <LinearLayout
+        android:id="@+id/fgpassOTPLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/btnConfirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+        <TextView
+            android:id="@+id/didnotReceive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Didn't receive OTP code?"
+            android:textSize="10sp"
+            android:textColor="#9098B1"
+            android:fontFamily="@font/poppins_semibold" />
 
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="177dp"
-        android:layout_height="43dp"
-        android:background="@drawable/edit_text_bg"
-        android:ems="10"
-        android:fontFamily="@font/poppins"
-        android:inputType="number"
-        android:hint="OTP"
-        android:textAlignment="center"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="359dp" />
+        <TextView
+            android:id="@+id/tvResend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:text=" Resend"
+            android:textColor="@color/color01"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

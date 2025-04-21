@@ -3,95 +3,123 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/forgetpass_email">
+
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/signup_curve"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="H,16:7"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitle" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already have an account?"
-        tools:layout_editor_absoluteX="94dp"
-        tools:layout_editor_absoluteY="659dp" />
-
+        android:text="SWEETORI"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_bold"
+        app:layout_constraintTop_toBottomOf="@id/imageViewTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/textViewSlogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:text="Create new password"
+        android:textSize="16sp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Sign In"
-        android:textColor="@color/color01"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteX="258dp"
-        tools:layout_editor_absoluteY="659dp" />
-
+        android:textColor="@color/color02"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+    <TextView
+        android:id="@+id/textViewSlogan1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your email to receive OTP"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_thin"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewSlogan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+    <EditText
+        android:id="@+id/editTextOTPEmail"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:hint="Email"
+        android:background="@drawable/edit_text_bg"
+        android:paddingStart="12dp"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textColorHint="#9098B1"
+        app:layout_constraintTop_toBottomOf="@id/textViewSlogan1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="40dp" />
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnSendOTP"
         android:layout_width="150dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/sign_button_bg"
-        android:fontFamily="@font/poppins_semibold"
         android:text="Send OTP"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="447dp" />
-
-    <EditText
-        android:id="@+id/editTextText9"
-        android:layout_width="356dp"
-        android:layout_height="38dp"
-        android:background="@drawable/edit_text_bg"
-        android:clickable="true"
-        android:ems="10"
-        android:fontFamily="@font/poppins"
-        android:gravity="center_vertical"
-        android:inputType="text"
-        android:paddingLeft="10dp"
-        android:text="Your email"
-        android:textColor="#9098B1"
-        tools:layout_editor_absoluteX="27dp"
-        tools:layout_editor_absoluteY="372dp" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Create new password"
-        android:textColor="@color/color02"
-        android:textSize="22sp"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="259dp" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Enter your email to get OTP"
         android:textSize="17sp"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="309dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextOTPEmail" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/fgpassEmailLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/signup_curve"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-35dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/btnSendOTP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+        <TextView
+            android:id="@+id/haveAnAcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?"
+            android:textSize="10sp"
+            android:textColor="#9098B1"
+            android:fontFamily="@font/poppins_semibold" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="SWEETORI"
-        android:textColor="#000000"
-        android:textSize="64sp"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="162dp" />
+        <TextView
+            android:id="@+id/tvSignInNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:text=" Sign in now"
+            android:textColor="@color/color01"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
