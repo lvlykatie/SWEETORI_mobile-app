@@ -103,7 +103,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/footerLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -111,7 +111,7 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:backgroundTint="@color/white"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:layout_gravity="bottom"
@@ -136,6 +136,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/cart_icon" />
                 </LinearLayout>
 
@@ -151,6 +152,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/voucher_icon" />
                 </LinearLayout>
 
@@ -159,14 +161,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:orientation="vertical"
-                    android:visibility="visible">
-
+                    android:visibility="invisible">
                     <ImageView
                         android:id="@+id/imageView12"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/home_icon" />
+                        app:srcCompat="@drawable/home_icon"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -181,6 +183,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/notification_icon" />
                 </LinearLayout>
 
@@ -196,6 +199,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/account_icon" />
                 </LinearLayout>
             </LinearLayout>
@@ -204,10 +208,11 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:src="@drawable/home_icon"
             app:backgroundTint="@color/color02"
-            app:layout_anchor="@id/appBar"
             app:fabCustomSize="53dp"
+            app:layout_anchor="@id/appBar"
             app:maxImageSize="35dp"
             app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

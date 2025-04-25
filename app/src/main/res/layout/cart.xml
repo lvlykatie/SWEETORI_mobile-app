@@ -136,6 +136,8 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
+                        android:tint="@color/color01"
                         app:srcCompat="@drawable/cart_icon" />
                 </LinearLayout>
 
@@ -151,6 +153,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/voucher_icon" />
                 </LinearLayout>
 
@@ -180,6 +183,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/notification_icon" />
                 </LinearLayout>
 
@@ -195,6 +199,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
+                        android:clickable="true"
                         app:srcCompat="@drawable/account_icon" />
                 </LinearLayout>
             </LinearLayout>
@@ -203,10 +208,11 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:src="@drawable/home_icon"
             app:backgroundTint="@color/color02"
-            app:layout_anchor="@id/appBar"
             app:fabCustomSize="53dp"
+            app:layout_anchor="@id/appBar"
             app:maxImageSize="35dp"
             app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

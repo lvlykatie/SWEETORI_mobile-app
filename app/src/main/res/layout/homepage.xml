@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homepage"
@@ -10,190 +10,236 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/header"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="-18dp" />
-
         <LinearLayout
             android:id="@+id/header1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/header"
+            android:orientation="vertical"
             android:gravity="center_vertical"
-            android:layout_marginBottom="27dp"
-            android:layout_marginHorizontal="1dp"
             android:elevation="4dp"
-            android:orientation="vertical">
+            android:paddingBottom="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
             <LinearLayout
                 android:id="@+id/header1Content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginHorizontal="24dp"
-                android:orientation="horizontal">
+                android:paddingHorizontal="24dp">
+
                 <ImageView
                     android:id="@+id/avatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/uit"
-                    android:clickable="true"
                     android:background="@drawable/circle_background"
                     android:scaleType="centerCrop"
-                    android:clipToOutline="true" />
+                    android:clipToOutline="true"
+                    android:clickable="true" />
+
                 <LinearLayout
                     android:id="@+id/welcomeText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="12dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginEnd="12dp">
+
                     <TextView
                         android:id="@+id/tvUserName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Hello, Lisa"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
-                        android:fontFamily="@font/poppins_bold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:text="Hello, Lisa"
-                        />
+                        android:fontFamily="@font/poppins_bold" />
+
                     <TextView
                         android:id="@+id/tvWelcomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="How are you today?"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:text="How are you today?"
-                        />
+                        android:fontFamily="@font/poppins_semibold" />
+
                 </LinearLayout>
+
                 <ImageView
                     android:id="@+id/chatbot"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:clickable="true"
                     android:src="@drawable/chat_icon"
                     android:scaleType="fitXY"
-                    />
+                    android:clickable="true" />
+
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Thanh tìm kiếm -->
+        <LinearLayout
+            android:id="@+id/searchContainer"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/search_view_background"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/header1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/searchInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search ..."
+                android:background="@null"
+                android:textColor="#6C6C6C"
+                android:textSize="12sp"
+                android:padding="0dp"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/search"
+                android:scaleType="fitCenter"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <SearchView
-        android:id="@+id/searchView"
+    <!-- FOOTER -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/footerLayout"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@drawable/search_view_background"
-        android:focusable="true"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/constraintHeader"
+        android:layout_height="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:backgroundTint="@color/white"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:layout_gravity="bottom"
+            app:fabCradleMargin="8dp"
+            app:fabCradleRoundedCornerRadius="50dp"
+            app:fabCradleVerticalOffset="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView14"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/cart_icon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/voucher_icon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/notification_icon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imageView17"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/account_icon" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.bottomappbar.BottomAppBar>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/home_icon"
+            app:backgroundTint="@color/color02"
+            app:layout_anchor="@id/appBar"
+            app:fabCustomSize="53dp"
+            app:maxImageSize="35dp"
+            app:tint="@color/white" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:paddingTop="12dp"
+        app:layout_constraintBottom_toTopOf="@id/footerLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="120dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp" />
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:backgroundTint="@color/white"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-        android:layout_gravity="bottom"
-        android:id="@+id/appBar"
-
-        app:fabCradleMargin="8dp"
-        app:fabCradleRoundedCornerRadius="50dp"
-        app:fabCradleVerticalOffset="6dp">
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintHeader"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:orientation="vertical"
-                android:gravity="center">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="12dp">
 
-                <ImageView
-                    android:id="@+id/imageView14"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/cart_icon" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imageView13"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/voucher_icon" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:orientation="vertical"
-                android:visibility="visible"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imageView16"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/notification" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imageView17"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/account_icon" />
-            </LinearLayout>
+            <!-- Your main content goes here -->
         </LinearLayout>
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/home_icon"
-        app:backgroundTint="@color/color02"
-        app:layout_anchor="@id/appBar"
-        app:maxImageSize="35dp"
-        app:tint="@color/white">
-
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
