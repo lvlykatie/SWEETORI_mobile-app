@@ -9,7 +9,7 @@
 
 
     <Button
-        android:id="@+id/btn_goshopping"
+        android:id="@+id/btnGoShopping"
         android:layout_width="150dp"
         android:layout_height="36dp"
         android:background="@drawable/sign_button_bg"
