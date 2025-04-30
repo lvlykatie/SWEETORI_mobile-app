@@ -283,7 +283,25 @@
                 android:id="@+id/tabContent"
                 android:layout_width="match_parent"
                 android:layout_height="490dp"
-                android:minHeight="400dp" />
+                android:minHeight="400dp" >
+                <LinearLayout
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:srcCompat="@drawable/logout"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Log out"
+                        android:textColor="@color/color02"
+                        android:fontFamily="@font/poppins_semibold"/>
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
