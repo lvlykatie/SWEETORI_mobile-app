@@ -243,25 +243,27 @@
                     app:layout_constraintTop_toBottomOf="@+id/constraintHeader"
                     android:orientation="horizontal">
 
-                <TextView
+                <Button
                     android:id="@+id/tabPersonal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Personal"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@drawable/tab_text_selector"
                     android:background="@drawable/tab_selector_personal"
                     android:clickable="true"
                     android:fontFamily="@font/poppins_semibold"/>
 
-                <TextView
+                <Button
                     android:id="@+id/tabDiscount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Discount"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@drawable/tab_text_selector"
                     android:background="@drawable/tab_selector_discount"
                     android:clickable="true"

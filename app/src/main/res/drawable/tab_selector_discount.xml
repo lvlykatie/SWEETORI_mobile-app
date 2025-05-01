@@ -2,9 +2,9 @@
     <item android:state_selected="true">
         <shape android:shape="rectangle">
             <corners
-                android:topRightRadius="24dp"
-                android:bottomRightRadius="24dp"/>
-            <solid android:color="#E23C64"/>
+                android:topRightRadius="18dp"
+                android:bottomRightRadius="18dp"/>
+            <solid android:color="@color/color02"/>
         </shape>
     </item>
 </selector>

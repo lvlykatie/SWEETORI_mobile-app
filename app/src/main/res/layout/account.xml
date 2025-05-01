@@ -217,6 +217,7 @@
             app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
@@ -236,72 +237,55 @@
             <!-- Custom Tab Layout -->
             <LinearLayout
                 android:id="@+id/tabLayout"
-                android:layout_width="320dp"
-                android:layout_height="35dp"
+                android:layout_width="330dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/tab_background"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tabGenaral"
-                    android:layout_width="0dp"
+                <Button
+                    android:id="@+id/tabGeneral"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Genaral"
+                    android:text="General"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@drawable/tab_text_selector"
                     android:background="@drawable/tab_selector_personal"
                     android:clickable="true"
                     android:fontFamily="@font/poppins_semibold" />
 
-                <TextView
-                    android:id="@+id/tabPuchase"
-                    android:layout_width="0dp"
+                <Button
+                    android:id="@+id/tabPurchase"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Puchase order"
+                    android:text="Purchase order"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@drawable/tab_text_selector"
                     android:background="@drawable/tab_selector_discount"
                     android:clickable="true"
                     android:fontFamily="@font/poppins_semibold" />
-                <TextView
+                <Button
                     android:id="@+id/tabSupport"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Support"
                     android:gravity="center"
+                    android:textAllCaps="false"
                     android:textColor="@drawable/tab_text_selector"
                     android:background="@drawable/tab_selector_discount"
                     android:clickable="true"
                     android:fontFamily="@font/poppins_semibold" />
             </LinearLayout>
 
-            <!-- Tab Content (wrap_content để không chiếm hết màn hình) -->
             <FrameLayout
                 android:id="@+id/tabContent"
                 android:layout_width="match_parent"
-                android:layout_height="490dp"
-                android:minHeight="400dp" >
-                <LinearLayout
-                    android:id="@+id/btnLogOut"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:srcCompat="@drawable/logout"
-                        android:gravity="center"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Log out"
-                        android:textColor="@color/color02"
-                        android:fontFamily="@font/poppins_semibold"/>
-                </LinearLayout>
+                android:layout_height="match_parent">
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
