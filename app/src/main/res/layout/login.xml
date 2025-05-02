@@ -47,10 +47,10 @@
         android:layout_marginTop="4dp" />
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editTextUsername"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:hint="Email"
+        android:hint="Username"
         android:background="@drawable/edit_text_bg"
         android:paddingStart="12dp"
         android:imeOptions="actionDone"
@@ -76,7 +76,7 @@
         android:textColor="#000"
         android:textColorHint="#9098B1"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@id/editTextUsername"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"
