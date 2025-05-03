@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class SharedPref {
     private static final String PREF_NAME = "SweetoriPrefs";
@@ -14,6 +15,7 @@ public class SharedPref {
         editor.putString(KEY_ACCESS_TOKEN, accessToken);
         editor.putString(KEY_REFRESH_TOKEN, refreshToken);
         editor.apply();
+        Log.d("TOKEN", "Tokens saved: AccessToken=" + accessToken + ", RefreshToken=" + refreshToken);
     }
 
     public static String getAccessToken(Context context) {

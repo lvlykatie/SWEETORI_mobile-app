@@ -58,50 +58,6 @@ public class AccountActivity extends AppCompatActivity {
             highlightTab(btnGeneral);
             showTab(R.layout.tab_general);
 
-            btnLogOut = findViewById(R.id.btnLogOut);
-
-            //Lắng nghe sự kiện click
-            btnLogOut.setOnClickListener( v1 -> {
-                String accessToken = SharedPref.getAccessToken(AccountActivity.this);
-
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .addInterceptor(chain -> {
-                            Request request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + accessToken)
-                                    .build();
-                            return chain.proceed(request);
-                        }).build();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://spring-shop.onrender.com/auth/")
-                        .client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                AuthFetching authFetching = retrofit.create(AuthFetching.class);
-
-                authFetching.logout().enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-
-                        SharedPref.clearTokens(AccountActivity.this);
-
-                        Intent loginIntent = new Intent(AccountActivity.this, SignInActivity.class);
-                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // clear back stack
-                        startActivity(loginIntent);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-//                        // Có thể hiển thị lỗi, nhưng vẫn nên xoá token
-//                        SharedPref.clearTokens(HomepageActivity.this);
-//                        Intent loginIntent = new Intent(HomepageActivity.this, SignInActivity.class);
-//                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        startActivity(loginIntent);
-                    }
-                });
-            });
-
         });
 
         btnPurchase.setOnClickListener(v -> {
@@ -118,8 +74,44 @@ public class AccountActivity extends AppCompatActivity {
 
         //Lắng nghe sự kiện click
         btnLogOut.setOnClickListener(v -> {
-            Intent logout = new Intent(AccountActivity.this, SignInActivity.class);
-            startActivity(logout);
+            String accessToken = SharedPref.getAccessToken(AccountActivity.this);
+
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(chain -> {
+                        Request request = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " + accessToken)
+                                .build();
+                        return chain.proceed(request);
+                    }).build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://spring-shop.onrender.com/auth/")
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            AuthFetching authFetching = retrofit.create(AuthFetching.class);
+
+            authFetching.logout().enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    SharedPref.clearTokens(AccountActivity.this);
+
+                    Intent loginIntent = new Intent(AccountActivity.this, SignInActivity.class);
+                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // clear back stack
+                    startActivity(loginIntent);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+//                        // Có thể hiển thị lỗi, nhưng vẫn nên xoá token
+//                        SharedPref.clearTokens(HomepageActivity.this);
+//                        Intent loginIntent = new Intent(HomepageActivity.this, SignInActivity.class);
+//                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        startActivity(loginIntent);
+                }
+            });
         });
     }
 
