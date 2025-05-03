@@ -78,7 +78,10 @@ public class SignInActivity extends AppCompatActivity {
                         // Xử lý khi đăng nhập thành công
                         APIResponse<ResLoginDTO> apiResponse = response.body();
                         ResLoginDTO resLoginDTO = apiResponse.getData();
-                        Log.d("LOGIN", resLoginDTO.getAccess_token());
+
+                        SharedPref.saveTokens(SignInActivity.this,
+                                resLoginDTO.getAccess_token(),
+                                resLoginDTO.getRefresh_token());
 
                         Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
                         // Chuyển đến ShoppingActivity
