@@ -3,9 +3,9 @@ package com.example.sweetori.dto.response;
 import com.google.gson.annotations.SerializedName;
 
 public class ResLoginDTO {
-    @SerializedName("accessToken")
+    @SerializedName("access_token")
     private String access_token;
-    @SerializedName("refreshToken")
+    @SerializedName("refresh_token")
     private String refresh_token;
     @SerializedName("userLogin")
     private UserLogin userLogin;

@@ -75,18 +75,28 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        // Xử lý khi đăng nhập thành công
-                        APIResponse<ResLoginDTO> apiResponse = response.body();
-                        ResLoginDTO resLoginDTO = apiResponse.getData();
-                        Log.d("LOGIN", resLoginDTO.getAccess_token());
+                        // Lấy dữ liệu từ response
+                        ResLoginDTO resLoginDTO = response.body().getData();
 
-                        Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
-                        // Chuyển đến ShoppingActivity
-                        Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
-                        startActivity(homepage);
+                        if (resLoginDTO != null) {
+                            // Lưu token
+                            SharedPref.saveTokens(SignInActivity.this,
+                                    resLoginDTO.getAccess_token(),
+                                    resLoginDTO.getRefresh_token());
+
+                            // Log token để kiểm tra
+                            Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
+
+                            // Chuyển đến Homepage
+                            Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
+                            startActivity(homepage);
+                        } else {
+                            Log.d("LOGIN", "resLoginDTO is null");
+                        }
+
                     } else {
-                        // Xử lý khi đăng nhập thất bại
-                        // Hiển thị thông báo lỗi hoặc xử lý logic khác
+                        Log.d("LOGIN", "Response unsuccessful or body is null");
+                        // TODO: xử lý đăng nhập thất bại
                     }
                 }
 

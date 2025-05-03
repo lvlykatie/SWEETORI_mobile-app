@@ -11,4 +11,7 @@ import retrofit2.http.POST;
 public interface AuthFetching {
     @POST("sign-in")
     Call<APIResponse<ResLoginDTO>> login(@Body ReqLoginDTO reqLoginDTO);
+
+    @POST("sign-out")
+    Call<Void> logout();
 }
