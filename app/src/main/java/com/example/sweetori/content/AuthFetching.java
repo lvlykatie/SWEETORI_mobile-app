@@ -5,9 +5,12 @@ import com.example.sweetori.dto.request.ReqLoginDTO;
 import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.request.ReqRegisterDTO;
 import com.example.sweetori.dto.response.ResRegisterDTO;
+import com.example.sweetori.dto.response.ResSendEmailDTO;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface AuthFetching {
     @POST("sign-in")
@@ -16,8 +19,10 @@ public interface AuthFetching {
     @POST("sign-out")
     Call<Void> logout();
 
-
     @POST("register")
     Call<APIResponse<ResRegisterDTO>> register(@Body ReqRegisterDTO reqRegisterDTO);
+
+    @POST("forgot-passwd")
+    Call<APIResponse<ResSendEmailDTO>> sendOTP(@Query("email") String email);
 
 }

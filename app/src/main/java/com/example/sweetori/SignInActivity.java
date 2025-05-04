@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,6 +76,7 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         // Xử lý khi đăng nhập thành công
                         APIResponse<ResLoginDTO> apiResponse = response.body();
                         ResLoginDTO resLoginDTO = apiResponse.getData();

@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.sweetori.content.AuthFetching;
 
@@ -95,6 +96,7 @@ public class AccountActivity extends AppCompatActivity {
             authFetching.logout().enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(AccountActivity.this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
 
                     SharedPref.clearTokens(AccountActivity.this);
 
