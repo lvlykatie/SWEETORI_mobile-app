@@ -104,21 +104,6 @@ public class OTPActivity extends AppCompatActivity {
                                         long secondsLeft = Duration.between(now, expiry).getSeconds();
                                         Log.d("OTP", "OTP còn hiệu lực trong " + secondsLeft + " giây");
                                     }
-                                } else {
-                                    // Android API < 26: xử lý bằng SimpleDateFormat
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-                                    Date expiryDate = sdf.parse(expiryStr.substring(0, 23) + "Z");
-                                    long now = System.currentTimeMillis();
-
-                                    if (expiryDate.getTime() < now) {
-                                        Toast.makeText(OTPActivity.this, "OTP đã hết hạn. Vui lòng yêu cầu lại.", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    } else {
-                                        long secondsLeft = (expiryDate.getTime() - now) / 1000;
-                                        Log.d("OTP", "OTP còn hiệu lực trong " + secondsLeft + " giây");
-                                    }
                                 }
                             }
 
@@ -126,7 +111,7 @@ public class OTPActivity extends AppCompatActivity {
                             String body = response.body().string();
                             if (body.trim().equalsIgnoreCase("ok")) {
                                 Toast.makeText(OTPActivity.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(OTPActivity.this, CreatePassActivity.class);
+                                Intent intent = new Intent(OTPActivity.this, SignInActivity.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(OTPActivity.this, "Xác thực thất bại", Toast.LENGTH_SHORT).show();
