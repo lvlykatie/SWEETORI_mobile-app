@@ -264,8 +264,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/bannerScrollView"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:gravity="center">
+                android:layout_marginTop="16dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -754,11 +753,13 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:layout_marginTop="16dp"
-                    android:layout_marginStart="16dp">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Best sellers"
+                        android:layout_weight="1"
                         android:textSize="16sp"
                         android:textColor="@color/color01"
                         android:fontFamily="@font/poppins_bold"/>
@@ -769,7 +770,6 @@
                         android:textSize="14sp"
                         android:textColor="@color/color02"
                         android:fontFamily="@font/poppins_semibold"
-                        android:layout_marginStart="230dp"
                         android:clickable="true"/>
                 </LinearLayout>
                 <HorizontalScrollView
@@ -784,20 +784,11 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/productItem"
                             android:orientation="vertical"
                             android:gravity="center"
                             android:layout_marginStart="16dp">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/brand_1"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Judydoll"
-                                android:textSize="12sp"
-                                android:textColor="@color/black"
-                                android:fontFamily="@font/poppins_medium"/>
+
                         </LinearLayout>
                     </LinearLayout>
                 </HorizontalScrollView>
