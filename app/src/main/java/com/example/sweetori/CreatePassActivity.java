@@ -3,15 +3,31 @@ package com.example.sweetori;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.sweetori.content.AuthFetching;
+import com.example.sweetori.SharedPref;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreatePassActivity extends AppCompatActivity {
     Button btnDone;
+    EditText edtNewPass, edtConfirmPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,20 +35,99 @@ public class CreatePassActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.createpass);
 
-        //Ánh xạ component
+        // Ánh xạ component
         btnDone = findViewById(R.id.btnDone);
+        edtNewPass = findViewById(R.id.editTextNewPassword);
+        edtConfirmPass = findViewById(R.id.editTextConfirmNewPassword);
 
-        //Intent
-        btnDone.setOnClickListener(v -> {
-            // Chuyển đến ShoppingActivity
-            Intent signIn = new Intent(CreatePassActivity.this, SignInActivity.class);
-            startActivity(signIn);
-        });
+        btnDone.setOnClickListener(v -> handlePasswordChange());
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.createpass), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+    private void handlePasswordChange() {
+        String newPassword = edtNewPass.getText().toString().trim();
+        String confirmPassword = edtConfirmPass.getText().toString().trim();
+
+        // Validate input
+        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ mật khẩu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Lấy access token
+        String accessToken = SharedPref.getAccessToken(this);
+        if (accessToken == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo request body
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("newPassword", newPassword);
+
+        // Cấu hình Retrofit với interceptor
+        // Trong phương thức handlePasswordChange()
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)  // Thêm timeout
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + accessToken)
+                            .build();
+                    return chain.proceed(request);
+                })
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://spring-shop.onrender.com/auth/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        AuthFetching authFetching = retrofit.create(AuthFetching.class);
+
+        // Gọi API
+        authFetching.changePassword(requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
+            @Override
+            public void onResponse(Call<APIResponse<Boolean>> call, Response<APIResponse<Boolean>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Boolean isSuccess = response.body().getData();
+                    if (isSuccess != null && isSuccess) {
+                        Toast.makeText(CreatePassActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                        redirectToLogin();
+                    } else {
+                        Toast.makeText(CreatePassActivity.this, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    try {
+                        // Xử lý lỗi HTTP (ví dụ: 401, 500)
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
+                        Toast.makeText(CreatePassActivity.this, "Lỗi: " + response.code() + " - " + errorBody, Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override  // <-- PHẢI CÓ PHƯƠNG THỨC NÀY
+            public void onFailure(Call<APIResponse<Boolean>> call, Throwable t) {
+                // Xử lý lỗi kết nối/timeout
+                Toast.makeText(CreatePassActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
         });
+    }
+
+    private void redirectToLogin() {
+        SharedPref.clearTokens(CreatePassActivity.this);
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -38,6 +38,7 @@ public class AccountActivity extends AppCompatActivity {
     Button btnGeneral, btnPurchase, btnSupport;
     FrameLayout tabContent;
     LinearLayout btnLogOut;
+    LinearLayout btnResetPass;
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -69,6 +70,12 @@ public class AccountActivity extends AppCompatActivity {
         btnSupport.setOnClickListener(v -> {
             highlightTab(btnSupport);
             showTab(R.layout.tab_support);
+        });
+
+        btnResetPass = findViewById(R.id.btn_reset_password);
+        btnResetPass.setOnClickListener(v -> {
+            Intent intent = new Intent(AccountActivity.this, CreatePassActivity.class);
+            startActivity(intent);
         });
 
         btnLogOut = findViewById(R.id.btnLogOut);
