@@ -13,13 +13,19 @@
         android:theme="@style/Theme.Sweetori"
         tools:targetApi="31">
         <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VoucherDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".VoucherActivity"
             android:exported="false" />
         <activity
             android:name=".NotiActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".CartActivity"
