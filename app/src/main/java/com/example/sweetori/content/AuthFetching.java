@@ -7,6 +7,8 @@ import com.example.sweetori.dto.request.ReqRegisterDTO;
 import com.example.sweetori.dto.response.ResRegisterDTO;
 import com.example.sweetori.dto.response.ResSendEmailDTO;
 
+import java.util.Map;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,4 +31,7 @@ public interface AuthFetching {
 
     @POST("verify-otp")
     Call<ResponseBody> verifyOTP(@Query("email") String email, @Query("otp") String otp);
+
+    @POST("change-passwd")
+    Call<APIResponse<Boolean>> changePassword(@Body Map<String, String> newPassword);
 }
