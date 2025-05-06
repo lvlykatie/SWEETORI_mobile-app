@@ -132,7 +132,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView14"
+                        android:id="@+id/btnCart"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
@@ -149,7 +149,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView13"
+                        android:id="@+id/btnVoucher"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
@@ -179,7 +179,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView16"
+                        android:id="@+id/btnNoti"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
@@ -195,7 +195,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView17"
+                        android:id="@+id/btnAccount"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
@@ -209,6 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:id="@+id/btnHome"
             android:src="@drawable/home_icon"
             app:backgroundTint="@color/color02"
             app:fabCustomSize="53dp"

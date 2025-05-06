@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.graphics.drawable.GradientDrawable;
 
@@ -35,6 +36,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountActivity extends AppCompatActivity {
 
+    ImageView btnAccount;
+    ImageView btnHome;
+    ImageView btnCart;
+    ImageView btnNoti;
+    ImageView btnVoucher;
     Button btnGeneral, btnPurchase, btnSupport;
     FrameLayout tabContent;
     LinearLayout btnLogOut;
@@ -52,7 +58,28 @@ public class AccountActivity extends AppCompatActivity {
         btnPurchase = findViewById(R.id.tabPurchase);
         btnSupport = findViewById(R.id.tabSupport);
         tabContent = findViewById(R.id.tabContent);
+        btnAccount = findViewById(R.id.btnAccount);
+        btnHome = findViewById(R.id.btnHome);
+        btnCart = findViewById(R.id.btnCart);
+        btnNoti = findViewById(R.id.btnNoti);
+        btnVoucher = findViewById(R.id.btnVoucher);
 
+        btnHome.setOnClickListener(v -> {
+            Intent home = new Intent(AccountActivity.this, HomepageActivity.class);
+            startActivity(home);
+        });
+        btnCart.setOnClickListener(v -> {
+            Intent cart = new Intent(AccountActivity.this, CartActivity.class);
+            startActivity(cart);
+        });
+        btnNoti.setOnClickListener(v -> {
+            Intent noti = new Intent(AccountActivity.this, NotiActivity.class);
+            startActivity(noti);
+        });
+        btnVoucher.setOnClickListener(v -> {
+            Intent voucher = new Intent(AccountActivity.this, VoucherActivity.class);
+            startActivity(voucher);
+        });
         // Mặc định hiển thị tab General
         showTab(R.layout.tab_general);
 
