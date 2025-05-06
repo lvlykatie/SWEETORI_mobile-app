@@ -133,7 +133,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView14"
+                    android:id="@+id/btnCart"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
@@ -149,7 +149,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView13"
+                    android:id="@+id/btnVoucher"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
@@ -181,7 +181,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView16"
+                    android:id="@+id/btnNoti"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
@@ -197,7 +197,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView17"
+                    android:id="@+id/btnAccount"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
@@ -214,6 +214,7 @@
             android:src="@drawable/home_icon"
             app:backgroundTint="@color/color02"
             app:fabCustomSize="53dp"
+            android:id="@+id/btnHome"
             app:layout_anchor="@id/appBar"
             app:maxImageSize="35dp"
             app:tint="@color/white" />
@@ -225,7 +226,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingBottom="0dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@id/footerLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

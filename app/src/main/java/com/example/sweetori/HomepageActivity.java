@@ -16,6 +16,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class HomepageActivity extends AppCompatActivity {
     ImageView btnAccount;
+    ImageView btnHome;
+    ImageView btnCart;
+    ImageView btnNoti;
+    ImageView btnVoucher;
     HorizontalScrollView bannerScrollView;
     LinearLayout bannerContainer;
 
@@ -36,7 +40,13 @@ public class HomepageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         //Ánh xạ component
+        //Footer
         btnAccount = findViewById(R.id.btnAccount);
+        btnHome = findViewById(R.id.btnHome);
+        btnCart = findViewById(R.id.btnCart);
+        btnNoti = findViewById(R.id.btnNoti);
+        btnVoucher = findViewById(R.id.btnVoucher);
+
         bannerScrollView = findViewById(R.id.bannerScrollView);
         bannerContainer = findViewById(R.id.bannerContainer);
 
@@ -44,6 +54,22 @@ public class HomepageActivity extends AppCompatActivity {
         btnAccount.setOnClickListener(v -> {
             Intent account = new Intent(HomepageActivity.this, AccountActivity.class);
             startActivity(account);
+        });
+        btnHome.setOnClickListener(v -> {
+            Intent home = new Intent(HomepageActivity.this, HomepageActivity.class);
+            startActivity(home);
+        });
+        btnCart.setOnClickListener(v -> {
+            Intent cart = new Intent(HomepageActivity.this, CartActivity.class);
+            startActivity(cart);
+        });
+        btnNoti.setOnClickListener(v -> {
+            Intent noti = new Intent(HomepageActivity.this, NotiActivity.class);
+            startActivity(noti);
+        });
+        btnVoucher.setOnClickListener(v -> {
+            Intent voucher = new Intent(HomepageActivity.this, VoucherActivity.class);
+            startActivity(voucher);
         });
 
         final Runnable[] runnable = new Runnable[1];
