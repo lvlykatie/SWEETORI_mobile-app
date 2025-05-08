@@ -110,18 +110,18 @@ public class OTPActivity extends AppCompatActivity {
                             // Nếu OTP còn hiệu lực, xử lý phản hồi từ server
                             String body = response.body().string();
                             if (body.trim().equalsIgnoreCase("ok")) {
-                                Toast.makeText(OTPActivity.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPActivity.this, "OTP verified successfully, new password has just been sent", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(OTPActivity.this, SignInActivity.class);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(OTPActivity.this, "Xác thực thất bại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPActivity.this, "OTP verified failed", Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(OTPActivity.this, "Lỗi xử lý phản hồi", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(OTPActivity.this, "Xác thực thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OTPActivity.this, "OTP verified failed", Toast.LENGTH_SHORT).show();
                     }
                 }
 

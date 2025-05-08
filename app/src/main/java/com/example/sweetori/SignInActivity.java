@@ -21,6 +21,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import java.io.IOException;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -76,7 +78,7 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignInActivity.this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
                         // Xử lý khi đăng nhập thành công
                         APIResponse<ResLoginDTO> apiResponse = response.body();
                         ResLoginDTO resLoginDTO = apiResponse.getData();
@@ -90,8 +92,7 @@ public class SignInActivity extends AppCompatActivity {
                         Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
                         startActivity(homepage);
                     } else {
-                        // Xử lý khi đăng nhập thất bại
-                        // Hiển thị thông báo lỗi hoặc xử lý logic khác
+                        Toast.makeText(SignInActivity.this, "Username or password is wrong!", Toast.LENGTH_SHORT).show();
                     }
                 }
 

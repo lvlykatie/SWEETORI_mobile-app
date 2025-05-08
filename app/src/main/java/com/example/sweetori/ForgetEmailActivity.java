@@ -76,7 +76,7 @@ public class ForgetEmailActivity extends AppCompatActivity {
                         APIResponse<ResSendEmailDTO> apiResponse = response.body();
                         ResSendEmailDTO resSendEmailDTO = apiResponse.getData();
                         if (resSendEmailDTO.getOtp() != null) {
-                            Toast.makeText(ForgetEmailActivity.this, "OTP đã được gửi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgetEmailActivity.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
                             SharedPref.saveOTP(ForgetEmailActivity.this,
                                     resSendEmailDTO.getOtp(),
                                     resSendEmailDTO.getExp());
@@ -86,10 +86,10 @@ public class ForgetEmailActivity extends AppCompatActivity {
                             intent.putExtra("email", email); // nếu cần truyền email sang OTPActivity
                             startActivity(intent);
                         } else {
-                            Toast.makeText(ForgetEmailActivity.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgetEmailActivity.this, "User not found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(ForgetEmailActivity.this, "Gửi OTP thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetEmailActivity.this, "OTP sent failed", Toast.LENGTH_SHORT).show();
                     }
                 }
 
