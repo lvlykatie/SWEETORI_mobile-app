@@ -130,7 +130,7 @@ public class AccountActivity extends AppCompatActivity {
             authFetching.logout().enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Toast.makeText(AccountActivity.this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountActivity.this, "Sign out successfully!", Toast.LENGTH_SHORT).show();
 
                     SharedPref.clearTokens(AccountActivity.this);
 

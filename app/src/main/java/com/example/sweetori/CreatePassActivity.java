@@ -49,19 +49,19 @@ public class CreatePassActivity extends AppCompatActivity {
 
         // Validate input
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ mật khẩu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter password completely", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password mismatch", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Lấy access token
         String accessToken = SharedPref.getAccessToken(this);
         if (accessToken == null) {
-            Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please sign in again", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -98,10 +98,10 @@ public class CreatePassActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Boolean isSuccess = response.body().getData();
                     if (isSuccess != null && isSuccess) {
-                        Toast.makeText(CreatePassActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
                         redirectToLogin();
                     } else {
-                        Toast.makeText(CreatePassActivity.this, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreatePassActivity.this, "Password changed failed", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     try {
