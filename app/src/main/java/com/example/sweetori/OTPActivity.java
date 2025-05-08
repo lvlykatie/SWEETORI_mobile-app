@@ -21,6 +21,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -87,43 +89,50 @@ public class OTPActivity extends AppCompatActivity {
             authAPI.verifyOTP(email, otp).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            // Trước khi xử lý phản hồi, kiểm tra thời hạn OTP
-                            String expiryStr = SharedPref.getOTPExpiry(OTPActivity.this);
+                    try {
+                        // Kiểm tra thời hạn OTP trước
+                        String expiryStr = SharedPref.getOTPExpiry(OTPActivity.this);
+                        if (expiryStr != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            Instant expiry = Instant.parse(expiryStr);
+                            Instant now = Instant.now();
 
-                            if (expiryStr != null) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    Instant expiry = Instant.parse(expiryStr);
-                                    Instant now = Instant.now();
-
-                                    if (now.isAfter(expiry)) {
-                                        Toast.makeText(OTPActivity.this, "OTP đã hết hạn. Vui lòng yêu cầu lại.", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    } else {
-                                        long secondsLeft = Duration.between(now, expiry).getSeconds();
-                                        Log.d("OTP", "OTP còn hiệu lực trong " + secondsLeft + " giây");
-                                    }
-                                }
+                            if (now.isAfter(expiry)) {
+                                Toast.makeText(OTPActivity.this, "OTP has expired!", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                long secondsLeft = Duration.between(now, expiry).getSeconds();
+                                Log.d("OTP", "OTP is valid for" + secondsLeft + " seconds");
                             }
+                        }
 
-                            // Nếu OTP còn hiệu lực, xử lý phản hồi từ server
-                            String body = response.body().string();
-                            if (body.trim().equalsIgnoreCase("ok")) {
-                                Toast.makeText(OTPActivity.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
+                        // Nếu phản hồi thành công
+                        if (response.isSuccessful() && response.body() != null) {
+                            String body = response.body().string().trim();
+                            if (body.equalsIgnoreCase("ok")) {
+                                Toast.makeText(OTPActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(OTPActivity.this, SignInActivity.class);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(OTPActivity.this, "Xác thực thất bại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(OTPActivity.this, "Lỗi xử lý phản hồi", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Nếu phản hồi thất bại, đọc lỗi từ errorBody()
+                            if (response.errorBody() != null) {
+                                String errorJson = response.errorBody().string();
+                                JSONObject jsonObject = new JSONObject(errorJson);
+                                String message = jsonObject.optString("message", "Invalid OTP");
+                                Toast.makeText(OTPActivity.this, message, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(OTPActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        Toast.makeText(OTPActivity.this, "Xác thực thất bại", Toast.LENGTH_SHORT).show();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(OTPActivity.this, "Response processing error", Toast.LENGTH_SHORT).show();
                     }
                 }
+
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {

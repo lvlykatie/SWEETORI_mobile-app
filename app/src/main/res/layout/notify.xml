@@ -240,12 +240,13 @@
                     android:id="@+id/tabLayout"
                     android:layout_width="200dp"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/tab_background"
                     app:layout_constraintTop_toBottomOf="@+id/constraintHeader"
                     android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/tabPersonal"
+                    android:id="@+id/btnPersonal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -258,7 +259,7 @@
                     android:fontFamily="@font/poppins_semibold"/>
 
                 <Button
-                    android:id="@+id/tabDiscount"
+                    android:id="@+id/btnDiscount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -270,7 +271,6 @@
                     android:clickable="true"
                     android:fontFamily="@font/poppins_semibold"/>
             </LinearLayout>
-
 
                 <FrameLayout
                     android:id="@+id/tabContent"
