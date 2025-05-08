@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Xử lý click Sign Up
         btnSignUp.setOnClickListener(v -> {
             if (!checkBoxPolicy.isChecked()) {
-                Toast.makeText(this, "Vui lòng chấp nhận điều khoản!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please accept our policies!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -89,11 +89,11 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<APIResponse<ResRegisterDTO>> call, Response<APIResponse<ResRegisterDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Sign up successfully!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(RegisterActivity.this, SignInActivity.class));
                         finish();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Sign up failed!", Toast.LENGTH_SHORT).show();
                         Log.e("REGISTER_ERROR", "Code: " + response.code());
                     }
                 }

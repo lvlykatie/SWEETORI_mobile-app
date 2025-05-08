@@ -136,7 +136,6 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:clickable="true"
                         app:srcCompat="@drawable/cart_icon" />
                 </LinearLayout>
 
@@ -148,11 +147,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView13"
+                        android:id="@+id/btnVoucher1"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:clickable="true"
                         app:srcCompat="@drawable/voucher_icon" />
                 </LinearLayout>
 
@@ -161,14 +159,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:orientation="vertical"
-                    android:visibility="invisible">
+                    android:visibility="visible">
+
                     <ImageView
                         android:id="@+id/imageView12"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/home_icon"/>
-
+                        app:srcCompat="@drawable/home_icon" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -179,11 +177,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView16"
+                        android:id="@+id/btnNoti"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:clickable="true"
                         app:srcCompat="@drawable/notification_icon" />
                 </LinearLayout>
 
@@ -195,11 +192,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView17"
+                        android:id="@+id/btnAccount"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:clickable="true"
                         app:srcCompat="@drawable/account_icon" />
                 </LinearLayout>
             </LinearLayout>
@@ -209,9 +205,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/home_icon"
-            android:clickable="true"
             app:backgroundTint="@color/color02"
             app:layout_anchor="@id/appBar"
+            android:id="@+id/btnHome"
             app:fabCustomSize="53dp"
             app:maxImageSize="35dp"
             app:tint="@color/white" />
