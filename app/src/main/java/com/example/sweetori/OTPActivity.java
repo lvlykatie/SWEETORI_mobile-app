@@ -63,34 +63,18 @@ public class OTPActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(v -> {
             String otp = editTextOTPCode.getText().toString().trim();
             if (otp.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập mã OTP", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter OTP", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-            // Set up OkHttpClient with logging
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .build();
-
-            // Retrofit setup
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/") // Adjust base URL if necessary
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            // tạo API interface
-            AuthFetching authAPI = retrofit.create(AuthFetching.class);
+            // Sử dụng lại Retrofit từ ApiClient
+            AuthFetching authAPI = APIClient.getClient().create(AuthFetching.class);
 
             authAPI.verifyOTP(email, otp).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
-                        // Kiểm tra thời hạn OTP trước
+                        // Kiểm tra thời hạn OTP
                         String expiryStr = SharedPref.getOTPExpiry(OTPActivity.this);
                         if (expiryStr != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             Instant expiry = Instant.parse(expiryStr);
@@ -101,22 +85,20 @@ public class OTPActivity extends AppCompatActivity {
                                 return;
                             } else {
                                 long secondsLeft = Duration.between(now, expiry).getSeconds();
-                                Log.d("OTP", "OTP is valid for" + secondsLeft + " seconds");
+                                Log.d("OTP", "OTP is valid for " + secondsLeft + " seconds");
                             }
                         }
 
-                        // Nếu phản hồi thành công
                         if (response.isSuccessful() && response.body() != null) {
                             String body = response.body().string().trim();
                             if (body.equalsIgnoreCase("ok")) {
-                                Toast.makeText(OTPActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPActivity.this, "New password has been sent to your email", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(OTPActivity.this, SignInActivity.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(OTPActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            // Nếu phản hồi thất bại, đọc lỗi từ errorBody()
                             if (response.errorBody() != null) {
                                 String errorJson = response.errorBody().string();
                                 JSONObject jsonObject = new JSONObject(errorJson);
@@ -133,51 +115,35 @@ public class OTPActivity extends AppCompatActivity {
                     }
                 }
 
-
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Toast.makeText(OTPActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         });
+
 
         btnResend.setOnClickListener(v -> {
             if (email.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Chuyển đến ShoppingActivity
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            AuthFetching authAPI = retrofit.create(AuthFetching.class);
+            AuthFetching authAPI = APIClient.getClient().create(AuthFetching.class);
 
             authAPI.sendOTP(email).enqueue(new Callback<APIResponse<ResSendEmailDTO>>() {
-
                 @Override
                 public void onResponse(Call<APIResponse<ResSendEmailDTO>> call, Response<APIResponse<ResSendEmailDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         APIResponse<ResSendEmailDTO> apiResponse = response.body();
                         ResSendEmailDTO resSendEmailDTO = apiResponse.getData();
                         if (resSendEmailDTO.getOtp() != null) {
-                            Toast.makeText(OTPActivity.this, "OTP đã được gửi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPActivity.this, "OTP has been sent", Toast.LENGTH_SHORT).show();
                             SharedPref.saveOTP(OTPActivity.this,
                                     resSendEmailDTO.getOtp(),
                                     resSendEmailDTO.getExp());
                         } else {
-                            Toast.makeText(OTPActivity.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPActivity.this, "Lỗi khi nhận OTP", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(OTPActivity.this, "Gửi OTP thất bại", Toast.LENGTH_SHORT).show();
@@ -188,9 +154,9 @@ public class OTPActivity extends AppCompatActivity {
                 public void onFailure(Call<APIResponse<ResSendEmailDTO>> call, Throwable t) {
                     Toast.makeText(OTPActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-
             });
         });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.forgetpass_otp), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

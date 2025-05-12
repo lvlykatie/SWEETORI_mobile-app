@@ -36,12 +36,8 @@ public class CartActivity extends AppCompatActivity {
             startActivity(account);
         });
         btnHome.setOnClickListener(v -> {
-            Intent home = new Intent(CartActivity.this, MainActivity.class);
+            Intent home = new Intent(CartActivity.this, HomepageActivity.class);
             startActivity(home);
-        });
-        btnCart.setOnClickListener(v -> {
-            Intent cart = new Intent(CartActivity.this, CartActivity.class);
-            startActivity(cart);
         });
         btnNoti.setOnClickListener(v -> {
             Intent noti = new Intent(CartActivity.this, NotiActivity.class);

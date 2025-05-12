@@ -111,21 +111,7 @@ public class AccountActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(v -> {
             String accessToken = SharedPref.getAccessToken(AccountActivity.this);
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(chain -> {
-                        Request request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + accessToken)
-                                .build();
-                        return chain.proceed(request);
-                    }).build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            AuthFetching authFetching = retrofit.create(AuthFetching.class);
+            AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
 
             authFetching.logout().enqueue(new Callback<Void>() {
                 @Override
@@ -141,14 +127,11 @@ public class AccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-//                        // Có thể hiển thị lỗi, nhưng vẫn nên xoá token
-//                        SharedPref.clearTokens(HomepageActivity.this);
-//                        Intent loginIntent = new Intent(HomepageActivity.this, SignInActivity.class);
-//                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        startActivity(loginIntent);
+                    Toast.makeText(AccountActivity.this, "Lỗi khi đăng xuất: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });
+
     }
 
     private void showTab(int layoutResId) {

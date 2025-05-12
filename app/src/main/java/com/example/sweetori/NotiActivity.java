@@ -52,16 +52,12 @@ public class NotiActivity extends AppCompatActivity {
             startActivity(account);
         });
         btnHome.setOnClickListener(v -> {
-            Intent home = new Intent(this, MainActivity.class);
+            Intent home = new Intent(this, HomepageActivity.class);
             startActivity(home);
         });
         btnCart.setOnClickListener(v -> {
             Intent cart = new Intent(this, CartActivity.class);
             startActivity(cart);
-        });
-        btnNoti.setOnClickListener(v -> {
-            Intent noti = new Intent(this, NotiActivity.class);
-            startActivity(noti);
         });
         btnVoucher.setOnClickListener(v -> {
             Intent voucher = new Intent(this, VoucherActivity.class);

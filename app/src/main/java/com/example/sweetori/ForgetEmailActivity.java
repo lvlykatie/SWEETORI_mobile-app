@@ -53,23 +53,9 @@ public class ForgetEmailActivity extends AppCompatActivity {
                 return;
             }
 
-            // Chuyển đến ShoppingActivity
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            AuthFetching authAPI = retrofit.create(AuthFetching.class);
+            AuthFetching authAPI = APIClient.getClient().create(AuthFetching.class);
 
             authAPI.sendOTP(email).enqueue(new Callback<APIResponse<ResSendEmailDTO>>() {
-
                 @Override
                 public void onResponse(Call<APIResponse<ResSendEmailDTO>> call, Response<APIResponse<ResSendEmailDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
@@ -77,13 +63,14 @@ public class ForgetEmailActivity extends AppCompatActivity {
                         ResSendEmailDTO resSendEmailDTO = apiResponse.getData();
                         if (resSendEmailDTO.getOtp() != null) {
                             Toast.makeText(ForgetEmailActivity.this, "OTP sent successfully", Toast.LENGTH_SHORT).show();
+
                             SharedPref.saveOTP(ForgetEmailActivity.this,
                                     resSendEmailDTO.getOtp(),
                                     resSendEmailDTO.getExp());
 
                             // Chuyển sang OTPActivity
                             Intent intent = new Intent(ForgetEmailActivity.this, OTPActivity.class);
-                            intent.putExtra("email", email); // nếu cần truyền email sang OTPActivity
+                            intent.putExtra("email", email);
                             startActivity(intent);
                         } else {
                             Toast.makeText(ForgetEmailActivity.this, "User not found", Toast.LENGTH_SHORT).show();
@@ -97,9 +84,9 @@ public class ForgetEmailActivity extends AppCompatActivity {
                 public void onFailure(Call<APIResponse<ResSendEmailDTO>> call, Throwable t) {
                     Toast.makeText(ForgetEmailActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-
             });
         });
+
         btnSignInNow.setOnClickListener(v -> {
             // Chuyển đến ShoppingActivity
             Intent signIn = new Intent(ForgetEmailActivity.this, SignInActivity.class);

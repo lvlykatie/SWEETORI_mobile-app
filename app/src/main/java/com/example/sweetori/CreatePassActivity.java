@@ -47,7 +47,6 @@ public class CreatePassActivity extends AppCompatActivity {
         String newPassword = edtNewPass.getText().toString().trim();
         String confirmPassword = edtConfirmPass.getText().toString().trim();
 
-        // Validate input
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Please enter password completely", Toast.LENGTH_SHORT).show();
             return;
@@ -58,54 +57,26 @@ public class CreatePassActivity extends AppCompatActivity {
             return;
         }
 
-        // Lấy access token
         String accessToken = SharedPref.getAccessToken(this);
         if (accessToken == null) {
             Toast.makeText(this, "Please sign in again", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Tạo request body
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("newPassword", newPassword);
 
-        // Cấu hình Retrofit với interceptor
-        // Trong phương thức handlePasswordChange()
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)  // Thêm timeout
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + accessToken)
-                            .build();
-                    return chain.proceed(request);
-                })
-                .build();
+        // Sử dụng ApiClient thay vì tạo lại Retrofit
+        AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://spring-shop.onrender.com/auth/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        AuthFetching authFetching = retrofit.create(AuthFetching.class);
-
-        // Gọi API
         authFetching.changePassword(requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
             @Override
             public void onResponse(Call<APIResponse<Boolean>> call, Response<APIResponse<Boolean>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Boolean isSuccess = response.body().getData();
-                    if (isSuccess != null && isSuccess) {
-                        Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
-                        redirectToLogin();
-                    } else {
-                        Toast.makeText(CreatePassActivity.this, "Password changed failed", Toast.LENGTH_SHORT).show();
-                    }
+                if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().getData())) {
+                    Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
+                    redirectToLogin();
                 } else {
                     try {
-                        // Xử lý lỗi HTTP (ví dụ: 401, 500)
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
                         Toast.makeText(CreatePassActivity.this, "Lỗi: " + response.code() + " - " + errorBody, Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
@@ -114,14 +85,13 @@ public class CreatePassActivity extends AppCompatActivity {
                 }
             }
 
-            @Override  // <-- PHẢI CÓ PHƯƠNG THỨC NÀY
+            @Override
             public void onFailure(Call<APIResponse<Boolean>> call, Throwable t) {
-                // Xử lý lỗi kết nối/timeout
                 Toast.makeText(CreatePassActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
             }
         });
     }
+
 
     private void redirectToLogin() {
         SharedPref.clearTokens(CreatePassActivity.this);

@@ -36,7 +36,7 @@ public class VoucherActivity extends AppCompatActivity {
             startActivity(account);
         });
         btnHome.setOnClickListener(v -> {
-            Intent home = new Intent(VoucherActivity.this, MainActivity.class);
+            Intent home = new Intent(VoucherActivity.this, HomepageActivity.class);
             startActivity(home);
         });
         btnCart.setOnClickListener(v -> {
@@ -46,10 +46,6 @@ public class VoucherActivity extends AppCompatActivity {
         btnNoti.setOnClickListener(v -> {
             Intent noti = new Intent(VoucherActivity.this, NotiActivity.class);
             startActivity(noti);
-        });
-        btnVoucher.setOnClickListener(v -> {
-            Intent voucher = new Intent(VoucherActivity.this, VoucherActivity.class);
-            startActivity(voucher);
         });
     }
 }

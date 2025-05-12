@@ -17,21 +17,21 @@ import retrofit2.http.Query;
 
 public interface AuthFetching {
 
-    @POST("sign-in")
+    @POST("auth/sign-in")
     Call<APIResponse<ResLoginDTO>> login(@Body ReqLoginDTO reqLoginDTO);
 
-    @POST("sign-out")
+    @POST("auth/sign-out")
     Call<Void> logout();
 
-    @POST("register")
+    @POST("auth/register")
     Call<APIResponse<ResRegisterDTO>> register(@Body ReqRegisterDTO reqRegisterDTO);
 
-    @POST("forgot-passwd")
+    @POST("auth/forgot-passwd")
     Call<APIResponse<ResSendEmailDTO>> sendOTP(@Query("email") String email);
 
-    @POST("verify-otp")
+    @POST("auth/verify-otp")
     Call<ResponseBody> verifyOTP(@Query("email") String email, @Query("otp") String otp);
 
-    @POST("change-passwd")
+    @POST("auth/change-passwd")
     Call<APIResponse<Boolean>> changePassword(@Body Map<String, String> newPassword);
 }

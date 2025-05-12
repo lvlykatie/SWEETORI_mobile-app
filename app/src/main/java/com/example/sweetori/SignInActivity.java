@@ -52,34 +52,22 @@ public class SignInActivity extends AppCompatActivity {
 
         //Intent
         btnSignIn.setOnClickListener(v -> {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            AuthFetching authFetching = retrofit.create(AuthFetching.class);
-
-// Tạo dữ liệu đăng nhập
-            ReqLoginDTO reqLoginDTO = new ReqLoginDTO();
-            // Lấy giá trị từ EditText
             editTextUsername = findViewById(R.id.editTextUsername);
             editTextPassword = findViewById(R.id.editTextPassword);
-            reqLoginDTO.setPassword(editTextPassword.getText().toString()); // Thay bằng giá trị thực tế
-            reqLoginDTO.setUsername(editTextUsername.getText().toString()); // Thay bằng giá trị thực tế
+
+            ReqLoginDTO reqLoginDTO = new ReqLoginDTO();
+            reqLoginDTO.setUsername(editTextUsername.getText().toString());
+            reqLoginDTO.setPassword(editTextPassword.getText().toString());
+
+            // Lấy instance từ ApiClient
+            AuthFetching authFetching = APIClient.getClient().create(AuthFetching.class);
 
             authFetching.login(reqLoginDTO).enqueue(new Callback<APIResponse<ResLoginDTO>>() {
                 @Override
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(SignInActivity.this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
-                        // Xử lý khi đăng nhập thành công
+
                         APIResponse<ResLoginDTO> apiResponse = response.body();
                         ResLoginDTO resLoginDTO = apiResponse.getData();
 
@@ -88,7 +76,7 @@ public class SignInActivity extends AppCompatActivity {
                                 resLoginDTO.getRefresh_token());
 
                         Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
-                        // Chuyển đến ShoppingActivity
+
                         Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
                         startActivity(homepage);
                     } else {
@@ -98,10 +86,11 @@ public class SignInActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<APIResponse<ResLoginDTO>> call, Throwable t) {
-
+                    Toast.makeText(SignInActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });
+
         btnForgot.setOnClickListener(v -> {
             // Chuyển đến ShoppingActivity
             Intent forgetEmail = new Intent(SignInActivity.this, ForgetEmailActivity.class);

@@ -58,33 +58,13 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // Khởi tạo Retrofit
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            AuthFetching authFetching = APIClient.getClient().create(AuthFetching.class);
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .connectTimeout(30, TimeUnit.SECONDS) // Thời gian chờ kết nối: 30 giây
-                    .readTimeout(30, TimeUnit.SECONDS)    // Thời gian chờ đọc dữ liệu: 30 giây
-                    .writeTimeout(30, TimeUnit.SECONDS)   // Thời gian chờ ghi dữ liệu: 30 giây
-                    .build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://spring-shop.onrender.com/auth/")
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            AuthFetching authFetching = retrofit.create(AuthFetching.class);
-
-            // Tạo request DTO
             ReqRegisterDTO reqRegisterDTO = new ReqRegisterDTO();
             reqRegisterDTO.setUsername(etUsername.getText().toString().trim());
             reqRegisterDTO.setEmail(etEmail.getText().toString().trim());
             reqRegisterDTO.setPassword(etPassword.getText().toString().trim());
-          //  reqRegisterDTO.setRole(new ReqRegisterDTO.Role(2)); // Role ID mặc định
 
-            // Gọi API
             authFetching.register(reqRegisterDTO).enqueue(new Callback<APIResponse<ResRegisterDTO>>() {
                 @Override
                 public void onResponse(Call<APIResponse<ResRegisterDTO>> call, Response<APIResponse<ResRegisterDTO>> response) {
@@ -105,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
         });
+
 
         // Chuyển sang màn hình đăng nhập
         btnSignInNow.setOnClickListener(v -> {
