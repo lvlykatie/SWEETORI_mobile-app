@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".WishlistActivity">
 
-    <!-- HEADER SECTION -->
+    <!-- Header SECTION -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintHeader"
         android:layout_width="0dp"
@@ -28,7 +28,7 @@
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
-            android:id="@+id/header1"
+            android:id="@+id/Header1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/header"
@@ -40,7 +40,7 @@
             tools:ignore="MissingConstraints">
 
             <LinearLayout
-                android:id="@+id/header1Content"
+                android:id="@+id/Header1Content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

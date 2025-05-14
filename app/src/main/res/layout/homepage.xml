@@ -807,6 +807,7 @@
                         android:textColor="@color/color01"
                         android:fontFamily="@font/poppins_bold"/>
                     <TextView
+                        android:id="@+id/btnMore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="more"

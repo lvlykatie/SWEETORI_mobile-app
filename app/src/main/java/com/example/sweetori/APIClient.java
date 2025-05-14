@@ -8,10 +8,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
     private static final String BASE_URL = "https://spring-shop.onrender.com/";
-    private static Retrofit retrofit = null;
+
+    // Tách 2 instance riêng biệt
+    private static Retrofit retrofitNoToken = null;
 
     public static Retrofit getClient() {
-        if (retrofit == null) {
+        if (retrofitNoToken == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -19,14 +21,16 @@ public class APIClient {
                     .addInterceptor(logging)
                     .build();
 
-            retrofit = new Retrofit.Builder()
+            retrofitNoToken = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-        return retrofit;
+        return retrofitNoToken;
     }
+
+    // Luôn tạo mới Retrofit khi có token (không dùng chung)
     public static Retrofit getClientWithToken(String token) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -42,10 +46,9 @@ public class APIClient {
                 .build();
 
         return new Retrofit.Builder()
-                .baseUrl("https://spring-shop.onrender.com/")
+                .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
-
 }

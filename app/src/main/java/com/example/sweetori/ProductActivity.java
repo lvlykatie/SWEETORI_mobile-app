@@ -1,61 +1,90 @@
 package com.example.sweetori;
 
-import android.os.Bundle;
-
 import android.content.Intent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sweetori.adapter.ProductAdapter;
+import com.example.sweetori.content.ProductFetching;
+import com.example.sweetori.dto.response.ResProductDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class ProductActivity extends AppCompatActivity {
 
-    ImageView btnAccount;
-    ImageView btnHome;
-    ImageView btnCart;
-    ImageView btnNoti;
-    ImageView btnVoucher;
+    private ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
+    private RecyclerView productItemRecyclerView;
+    private ProductAdapter productAdapter;
+    private List<ResProductDTO.ProductData> productList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product);
-        EdgeToEdge.enable(this);
 
-        //Component
+        // Ánh xạ view
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);
         btnCart = findViewById(R.id.btnCart);
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher1);
+        productItemRecyclerView = findViewById(R.id.productItemRecyclerView);
 
-        //Intent
-        btnAccount.setOnClickListener(v -> {
-            Intent account = new Intent(ProductActivity.this, AccountActivity.class);
-            startActivity(account);
+        // Cài đặt RecyclerView
+        productItemRecyclerView.setHasFixedSize(true);
+        productItemRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        productAdapter = new ProductAdapter(productList, ProductActivity.this);
+        productItemRecyclerView.setAdapter(productAdapter);
+
+        // Gọi API
+        ProductFetching productFetching = APIClient.getClient().create(ProductFetching.class);
+        productFetching.getAllProducts().enqueue(new retrofit2.Callback<APIResponse<ResProductDTO>>() {
+            @Override
+            public void onResponse(retrofit2.Call<APIResponse<ResProductDTO>> call,
+                                   retrofit2.Response<APIResponse<ResProductDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ResProductDTO resProductDTO = response.body().getData();
+                    if (resProductDTO != null && resProductDTO.getProductData() != null) {
+                        productList.clear();
+                        productList.addAll(resProductDTO.getProductData());
+                        productAdapter.notifyDataSetChanged();
+                        Log.d("PRODUCT_ACTIVITY", "Data loaded. Items: " + productList.size());
+                    } else {
+                        Log.e("PRODUCT_ACTIVITY", "Product data is null");
+                    }
+                } else {
+                    Log.e("PRODUCT_ACTIVITY", "API call failed. Code: " + response.code());
+                    try {
+                        if (response.errorBody() != null) {
+                            Log.e("API_ERROR_BODY", response.errorBody().string());
+                        }
+                    } catch (Exception e) {
+                        Log.e("API_ERROR", "Error reading error body", e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<APIResponse<ResProductDTO>> call, Throwable t) {
+                Log.e("PRODUCT_ACTIVITY", "API call failed: " + t.getMessage());
+                t.printStackTrace();
+            }
         });
-        btnHome.setOnClickListener(v -> {
-            Intent home = new Intent(ProductActivity.this, MainActivity.class);
-            startActivity(home);
-        });
-        btnCart.setOnClickListener(v -> {
-            Intent cart = new Intent(ProductActivity.this, CartActivity.class);
-            startActivity(cart);
-        });
-        btnNoti.setOnClickListener(v -> {
-            Intent noti = new Intent(ProductActivity.this, NotiActivity.class);
-            startActivity(noti);
-        });
-        btnVoucher.setOnClickListener(v -> {
-            Intent voucher = new Intent(ProductActivity.this, VoucherActivity.class);
-            startActivity(voucher);
-        });
+
+        // Điều hướng các button
+        btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
+        btnHome.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
+        btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
+        btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
     }
 }

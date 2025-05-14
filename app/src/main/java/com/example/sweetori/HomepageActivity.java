@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class HomepageActivity extends AppCompatActivity {
     ImageView btnCart;
     ImageView btnNoti;
     ImageView btnVoucher;
+    TextView btnMore;
     HorizontalScrollView bannerScrollView;
     LinearLayout bannerContainer;
 
@@ -46,6 +48,7 @@ public class HomepageActivity extends AppCompatActivity {
         btnCart = findViewById(R.id.btnCart);
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
+        btnMore = findViewById(R.id.btnMore);
 
         bannerScrollView = findViewById(R.id.bannerScrollView);
         bannerContainer = findViewById(R.id.bannerContainer);
@@ -70,6 +73,10 @@ public class HomepageActivity extends AppCompatActivity {
         btnVoucher.setOnClickListener(v -> {
             Intent voucher = new Intent(HomepageActivity.this, VoucherActivity.class);
             startActivity(voucher);
+        });
+        btnMore.setOnClickListener(v -> {
+            Intent more = new Intent(HomepageActivity.this, ProductActivity.class);
+            startActivity(more);
         });
 
         final Runnable[] runnable = new Runnable[1];
