@@ -45,41 +45,15 @@ public class ProductActivity extends AppCompatActivity {
         productAdapter = new ProductAdapter(productList, ProductActivity.this);
         productItemRecyclerView.setAdapter(productAdapter);
 
-        // Gọi API
-        ProductFetching productFetching = APIClient.getClient().create(ProductFetching.class);
-        productFetching.getAllProducts().enqueue(new retrofit2.Callback<APIResponse<ResProductDTO>>() {
-            @Override
-            public void onResponse(retrofit2.Call<APIResponse<ResProductDTO>> call,
-                                   retrofit2.Response<APIResponse<ResProductDTO>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ResProductDTO resProductDTO = response.body().getData();
-                    if (resProductDTO != null && resProductDTO.getProductData() != null) {
-                        productList.clear();
-                        productList.addAll(resProductDTO.getProductData());
-                        productAdapter.notifyDataSetChanged();
-                        Log.d("PRODUCT_ACTIVITY", "Data loaded. Items: " + productList.size());
-                    } else {
-                        Log.e("PRODUCT_ACTIVITY", "Product data is null");
-                    }
-                } else {
-                    Log.e("PRODUCT_ACTIVITY", "API call failed. Code: " + response.code());
-                    try {
-                        if (response.errorBody() != null) {
-                            Log.e("API_ERROR_BODY", response.errorBody().string());
-                        }
-                    } catch (Exception e) {
-                        Log.e("API_ERROR", "Error reading error body", e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<APIResponse<ResProductDTO>> call, Throwable t) {
-                Log.e("PRODUCT_ACTIVITY", "API call failed: " + t.getMessage());
-                t.printStackTrace();
-            }
-        });
-
+        List<ResProductDTO.ProductData> cachedProductList = ResProductDTO.ProductDataManager.getInstance().getProductList();
+        if (cachedProductList != null && !cachedProductList.isEmpty()) {
+            productList.clear();
+            productList.addAll(cachedProductList);
+            productAdapter.notifyDataSetChanged();
+            Log.d("PRODUCT_ACTIVITY", "Loaded cached data. Items: " + productList.size());
+        } else {
+            Log.e("PRODUCT_ACTIVITY", "No cached data available");
+        }
         // Điều hướng các button
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
         btnHome.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));

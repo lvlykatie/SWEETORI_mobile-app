@@ -42,9 +42,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             ResProductDTO.ProductData product = productList.get(position);
 
             // Set text for product name
-            holder.productName.setText(product.getTitle() != null ? product.getTitle() : "No name");
+            holder.productName.setText(product.getproductName() != null ? product.getproductName() : "No name");
 
-            if (product.getTitle().length() > 30) { // Ngưỡng số ký tự
+            if (product.getproductName().length() > 30) { // Ngưỡng số ký tự
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10); // Giảm size
             } else {
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12); // Size mặc định

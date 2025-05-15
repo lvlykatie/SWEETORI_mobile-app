@@ -27,7 +27,28 @@ public class ResProductDTO {
         this.data = data;
     }
 
+    public static class ProductDataManager {
+        private static ProductDataManager instance;
+        private List<ResProductDTO.ProductData> productList;
 
+        private ProductDataManager() {
+        }
+
+        public static synchronized ProductDataManager getInstance() {
+            if (instance == null) {
+                instance = new ProductDataManager();
+            }
+            return instance;
+        }
+
+        public List<ResProductDTO.ProductData> getProductList() {
+            return productList;
+        }
+
+        public void setProductList(List<ResProductDTO.ProductData> productList) {
+            this.productList = productList;
+        }
+    }
     public class Meta {
         private int currentPage, totalPages, pageSize, total;
 
@@ -72,25 +93,25 @@ public class ResProductDTO {
     }
     public class ProductData {
         private int productId;
-        private String title;
+        private String productName;
         private String description;
         private String descriptionDetails;
         private String image;
-        private String isbn;
-        private String author;
+        private String productCode;
+        private String brand;
         private double sellingPrice;
         private double listPrice;
         private int quantity;
         private double avgRate;
 
-        public ProductData(int productId, String title, String description, String descriptionDetails, String image, String isbn, String author, double sellingPrice, double listPrice, int quantity, double avgRate) {
+        public ProductData(int productId, String productName, String description, String descriptionDetails, String image, String productCode, String brand, double sellingPrice, double listPrice, int quantity, double avgRate) {
             this.productId = productId;
-            this.title = title;
+            this.productName = productName;
             this.description = description;
             this.descriptionDetails = descriptionDetails;
             this.image = image;
-            this.isbn = isbn;
-            this.author = author;
+            this.productCode = productCode;
+            this.brand = brand;
             this.sellingPrice = sellingPrice;
             this.listPrice = listPrice;
             this.quantity = quantity;
@@ -101,8 +122,8 @@ public class ResProductDTO {
             this.productId = productId;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setproductName(String productName) {
+            this.productName = productName;
         }
 
         public void setDescription(String description) {
@@ -117,12 +138,12 @@ public class ResProductDTO {
             this.image = image;
         }
 
-        public void setIsbn(String isbn) {
-            this.isbn = isbn;
+        public void setproductCode(String productCode) {
+            this.productCode = productCode;
         }
 
-        public void setAuthor(String author) {
-            this.author = author;
+        public void setbrand(String brand) {
+            this.brand = brand;
         }
 
         public void setSellingPrice(double sellingPrice) {
@@ -145,8 +166,8 @@ public class ResProductDTO {
             return productId;
         }
 
-        public String getTitle() {
-            return title;
+        public String getproductName() {
+            return productName;
         }
 
         public String getDescription() {
@@ -161,12 +182,12 @@ public class ResProductDTO {
             return image;
         }
 
-        public String getIsbn() {
-            return isbn;
+        public String getproductCode() {
+            return productCode;
         }
 
-        public String getAuthor() {
-            return author;
+        public String getbrand() {
+            return brand;
         }
 
         public double getSellingPrice() {
