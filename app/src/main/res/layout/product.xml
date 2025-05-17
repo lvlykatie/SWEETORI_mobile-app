@@ -72,7 +72,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Search vouchers..."
+                        android:hint="Search what you need!"
                         android:background="@null"
                         android:textColor="#6C6C6C"
                         android:textSize="12sp"
