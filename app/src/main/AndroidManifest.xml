@@ -45,6 +45,12 @@
         <activity
             android:name=".OTPActivity"
             android:exported="false" />
+        <activity
+            android:name=".WishlistActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

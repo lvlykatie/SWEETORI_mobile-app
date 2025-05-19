@@ -45,6 +45,8 @@ public class AccountActivity extends AppCompatActivity {
     FrameLayout tabContent;
     LinearLayout btnLogOut;
     LinearLayout btnResetPass;
+    LinearLayout btn_wishlist;
+
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -63,6 +65,8 @@ public class AccountActivity extends AppCompatActivity {
         btnCart = findViewById(R.id.btnCart);
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
+        btnLogOut = findViewById(R.id.btnLogOut);
+        btn_wishlist = findViewById(R.id.btn_wishlist);
 
         btnHome.setOnClickListener(v -> {
             Intent home = new Intent(AccountActivity.this, HomepageActivity.class);
@@ -87,6 +91,36 @@ public class AccountActivity extends AppCompatActivity {
             highlightTab(btnGeneral);
             showTab(R.layout.tab_general);
 
+            //Lắng nghe sự kiện click
+            btnLogOut.setOnClickListener(v1 -> {
+                String accessToken = SharedPref.getAccessToken(AccountActivity.this);
+
+                AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
+
+                authFetching.logout().enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Toast.makeText(AccountActivity.this, "Sign out successfully!", Toast.LENGTH_SHORT).show();
+
+                        SharedPref.clearTokens(AccountActivity.this);
+
+                        Intent loginIntent = new Intent(AccountActivity.this, SignInActivity.class);
+                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // clear back stack
+                        startActivity(loginIntent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(AccountActivity.this, "Lỗi khi đăng xuất: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+
+            btn_wishlist.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, WishlistActivity.class);
+                startActivity(intent);
+            });
+
         });
 
         btnPurchase.setOnClickListener(v -> {
@@ -97,6 +131,17 @@ public class AccountActivity extends AppCompatActivity {
         btnSupport.setOnClickListener(v -> {
             highlightTab(btnSupport);
             showTab(R.layout.tab_support);
+        });
+
+        btn_wishlist = findViewById(R.id.btn_wishlist);
+        btn_wishlist.setOnClickListener(v -> {
+            Intent wishlist = new Intent(AccountActivity.this, WishlistActivity.class);
+            startActivity(wishlist);
+        });
+
+        btnVoucher.setOnClickListener(v -> {
+            Intent voucher = new Intent(AccountActivity.this, VoucherActivity.class);
+            startActivity(voucher);
         });
 
         btnResetPass = findViewById(R.id.btn_reset_password);

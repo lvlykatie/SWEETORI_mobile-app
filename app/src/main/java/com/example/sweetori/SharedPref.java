@@ -32,6 +32,19 @@ public class SharedPref {
         editor.remove(KEY_REFRESH_TOKEN);
         editor.apply();
     }
+
+    public static void saveUserId(Context context, int userId) {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("userId", userId);
+        editor.apply();
+    }
+
+    public static int getUserId(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        return prefs.getInt("userId", -1); // -1 nếu chưa có userId
+    }
+
     // Lưu OTP và thời gian hết hạn
     public static void saveOTP(Context context, String otp, String exp) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

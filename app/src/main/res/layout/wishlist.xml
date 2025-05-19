@@ -236,13 +236,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:gravity="start|center_vertical">
+            android:gravity="start|center_vertical"
+            android:paddingStart="20dp">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edit list"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:background="@color/white" />
 
             <ImageView
                 android:layout_width="16dp"
@@ -258,10 +260,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="end|center_vertical"
+            android:gravity="start|center_vertical"
             android:paddingEnd="8dp"
             android:text="● Delete"
-            android:textColor="@android:color/holo_red_dark" />
+            android:textColor="@android:color/holo_red_dark"
+            android:background="@color/white"
+            android:paddingStart="20dp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

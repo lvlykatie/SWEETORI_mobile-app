@@ -12,5 +12,4 @@ public interface ProductFetching {
     @GET("api/products")
     Call<APIResponse<ResProductDTO>> getAllProducts();
 
-
 }

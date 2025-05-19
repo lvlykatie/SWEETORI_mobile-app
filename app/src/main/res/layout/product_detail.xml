@@ -296,6 +296,7 @@
                             android:stepSize="0.1" />
 
                         <TextView
+                            android:id="@+id/productRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
@@ -397,24 +398,17 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/brand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Brand: Judydoll"/>
 
                     <TextView
+                        android:id="@+id/productDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Origin:China"/>
+                        android:text="Origin:China "/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Weight:#06 #49:2g;" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Expire: 12/2026"/>
                 </LinearLayout>
 
                 <!-- Đánh giá với hiệu ứng đổ bóng -->

@@ -75,6 +75,7 @@ public class SignInActivity extends AppCompatActivity {
                                 resLoginDTO.getAccess_token(),
                                 resLoginDTO.getRefresh_token());
 
+
                         Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
 
                         Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
