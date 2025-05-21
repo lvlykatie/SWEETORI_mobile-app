@@ -24,6 +24,7 @@ public class ProductActivity extends AppCompatActivity {
     private List<ResProductDTO.ProductData> productList = new ArrayList<>();
     private EditText searchInput;
     private ImageView searchIcon;
+    private ImageView filterIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,27 @@ public class ProductActivity extends AppCompatActivity {
             String q = searchInput.getText().toString().trim().toLowerCase();
             applyFilter(q);
         });
+
+        // Ánh xạ icon filter
+        filterIcon = findViewById(R.id.filter);
+        filterIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductActivity.this, TabFilterActivity.class);
+            startActivity(intent);
+            // override animation
+            overridePendingTransition(
+                    R.anim.slide_in_right,  // vào
+                    R.anim.slide_out_left   // hiện tại trượt ra trái
+            );
+        });
+    }
+    @Override
+    public void finish() {
+        super.finish();
+        // override khi bấm back hoặc finish()
+        overridePendingTransition(
+                R.anim.slide_in_left,   // trở về trượt từ trái vào
+                R.anim.slide_out_right  // đóng trượt sang phải
+        );
     }
 
     // Hàm lọc dùng chung
