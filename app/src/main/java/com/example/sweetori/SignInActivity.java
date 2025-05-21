@@ -1,6 +1,7 @@
 package com.example.sweetori;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.example.sweetori.dto.response.ResLoginDTO;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -67,7 +69,7 @@ public class SignInActivity extends AppCompatActivity {
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(SignInActivity.this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
-
+                        ResLoginDTO.UserLogin user = response.body().getData().getUserLogin();
                         APIResponse<ResLoginDTO> apiResponse = response.body();
                         ResLoginDTO resLoginDTO = apiResponse.getData();
 
@@ -79,6 +81,12 @@ public class SignInActivity extends AppCompatActivity {
                         Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
 
                         Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
+                        Gson gson = new Gson();
+
+                        String userJson = gson.toJson(user);
+
+                        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        prefs.edit().putString("user", userJson).apply();
                         startActivity(homepage);
                     } else {
                         Toast.makeText(SignInActivity.this, "Username or password is wrong!", Toast.LENGTH_SHORT).show();

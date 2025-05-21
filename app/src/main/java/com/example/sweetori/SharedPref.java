@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.sweetori.dto.response.ResLoginDTO;
+
 public class SharedPref {
     private static final String PREF_NAME = "SweetoriPrefs";
     private static final String KEY_ACCESS_TOKEN = "access_token";
@@ -44,7 +46,6 @@ public class SharedPref {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         return prefs.getInt("userId", -1); // -1 nếu chưa có userId
     }
-
     // Lưu OTP và thời gian hết hạn
     public static void saveOTP(Context context, String otp, String exp) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

@@ -54,23 +54,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="4dp" />
+    <LinearLayout
+        android:id="@+id/nameLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/textViewSlogan1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/editTextUserFirstName"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="First Name"
+            android:background="@drawable/edit_text_bg"
+            android:paddingStart="12dp"
+            android:textColor="#000"
+            android:textColorHint="#9098B1"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/editTextUserLastName"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="Last Name"
+            android:background="@drawable/edit_text_bg"
+            android:paddingStart="12dp"
+            android:textColor="#000"
+            android:textColorHint="#9098B1"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
     <EditText
         android:id="@+id/editTextUserName"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:hint="Name"
+        android:hint="Username"
         android:background="@drawable/edit_text_bg"
         android:paddingStart="12dp"
         android:textColor="#000"
         android:textColorHint="#9098B1"
         android:imeOptions="actionDone"
         android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@id/textViewSlogan1"
+        app:layout_constraintTop_toBottomOf="@id/nameLinearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="12dp" />
     <EditText
         android:id="@+id/editTextUserEmail"
         android:layout_width="0dp"
@@ -107,6 +146,71 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp" />
+    <EditText
+        android:id="@+id/editTextUserPhone"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:hint="Phone Number"
+        android:background="@drawable/edit_text_bg"
+        android:paddingStart="12dp"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textColorHint="#9098B1"
+        android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/editTextUserPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
+    <LinearLayout
+        android:id="@+id/genderLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/editTextUserPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textColor="#000"
+            android:layout_marginEnd="16dp" />
+
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textColor="#000"
+            android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+    <EditText
+        android:id="@+id/editTextUserAddress"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:hint="Address"
+        android:background="@drawable/edit_text_bg"
+        android:paddingStart="12dp"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textColorHint="#9098B1"
+        app:layout_constraintTop_toBottomOf="@id/genderLinearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
 
     <LinearLayout
         android:id="@+id/policyCheckbox"
@@ -114,7 +218,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/editTextUserPassword"
+        app:layout_constraintTop_toBottomOf="@id/editTextUserAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"

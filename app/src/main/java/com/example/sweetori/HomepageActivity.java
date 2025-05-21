@@ -1,6 +1,7 @@
 package com.example.sweetori;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.ProductAdapter;
+import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.response.ResProductDTO;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomepageActivity extends AppCompatActivity {
     ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
-    TextView btnMore;
+    TextView btnMore, tvUserName;
     HorizontalScrollView bannerScrollView;
     LinearLayout bannerContainer;
     private EditText searchInput;
@@ -55,12 +58,26 @@ public class HomepageActivity extends AppCompatActivity {
         btnNoti    = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
         btnMore    = findViewById(R.id.btnMore);
+        tvUserName = findViewById(R.id.tvUserName);
 
         // Ánh xạ banner
         bannerScrollView = findViewById(R.id.bannerScrollView);
         bannerContainer  = findViewById(R.id.bannerContainer);
 
         // Intent cho footer
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userJson = prefs.getString("user", null);
+
+        if (userJson != null) {
+            Gson gson = new Gson();
+            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+            if (user != null) {
+                String userName = user.getFirstName();
+                tvUserName.setText("Hello, "+ userName);
+            } else {
+                tvUserName.setText("Guest");
+            }
+        }
         btnAccount.setOnClickListener(v ->
                 startActivity(new Intent(this, AccountActivity.class))
         );

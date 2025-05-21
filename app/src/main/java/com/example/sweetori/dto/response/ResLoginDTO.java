@@ -2,6 +2,8 @@ package com.example.sweetori.dto.response;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 public class ResLoginDTO {
     @SerializedName("access_token")
     private String access_token;
@@ -46,7 +48,7 @@ public class ResLoginDTO {
     //    @Data
 //    @AllArgsConstructor
 //    @NoArgsConstructor
-    public static class UserLogin {
+    public static class UserLogin implements Serializable {
         private String username;
         private String email;
         private String firstName;

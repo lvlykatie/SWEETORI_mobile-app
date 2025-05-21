@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText etUsername, etEmail, etPassword;
+    private EditText etUsername, etEmail, etPassword, etFirstname, etLastname, etPhone, etAddress;
+    private RadioButton rbMale, rbFemale;
     private CheckBox checkBoxPolicy;
 
     @Override
@@ -47,6 +49,12 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.editTextUserName);
         etEmail = findViewById(R.id.editTextUserEmail);
         etPassword = findViewById(R.id.editTextUserPassword);
+        etFirstname = findViewById(R.id.editTextUserFirstName);
+        etLastname = findViewById(R.id.editTextUserLastName);
+        etPhone = findViewById(R.id.editTextUserPhone);
+        etAddress = findViewById(R.id.editTextUserAddress);
+        rbMale = findViewById(R.id.radioMale);
+        rbFemale = findViewById(R.id.radioFemale);
         checkBoxPolicy = findViewById(R.id.checkBoxPolicy);
         Button btnSignUp = findViewById(R.id.btnSignUp);
         TextView btnSignInNow = findViewById(R.id.btnSignInNow);
@@ -64,6 +72,20 @@ public class RegisterActivity extends AppCompatActivity {
             reqRegisterDTO.setUsername(etUsername.getText().toString().trim());
             reqRegisterDTO.setEmail(etEmail.getText().toString().trim());
             reqRegisterDTO.setPassword(etPassword.getText().toString().trim());
+            reqRegisterDTO.setFirstName(etFirstname.getText().toString().trim());
+            reqRegisterDTO.setLastName(etLastname.getText().toString().trim());
+            reqRegisterDTO.setPhoneNumber(etPhone.getText().toString().trim());
+            reqRegisterDTO.setBuyingAddress(etAddress.getText().toString().trim());
+            String gender;
+            if (rbMale.isChecked()) {
+                gender = "MALE";
+            } else if (rbFemale.isChecked()) {
+                gender = "FEMALE";
+            } else {
+                Toast.makeText(this, "Please select your gender!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            reqRegisterDTO.setGender(gender);
 
             authFetching.register(reqRegisterDTO).enqueue(new Callback<APIResponse<ResRegisterDTO>>() {
                 @Override
