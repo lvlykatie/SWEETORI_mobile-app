@@ -3,6 +3,7 @@ package com.example.sweetori;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -112,5 +113,31 @@ public class HomepageActivity extends AppCompatActivity {
             intent.putExtra("searchQuery", query);
             startActivity(intent);
         });
+
+        // —— Phần mới: ánh xạ container và gán click listener cho Categories & Brands ——
+        LinearLayout categoryContainer = findViewById(R.id.categoryContainer1);
+        LinearLayout categoryContainer2 = findViewById(R.id.categoryContainer2);
+        LinearLayout brandContainer    = findViewById(R.id.brandContainer);
+
+        View.OnClickListener onFilterClick = v -> {
+            // v là LinearLayout item, childAt(1) là TextView chứa tên
+            TextView tv = (TextView)((ViewGroup)v).getChildAt(1);
+            String q = tv.getText().toString().trim();
+            Intent intent = new Intent(HomepageActivity.this, ProductActivity.class);
+            intent.putExtra("searchQuery", q);
+            startActivity(intent);
+        };
+
+        // Đăng ký cho từng mục trong categoryContainer
+        for (int i = 0; i < categoryContainer.getChildCount(); i++) {
+            categoryContainer.getChildAt(i).setOnClickListener(onFilterClick);
+        }
+        for (int i = 0; i < categoryContainer2.getChildCount(); i++) {
+            categoryContainer2.getChildAt(i).setOnClickListener(onFilterClick);
+        }
+        // Đăng ký cho từng mục trong brandContainer
+        for (int i = 0; i < brandContainer.getChildCount(); i++) {
+            brandContainer.getChildAt(i).setOnClickListener(onFilterClick);
+        }
     }
 }

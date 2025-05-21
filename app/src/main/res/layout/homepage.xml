@@ -324,6 +324,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/categoryContainer1"
                         android:orientation="horizontal">
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -461,6 +462,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/categoryContainer2"
                         android:orientation="horizontal">
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -625,6 +627,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/brandContainer"
                         android:orientation="horizontal">
                         <LinearLayout
                             android:layout_width="wrap_content"
