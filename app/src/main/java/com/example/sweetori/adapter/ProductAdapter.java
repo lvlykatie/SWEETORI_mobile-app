@@ -53,9 +53,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             final ResProductDTO.ProductData product = productList.get(position);  // final ở đây
 
             // Set text for product name
-            holder.productName.setText(product.getproductName() != null ? product.getproductName() : "No name");
+            holder.productName.setText(product.getProductName() != null ? product.getProductName() : "No name");
 
-            if (product.getproductName().length() > 30) {
+            if (product.getProductName().length() > 30) {
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
             } else {
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);

@@ -90,7 +90,7 @@ public class ProductActivity extends AppCompatActivity {
             filtered.addAll(tmp);
         } else {
             for (ResProductDTO.ProductData p : tmp) {
-                String name = p.getproductName();
+                String name = p.getProductName();
                 if (name != null && name.toLowerCase().contains(q)) {
                     filtered.add(p);
                 }

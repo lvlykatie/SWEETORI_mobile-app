@@ -3,29 +3,8 @@ package com.example.sweetori.dto.response;
 import java.util.List;
 
 public class ResProductDTO {
-    private Meta meta;
+    private PaginationWrapper.Meta meta;
     private List<ProductData> data;
-
-    public ResProductDTO(Meta meta, List<ProductData> productData) {
-        this.meta = meta;
-        this.data = data;
-    }
-
-    public Meta getMeta() {
-        return meta;
-    }
-
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
-    public List<ProductData> getProductData() {
-        return data;
-    }
-
-    public void setProductData(List<ProductData> data) {
-        this.data = data;
-    }
 
     public static class ProductDataManager {
         private static ProductDataManager instance;
@@ -49,49 +28,29 @@ public class ResProductDTO {
             this.productList = productList;
         }
     }
-    public class Meta {
-        private int currentPage, totalPages, pageSize, total;
 
-        public void setCurrentPage(int currentPage) {
-            this.currentPage = currentPage;
-        }
-
-        public void setTotalPages(int totalPages) {
-            this.totalPages = totalPages;
-        }
-
-        public void setPageSize(int pageSize) {
-            this.pageSize = pageSize;
-        }
-
-        public void setTotal(int total) {
-            this.total = total;
-        }
-
-        public int getCurrentPage() {
-            return currentPage;
-        }
-
-        public int getTotalPages() {
-            return totalPages;
-        }
-
-        public int getPageSize() {
-            return pageSize;
-        }
-
-        public int getTotal() {
-            return total;
-        }
-
-        public Meta(int currentPage, int totalPages, int pageSize, int total) {
-            this.currentPage = currentPage;
-            this.totalPages = totalPages;
-            this.pageSize = pageSize;
-            this.total = total;
-        }
+    public ResProductDTO(PaginationWrapper.Meta meta, List<ProductData> data) {
+        this.meta = meta;
+        this.data = data;
     }
-    public class ProductData {
+
+    public PaginationWrapper.Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(PaginationWrapper.Meta meta) {
+        this.meta = meta;
+    }
+
+    public List<ProductData> getData() {
+        return data;
+    }
+
+    public void setData(List<ProductData> data) {
+        this.data = data;
+    }
+
+    public static class ProductData {
         private int productId;
         private String productName;
         private String description;
@@ -104,7 +63,8 @@ public class ResProductDTO {
         private int quantity;
         private double avgRate;
 
-        public ProductData(int productId, String productName, String description, String descriptionDetails, String image, String productCode, String brand, double sellingPrice, double listPrice, int quantity, double avgRate) {
+        public ProductData(int productId, String productName, String description, String descriptionDetails, String image,
+                           String productCode, String brand, double sellingPrice, double listPrice, int quantity, double avgRate) {
             this.productId = productId;
             this.productName = productName;
             this.description = description;
@@ -118,92 +78,30 @@ public class ResProductDTO {
             this.avgRate = avgRate;
         }
 
-        public void setProductId(int productId) {
-            this.productId = productId;
-        }
+        // Getters
+        public int getProductId() { return productId; }
+        public String getProductName() { return productName; }
+        public String getDescription() { return description; }
+        public String getDescriptionDetails() { return descriptionDetails; }
+        public String getImage() { return image; }
+        public String getProductCode() { return productCode; }
+        public String getBrand() { return brand; }
+        public double getSellingPrice() { return sellingPrice; }
+        public double getListPrice() { return listPrice; }
+        public int getQuantity() { return quantity; }
+        public double getAvgRate() { return avgRate; }
 
-        public void setproductName(String productName) {
-            this.productName = productName;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public void setDescriptionDetails(String descriptionDetails) {
-            this.descriptionDetails = descriptionDetails;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public void setproductCode(String productCode) {
-            this.productCode = productCode;
-        }
-
-        public void setbrand(String brand) {
-            this.brand = brand;
-        }
-
-        public void setSellingPrice(double sellingPrice) {
-            this.sellingPrice = sellingPrice;
-        }
-
-        public void setListPrice(double listPrice) {
-            this.listPrice = listPrice;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
-        public void setAvgRate(double avgRate) {
-            this.avgRate = avgRate;
-        }
-
-        public int getProductId() {
-            return productId;
-        }
-
-        public String getproductName() {
-            return productName;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String getDescriptionDetails() {
-            return descriptionDetails;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public String getproductCode() {
-            return productCode;
-        }
-
-        public String getbrand() {
-            return brand;
-        }
-
-        public double getSellingPrice() {
-            return sellingPrice;
-        }
-
-        public double getListPrice() {
-            return listPrice;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public double getAvgRate() {
-            return avgRate;
-        }
+        // Setters
+        public void setProductId(int productId) { this.productId = productId; }
+        public void setProductName(String productName) { this.productName = productName; }
+        public void setDescription(String description) { this.description = description; }
+        public void setDescriptionDetails(String descriptionDetails) { this.descriptionDetails = descriptionDetails; }
+        public void setImage(String image) { this.image = image; }
+        public void setProductCode(String productCode) { this.productCode = productCode; }
+        public void setBrand(String brand) { this.brand = brand; }
+        public void setSellingPrice(double sellingPrice) { this.sellingPrice = sellingPrice; }
+        public void setListPrice(double listPrice) { this.listPrice = listPrice; }
+        public void setQuantity(int quantity) { this.quantity = quantity; }
+        public void setAvgRate(double avgRate) { this.avgRate = avgRate; }
     }
 }

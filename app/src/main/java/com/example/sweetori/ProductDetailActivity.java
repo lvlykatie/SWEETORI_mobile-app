@@ -238,9 +238,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void showProductDetails(ResProductDTO.ProductData product) {
-        productName.setText(product.getproductName());
+        productName.setText(product.getProductName());
         productPrice.setText(String.format("%,.0f VND", product.getSellingPrice()));
-        productBrand.setText(String.format("Brand: %s", product.getbrand()));
+        productBrand.setText(String.format("Brand: %s", product.getBrand()));
         productDesc.setText(product.getDescriptionDetails());
 
         if (product.getImage() != null && !product.getImage().isEmpty()) {

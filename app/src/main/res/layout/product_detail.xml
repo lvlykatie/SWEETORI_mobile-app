@@ -161,12 +161,6 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <ImageView
-                        android:id="@+id/imageView12"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/home_icon" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -292,6 +286,7 @@
                             android:layout_height="wrap_content"
                             android:isIndicator="true"
                             android:numStars="5"
+                            android:progressTint="@color/color04"
                             android:rating="4.9"
                             android:stepSize="0.1" />
 
@@ -455,6 +450,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
                                     android:isIndicator="true"
+                                    android:progressTint="@color/color04"
                                     android:numStars="5"
                                     android:rating="4.9"
                                     android:stepSize="0.1" />
