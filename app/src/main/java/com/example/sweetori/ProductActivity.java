@@ -15,7 +15,13 @@ import com.example.sweetori.adapter.ProductAdapter;
 import com.example.sweetori.dto.response.ResProductDTO;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import android.app.Activity;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 public class ProductActivity extends AppCompatActivity {
     private ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
@@ -25,6 +31,9 @@ public class ProductActivity extends AppCompatActivity {
     private EditText searchInput;
     private ImageView searchIcon;
     private ImageView filterIcon;
+
+    private ActivityResultLauncher<Intent> filterLauncher;
+    private List<ResProductDTO.ProductData> managerList;  // dữ liệu gốc
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +93,81 @@ public class ProductActivity extends AppCompatActivity {
         // Ánh xạ icon filter
         filterIcon = findViewById(R.id.filter);
         filterIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductActivity.this, TabFilterActivity.class);
-            startActivity(intent);
-            // override animation
+            Intent intent = new Intent(this, TabFilterActivity.class);
+            filterLauncher.launch(intent);        // <-- dùng launcher
             overridePendingTransition(
-                    R.anim.slide_in_right,  // vào
-                    R.anim.slide_out_left   // hiện tại trượt ra trái
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left
             );
         });
+
+        // Đăng ký launcher để nhận kết quả từ TabFilterActivity
+        filterLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                this::onFilterResult
+        );
+    }
+
+    // Callback khi filter xong
+    private void onFilterResult(ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            Intent data = result.getData();
+            ArrayList<String> selCats   = data.getStringArrayListExtra("FILTER_CATEGORIES");
+            ArrayList<String> selBrands = data.getStringArrayListExtra("FILTER_BRANDS");
+            int selRate     = data.getIntExtra("FILTER_RATE", 0);
+            String priceOrd = data.getStringExtra("FILTER_PRICE");
+            applyAdvancedFilter(selCats, selBrands, selRate, priceOrd);
+        }
+    }
+    /**
+     * Lọc theo category, brand, rate, sau đó sắp xếp theo priceOrder.
+     */
+    private void applyAdvancedFilter(
+            List<String> cats,
+            List<String> brands,
+            int minRate,
+            String priceOrder
+    ) {
+        List<ResProductDTO.ProductData> filtered = new ArrayList<>();
+
+        for (ResProductDTO.ProductData p : managerList) {
+            String name = p.getProductName() != null
+                    ? p.getProductName().toLowerCase()
+                    : "";
+
+            // 1) Check Category: nếu danh sách cats rỗng, bỏ qua luôn
+            boolean okCat = cats == null || cats.isEmpty()
+                    || cats.stream()
+                    .map(String::toLowerCase)
+                    .anyMatch(name::contains);
+
+            // 2) Check Brand: tương tự
+            boolean okBrand = brands == null || brands.isEmpty()
+                    || brands.stream()
+                    .map(String::toLowerCase)
+                    .anyMatch(name::contains);
+
+            // 3) Check Rate
+            boolean okRate = p.getAvgRate() >= minRate;
+
+            if (okCat && okBrand && okRate) {
+                filtered.add(p);
+            }
+        }
+
+        // 4) Sort theo priceOrder
+        if ("LOW_HIGH".equals(priceOrder)) {
+            Collections.sort(filtered,
+                    Comparator.comparingDouble(ResProductDTO.ProductData::getSellingPrice)
+            );
+        } else if ("HIGH_LOW".equals(priceOrder)) {
+            Collections.sort(filtered,
+                    (a, b) -> Double.compare(b.getSellingPrice(), a.getSellingPrice())
+            );
+        }
+
+        // 5) Cập nhật adapter
+        productAdapter.updateProductList(filtered);
     }
     @Override
     public void finish() {
