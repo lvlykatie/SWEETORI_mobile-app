@@ -57,6 +57,9 @@
         <activity
             android:name=".AddToBagActivity"
             android:exported="false" />
+        <activity
+            android:name=".PaymentsActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

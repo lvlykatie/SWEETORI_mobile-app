@@ -1,6 +1,9 @@
 package com.example.sweetori;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,11 +20,19 @@ public class AddToBagActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AddToBagAdapter adapter;
+    Button checkoutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_to_bag);
+
+        checkoutBtn = findViewById(R.id.checkoutBtn);
+        checkoutBtn.setOnClickListener(v -> {
+            Intent noti = new Intent(AddToBagActivity.this, PaymentsActivity.class);
+            startActivity(noti);
+        });
+
 
         // Lấy JSON string từ intent
         String selectedItemsJson = getIntent().getStringExtra("selectedItems");
@@ -33,7 +44,7 @@ public class AddToBagActivity extends AppCompatActivity {
         // Thiết lập RecyclerView
         recyclerView = findViewById(R.id.recyclerViewCart);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddToBagAdapter(selectedItems, null); // null nếu không cần click listener
+        adapter = new AddToBagAdapter(selectedItems, null);
         recyclerView.setAdapter(adapter);
     }
 }
