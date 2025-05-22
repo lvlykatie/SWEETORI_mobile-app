@@ -59,14 +59,20 @@ public class ProductActivity extends AppCompatActivity {
         // Load cached data vào list gốc và adapter
         List<ResProductDTO.ProductData> cached = ResProductDTO.ProductDataManager
                 .getInstance().getProductList();
-        if (cached != null && !cached.isEmpty()) {
-            productList.clear();
-            productList.addAll(cached);
-            productAdapter.notifyDataSetChanged();
-            Log.d("PRODUCT_ACTIVITY", "Loaded cached data. Items: " + productList.size());
+        if (cached == null) {
+            managerList = new ArrayList<>();
+            ResProductDTO.ProductDataManager.getInstance().setProductList(managerList);
+            Log.e("PRODUCT_ACTIVITY", "No cached data; initialized empty managerList");
         } else {
-            Log.e("PRODUCT_ACTIVITY", "No cached data available");
+            managerList = cached;
+            Log.d("PRODUCT_ACTIVITY", "Loaded cached data. Items: " + managerList.size());
         }
+
+        // Hiển thị lần đầu:
+        productList.clear();
+        productList.addAll(managerList);
+        productAdapter.notifyDataSetChanged();
+
 
         // Footer navigation (giữ nguyên)
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
@@ -90,6 +96,12 @@ public class ProductActivity extends AppCompatActivity {
             applyFilter(q);
         });
 
+        // Đăng ký launcher để nhận kết quả từ TabFilterActivity
+        filterLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                this::onFilterResult
+        );
+
         // Ánh xạ icon filter
         filterIcon = findViewById(R.id.filter);
         filterIcon.setOnClickListener(v -> {
@@ -101,11 +113,7 @@ public class ProductActivity extends AppCompatActivity {
             );
         });
 
-        // Đăng ký launcher để nhận kết quả từ TabFilterActivity
-        filterLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                this::onFilterResult
-        );
+
     }
 
     // Callback khi filter xong
