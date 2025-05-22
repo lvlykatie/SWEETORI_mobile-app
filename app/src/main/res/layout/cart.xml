@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/cart">
+    android:id="@+id/cart"
+    tools:context=".CartActivity">
 
-    <!-- HEADER SECTION -->
+    <!-- HEADER -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintHeader"
         android:layout_width="0dp"
@@ -20,9 +21,9 @@
             android:id="@+id/imageView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/header"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
+            android:src="@drawable/header"
             android:layout_marginBottom="16dp"
             tools:ignore="MissingConstraints" />
 
@@ -30,12 +31,12 @@
             android:id="@+id/header1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/header"
+            android:orientation="vertical"
             android:gravity="center_vertical"
             android:layout_marginBottom="27dp"
-            android:layout_marginHorizontal="1dp"
+            android:background="@drawable/header"
             android:elevation="4dp"
-            android:orientation="vertical"
+            android:layout_marginHorizontal="1dp"
             tools:ignore="MissingConstraints">
 
             <LinearLayout
@@ -43,8 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginHorizontal="24dp"
                 android:orientation="horizontal"
+                android:layout_marginHorizontal="24dp"
                 android:paddingVertical="8dp">
 
                 <ImageView
@@ -87,7 +88,6 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-
                 <ImageView
                     android:id="@+id/chatbot"
                     android:layout_width="40dp"
@@ -98,6 +98,104 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/checkboxAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="50dp"
+        app:layout_constraintTop_toBottomOf="@id/constraintHeader"
+        tools:ignore="MissingConstraints">
+
+        <CheckBox
+            android:id="@+id/checkboxall"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:buttonTint="@color/black"
+            android:button="@null"
+            android:background="@drawable/custom_checkbox_background" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="All"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+    <!-- RECYCLERVIEW GIỎ HÀNG -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="12dp"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="true"
+        tools:listitem="@layout/item_product_1"
+        app:layout_constraintTop_toBottomOf="@id/checkboxAll"
+        app:layout_constraintBottom_toTopOf="@+id/layoutBottomSection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- TỔNG TIỀN VÀ MUA NGAY -->
+    <LinearLayout
+        android:id="@+id/layoutBottomSection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/footerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/txtTotalQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total quantity: 0"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTotalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total: 0 VND"
+                android:textSize="16sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/imgbtn_buynow_cart"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="BUY NOW"
+            android:textColor="@color/white"
+            android:background="@drawable/banner_bg"
+            android:scaleType="centerInside"
+            android:contentDescription="Buy now" />
+    </LinearLayout>
 
     <!-- FOOTER -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -112,9 +210,9 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            app:backgroundTint="@color/white"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:layout_gravity="bottom"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            app:backgroundTint="@color/white"
             app:fabCradleMargin="8dp"
             app:fabCradleRoundedCornerRadius="50dp"
             app:fabCradleVerticalOffset="6dp">
@@ -128,31 +226,27 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
                     android:gravity="center">
 
                     <ImageView
                         android:id="@+id/btnCart"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_gravity="center"
                         android:clickable="true"
-                        android:tint="@color/color01"
-                        app:srcCompat="@drawable/cart_icon" />
+                        app:srcCompat="@drawable/cart_icon"
+                        app:tint="@color/color01" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
                     android:gravity="center">
 
                     <ImageView
                         android:id="@+id/btnVoucher"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_gravity="center"
                         android:clickable="true"
                         app:srcCompat="@drawable/voucher_icon" />
                 </LinearLayout>
@@ -161,7 +255,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
                     android:visibility="visible">
 
                     <ImageView
@@ -175,14 +268,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
                     android:gravity="center">
 
                     <ImageView
                         android:id="@+id/btnNoti"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_gravity="center"
                         android:clickable="true"
                         app:srcCompat="@drawable/notification_icon" />
                 </LinearLayout>
@@ -191,14 +282,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
-                    android:orientation="vertical"
                     android:gravity="center">
 
                     <ImageView
                         android:id="@+id/btnAccount"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:layout_gravity="center"
                         android:clickable="true"
                         app:srcCompat="@drawable/account_icon" />
                 </LinearLayout>
@@ -206,10 +295,10 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:id="@+id/btnHome"
             android:src="@drawable/home_icon"
             app:backgroundTint="@color/color02"
             app:fabCustomSize="53dp"
@@ -217,61 +306,5 @@
             app:maxImageSize="35dp"
             app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/constraintHeader"
-        app:layout_constraintBottom_toTopOf="@id/footerLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Phần tổng số lượng và giá -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:id="@+id/txtTotalQuantity"
-                    android:text="Total quantity: 0"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_width="0dp"
-                    android:textColor="@color/black"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/txtTotalPrice"
-                    android:text="Total: 0 VND"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <!-- Button mua hàng -->
-            <ImageButton
-                android:id="@+id/imgbtn_buynow_cart"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/buynow_cart"
-                android:scaleType="centerInside"
-                android:contentDescription="Buy now"/>
-        </LinearLayout>
-    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

@@ -18,7 +18,7 @@ import com.example.sweetori.dto.response.ResProductDTO;
 import com.example.sweetori.dto.request.ReqReviewDTO;
 import com.example.sweetori.APIClient;
 import com.example.sweetori.dto.request.ReqCartDetailDTO;
-import com.example.sweetori.content.CartDetailFetching;
+import com.example.sweetori.content.CartFetching;
 import com.example.sweetori.SharedPref;
 import com.example.sweetori.dto.request.ReqCartDTO;
 import com.example.sweetori.content.FeedbackFetching;
@@ -189,7 +189,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
 
 
-            CartDetailFetching api = APIClient.getClientWithToken(accessToken).create(CartDetailFetching.class);
+            CartFetching api = APIClient.getClientWithToken(accessToken).create(CartFetching.class);
             ReqCartDetailDTO request_product = new ReqCartDetailDTO(productId, quantityValue[0]);
 
             Call<Void> call = api.addCartDetail(request_product);
@@ -241,7 +241,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         productName.setText(product.getProductName());
         productPrice.setText(String.format("%,.0f VND", product.getSellingPrice()));
         productBrand.setText(String.format("Brand: %s", product.getBrand()));
-        productDesc.setText(product.getDescriptionDetails());
+        productDesc.setText(product.getDescriptionDetails() + "\n" + product.getDescription());
 
         if (product.getImage() != null && !product.getImage().isEmpty()) {
             Glide.with(this)

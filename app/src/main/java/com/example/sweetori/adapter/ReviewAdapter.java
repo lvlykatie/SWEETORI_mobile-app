@@ -58,10 +58,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
         // Load avatar: ưu tiên ảnh sản phẩm, nếu không có thì dùng icon mặc định
         String imageUrl = null;
-        if (review.getProduct() != null && review.getProduct().getImage() != null && !review.getProduct().getImage().isEmpty()) {
-            imageUrl = review.getProduct().getImage();
-        }
-
         if (imageUrl != null) {
             Glide.with(context)
                     .load(imageUrl)

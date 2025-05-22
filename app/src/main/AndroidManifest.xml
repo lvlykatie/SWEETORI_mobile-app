@@ -54,6 +54,9 @@
         <activity
             android:name=".TabFilterActivity"
             android:exported="false" />
+        <activity
+            android:name=".AddToBagActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
