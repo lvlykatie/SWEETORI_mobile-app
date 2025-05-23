@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -88,7 +89,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         recyclerReview.setLayoutManager(new LinearLayoutManager(this));
         reviewAdapter = new ReviewAdapter(reviewList, this);
         recyclerReview.setAdapter(reviewAdapter);
-        String accessToken = SharedPref.getAccessToken(ProductDetailActivity.this);
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(ProductDetailActivity.this);
+
 
         //Intent
         btnAccount.setOnClickListener(v ->
@@ -189,7 +191,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
 
 
-            CartFetching api = APIClient.getClientWithToken(accessToken).create(CartFetching.class);
+            CartFetching api = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
             ReqCartDetailDTO request_product = new ReqCartDetailDTO(productId, quantityValue[0]);
 
             Call<Void> call = api.addCartDetail(request_product);
@@ -216,7 +218,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 return;
             }
 
-            WishlistFetching api_Service = APIClient.getClientWithToken(accessToken).create(WishlistFetching.class);
+            WishlistFetching api_Service = APIClient.getClientWithToken(accessTokenWithUserId.first).create(WishlistFetching.class);
 
             Call<Void> call = api_Service.addToWishlist(productId);
             call.enqueue(new Callback<Void>() {

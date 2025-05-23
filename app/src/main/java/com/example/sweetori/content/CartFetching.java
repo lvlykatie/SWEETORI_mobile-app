@@ -1,5 +1,6 @@
 package com.example.sweetori.content;
 
+import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.response.ResCartDTO;
 
 import retrofit2.Call;
@@ -12,12 +13,12 @@ import retrofit2.http.Path;
 import com.example.sweetori.dto.request.ReqCartDetailDTO;
 
 public interface CartFetching {
-    @GET("api/carts")
-    Call<ResCartDTO> getCart(@Query("filter") String filter);
+    @GET("carts/{userId}")
+    Call<APIResponse<ResCartDTO>> getCart(@Path("userId") int userId);
 
-    @POST("/api/add-to-cart")
+    @POST("add-to-cart")
     Call<Void> addCartDetail(@Body ReqCartDetailDTO cartDetailRequest);
 
-    @DELETE("api/cart-details/{id}")
+    @DELETE("cart-details/{id}")
     Call<Void> deleteCartItem(@Path("id") int cartDetailId);
 }

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.AddToBagAdapter;
-import com.example.sweetori.dto.response.ResCartDTO.CartDetail;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

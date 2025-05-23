@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,8 +58,9 @@ public class CreatePassActivity extends AppCompatActivity {
             return;
         }
 
-        String accessToken = SharedPref.getAccessToken(this);
-        if (accessToken == null) {
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(CreatePassActivity.this);
+
+        if (accessTokenWithUserId.first == null) {
             Toast.makeText(this, "Please sign in again", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -67,7 +69,7 @@ public class CreatePassActivity extends AppCompatActivity {
         requestBody.put("newPassword", newPassword);
 
         // Sử dụng ApiClient thay vì tạo lại Retrofit
-        AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
+        AuthFetching authFetching = APIClient.getClientWithToken(accessTokenWithUserId.first).create(AuthFetching.class);
 
         authFetching.changePassword(requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
             @Override

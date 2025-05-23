@@ -1,29 +1,40 @@
 package com.example.sweetori.dto.response;
 
 public class ResCartDetailDTO {
-
-    private int productId;
-    private String productName;
+    private int cartDetailsId;
     private int quantity;
-    private double price;
+    private ResProductDTO.ProductData product;
 
-    public void CartItem(int productId, String productName, int quantity, double price) {
-        this.productId = productId;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.price = price;
+    public ResCartDetailDTO() {
     }
 
-    // Getter và Setter
-    public int getProductId() { return productId; }
-    public void setProductId(int productId) { this.productId = productId; }
+    public ResCartDetailDTO(int cartDetailsId, int quantity, ResProductDTO.ProductData product) {
+        this.cartDetailsId = cartDetailsId;
+        this.quantity = quantity;
+        this.product = product;
+    }
 
-    public String getProductName() { return productName; }
-    public void setProductName(String productName) { this.productName = productName; }
+    public int getCartDetailsId() {
+        return cartDetailsId;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setCartDetailsId(int cartDetailsId) {
+        this.cartDetailsId = cartDetailsId;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public ResProductDTO.ProductData getProduct() {
+        return product;
+    }
+
+    public void setProduct(ResProductDTO.ProductData product) {
+        this.product = product;
+    }
 }

@@ -3,6 +3,7 @@ package com.example.sweetori;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,15 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sweetori.APIClient;
 import com.example.sweetori.adapter.CartDetailAdapter;
 import com.example.sweetori.content.CartFetching;
+import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.response.ResCartDTO;
-import com.example.sweetori.dto.response.ResCartDTO.CartDetail;
-import com.example.sweetori.SharedPref;
+import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,12 +36,12 @@ public class CartActivity extends AppCompatActivity {
     RecyclerView recyclerViewCart;
     CartDetailAdapter cartDetailAdapter;
     TextView txtTotalQuantity, txtTotalPrice;
-
-    List<CartDetail> cartDetails;
     Button imgbtn_buynow_cart;
     CheckBox checkboxall;
-    private boolean isSelectAllChangingProgrammatically = false;
 
+    private boolean isSelectAllChangingProgrammatically = false;
+    private List<ResCartDetailDTO> cartDetails;
+    private Map<Integer, Boolean> selectedMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class CartActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.cart);
 
-        // Khởi tạo các thành phần giao diện
+        // Init UI components
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);
         btnCart = findViewById(R.id.btnCart);
@@ -59,18 +61,19 @@ public class CartActivity extends AppCompatActivity {
         imgbtn_buynow_cart = findViewById(R.id.imgbtn_buynow_cart);
         checkboxall = findViewById(R.id.checkboxall);
 
-
-
         recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
 
-        // Bắt sự kiện điều hướng
+        // Navigation listeners
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
         btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
         btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
         btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
 
+        // Buy now button
         imgbtn_buynow_cart.setOnClickListener(v -> {
-            List<ResCartDTO.CartDetail> selectedItems = cartDetailAdapter.getSelectedItems();
+            if (cartDetailAdapter == null) return;
+
+            List<ResCartDetailDTO> selectedItems = getSelectedItems();
             if (selectedItems.isEmpty()) {
                 Toast.makeText(this, "Please select at least one item", Toast.LENGTH_SHORT).show();
             } else {
@@ -80,98 +83,136 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+        // Check all checkbox
         checkboxall.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (cartDetailAdapter != null) {
-                cartDetailAdapter.setAllSelected(isChecked);
+            if (!isSelectAllChangingProgrammatically && cartDetailAdapter != null) {
+                setAllSelected(isChecked);
+                cartDetailAdapter.notifyDataSetChanged();
                 updateTotals();
             }
         });
 
+        // Fetch cart data
+        fetchCartData();
+    }
 
-        // Gọi API lấy giỏ hàng
-        String accessToken = SharedPref.getAccessToken(this);
-        int userId = SharedPref.getUserId(this);
-        String filter = "user:" + userId;
+    private void fetchCartData() {
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(CartActivity.this);
+        int userId = accessTokenWithUserId.second;
 
-        CartFetching apiService = APIClient.getClientWithToken(accessToken).create(CartFetching.class);
-        apiService.getCart(filter).enqueue(new Callback<ResCartDTO>() {
+        CartFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
+        apiService.getCart(userId).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ResCartDTO> call, Response<ResCartDTO> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<ResCartDTO.Cart> carts = response.body().getData().getData();
-                    if (carts != null && !carts.isEmpty()) {
-                        cartDetails = carts.get(0).getListOfCartdetails();
+            public void onResponse(Call<APIResponse<ResCartDTO>> call, Response<APIResponse<ResCartDTO>> response) {
+                if (response.isSuccessful() && response.body() != null &&
+                        response.body().getData() != null &&
+                        response.body().getData().getListOfCartdetails() != null) {
+                    Log.d("CartActivity", "Data fetched successfully");
+                    cartDetails = response.body().getData().getListOfCartdetails();
+                    Log.d("CartActivity", cartDetails.toString());
+                    selectedMap.clear();
+                    for (ResCartDetailDTO detail : cartDetails) {
+                        selectedMap.put(detail.getCartDetailsId(), false);
+                    }
 
-                        for (CartDetail detail : cartDetails) {
-                            detail.setSelected(false);
-                        }
-                        cartDetailAdapter = new CartDetailAdapter(cartDetails, new CartDetailAdapter.OnItemClickListener() {
-                            @Override
-                            public void onDeleteClick(CartDetail item, int position) {
-                                deleteCartItemFromServer(item.getCartDetailsId(), position);
-                            }
+                    cartDetailAdapter = new CartDetailAdapter(
+                            cartDetails,
+                            new CartDetailAdapter.OnItemClickListener() {
+                                @Override
+                                public void onDeleteClick(ResCartDetailDTO item, int position) {
+                                    deleteCartItemFromServer(item.getCartDetailsId(), position);
+                                }
 
-                            @Override
-                            public void onQuantityChanged() {
-                                updateTotals();
-                            }
-                        },
-                        new CartDetailAdapter.SelectAllCheckboxListener() {
-                            @Override
-                            public void onSelectAllChecked(boolean isAllSelected) {
+                                @Override
+                                public void onQuantityChanged() {
+                                    updateTotals();
+                                    updateSelectAllCheckbox();
+                                }
+
+                                @Override
+                                public void onItemSelectedChanged(int cartDetailId, boolean isSelected) {
+                                    selectedMap.put(cartDetailId, isSelected);
+                                    updateTotals();
+                                    updateSelectAllCheckbox();
+                                }
+                            },
+                            isAllSelected -> {
                                 isSelectAllChangingProgrammatically = true;
                                 checkboxall.setChecked(isAllSelected);
                                 isSelectAllChangingProgrammatically = false;
-                            }
-                        });
+                            },
+                            selectedMap
+                    );
 
-                        recyclerViewCart.setAdapter(cartDetailAdapter);
-                        updateTotals();
+                    recyclerViewCart.setAdapter(cartDetailAdapter);
+                    updateTotals();
 
-                    }
                 } else {
-                    Log.e("CartActivity", "No data");
+                    Log.e("CartActivity", "Failed to get data or data is null");
                 }
             }
 
             @Override
-            public void onFailure(Call<ResCartDTO> call, Throwable t) {
-                Log.e("CartActivity", "failse: " + t.getMessage());
+            public void onFailure(Call<APIResponse<ResCartDTO>> call, Throwable t) {
+                Log.e("CartActivity", "API call failed: " + t.getMessage());
             }
         });
     }
 
+    private List<ResCartDetailDTO> getSelectedItems() {
+        List<ResCartDetailDTO> selectedItems = new java.util.ArrayList<>();
+        if (cartDetails != null) {
+            for (ResCartDetailDTO detail : cartDetails) {
+                Boolean isSelected = selectedMap.get(detail.getCartDetailsId());
+                if (isSelected != null && isSelected) {
+                    selectedItems.add(detail);
+                }
+            }
+        }
+        return selectedItems;
+    }
+
+    private void setAllSelected(boolean isSelected) {
+        if (cartDetails != null) {
+            for (ResCartDetailDTO detail : cartDetails) {
+                selectedMap.put(detail.getCartDetailsId(), isSelected);
+            }
+        }
+    }
+
     private void deleteCartItemFromServer(int cartDetailId, int position) {
-        String accessToken = SharedPref.getAccessToken(this);
-        CartFetching apiService = APIClient.getClientWithToken(accessToken).create(CartFetching.class);
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(CartActivity.this);
+        CartFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
 
         apiService.deleteCartItem(cartDetailId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     cartDetailAdapter.removeItem(position);
+                    selectedMap.remove(cartDetailId);
                     updateTotals();
-                    Log.d("CartActivity", "Đã xoá item khỏi server");
+                    updateSelectAllCheckbox();
+                    Log.d("CartActivity", "Item deleted successfully");
                 } else {
-                    Log.e("CartActivity", "Xoá thất bại");
+                    Log.e("CartActivity", "Failed to delete item");
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("CartActivity", "Lỗi xoá item: " + t.getMessage());
+                Log.e("CartActivity", "Error deleting item: " + t.getMessage());
             }
         });
     }
 
-    // Hàm tính tổng số lượng và tổng tiền
     private void updateTotals() {
         int totalQuantity = 0;
         double totalPrice = 0;
 
         if (cartDetails != null) {
-            for (CartDetail detail : cartDetails) {
-                if (detail.isSelected()) {
+            for (ResCartDetailDTO detail : cartDetails) {
+                Boolean isSelected = selectedMap.get(detail.getCartDetailsId());
+                if (isSelected != null && isSelected) {
                     totalQuantity += detail.getQuantity();
                     totalPrice += detail.getQuantity() * detail.getProduct().getSellingPrice();
                 }
@@ -179,18 +220,21 @@ public class CartActivity extends AppCompatActivity {
         }
 
         txtTotalQuantity.setText("Total quantity: " + totalQuantity);
-        txtTotalPrice.setText(String.format("Total: %, .0f VND", totalPrice));
+        txtTotalPrice.setText(String.format("Total: %,.0f VND", totalPrice).replaceAll(",", "."));
     }
 
     private void updateSelectAllCheckbox() {
         if (cartDetails == null || cartDetails.isEmpty()) {
+            isSelectAllChangingProgrammatically = true;
             checkboxall.setChecked(false);
+            isSelectAllChangingProgrammatically = false;
             return;
         }
 
         boolean allSelected = true;
-        for (CartDetail detail : cartDetails) {
-            if (!detail.isSelected()) {
+        for (ResCartDetailDTO detail : cartDetails) {
+            Boolean isSelected = selectedMap.get(detail.getCartDetailsId());
+            if (isSelected == null || !isSelected) {
                 allSelected = false;
                 break;
             }

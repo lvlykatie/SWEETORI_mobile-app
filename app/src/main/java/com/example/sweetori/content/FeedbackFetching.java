@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface FeedbackFetching {
-    @GET("api/feedbacks")
+    @GET("feedbacks")
     Call<APIResponse<PaginationWrapper<ResReviewDTO>>> getFeedback(@Query("filter") String filter);
 }

@@ -3,6 +3,7 @@ package com.example.sweetori;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,14 +29,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.introduce);
 
         btnGoShopping = findViewById(R.id.btnGoShopping);
-        String token = SharedPref.getAccessToken(MainActivity.this);
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(MainActivity.this);
+
 
         btnGoShopping.setOnClickListener(v -> {
-            Intent intent = (token != null)
+            Intent intent = (accessTokenWithUserId.first != null)
                     ? new Intent(MainActivity.this, HomepageActivity.class)
                     : new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
-            if (token != null) finish(); // Only finish MainActivity if logged in
+            if (accessTokenWithUserId.first != null) finish(); // Only finish MainActivity if logged in
         });
 
         setUpProductFetching();

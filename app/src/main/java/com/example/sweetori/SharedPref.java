@@ -3,6 +3,7 @@ package com.example.sweetori;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.util.Pair;
 
 import com.example.sweetori.dto.response.ResLoginDTO;
 
@@ -44,9 +45,11 @@ public class SharedPref {
         Log.d("TOKEN", "Tokens saved: AccessToken=" + accessToken + ", RefreshToken=" + refreshToken);
     }
 
-    public static String getAccessToken(Context context) {
+    public static Pair<String, Integer> getAccessTokenWithUserId(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(KEY_ACCESS_TOKEN, null);
+        String accessToken = prefs.getString(KEY_ACCESS_TOKEN, null);
+        int userId = prefs.getInt("userId", -1); // -1 if userId is not set
+        return new Pair<>(accessToken, userId);
     }
 
     public static void clearTokens(Context context) {

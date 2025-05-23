@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.AddToBagAdapter;
-import com.example.sweetori.dto.response.ResCartDTO.CartDetail;
+import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,9 +37,9 @@ public class AddToBagActivity extends AppCompatActivity {
         // Lấy JSON string từ intent
         String selectedItemsJson = getIntent().getStringExtra("selectedItems");
 
-        // Chuyển JSON thành List<CartDetail>
-        Type listType = new TypeToken<List<CartDetail>>() {}.getType();
-        List<CartDetail> selectedItems = new Gson().fromJson(selectedItemsJson, listType);
+        // Chuyển JSON thành List<ResCartDetailDTO>
+        Type listType = new TypeToken<List<ResCartDetailDTO>>() {}.getType();
+        List<ResCartDetailDTO> selectedItems = new Gson().fromJson(selectedItemsJson, listType);
 
         // Thiết lập RecyclerView
         recyclerView = findViewById(R.id.recyclerViewCart);

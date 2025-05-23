@@ -16,19 +16,20 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.sweetori.R;
 import com.example.sweetori.dto.response.ResCartDTO;
+import com.example.sweetori.dto.response.ResCartDetailDTO;
 
 import java.util.List;
 import java.util.Locale;
 
 public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHolder> {
 
-    private List<ResCartDTO.CartDetail> cartDetails;
+    private List<ResCartDetailDTO> cartDetails;
     private OnItemClickListener onItemClickListener;
     public interface OnItemClickListener {
         void onQuantityChanged();
     }
 
-    public AddToBagAdapter(List<ResCartDTO.CartDetail> cartDetails, OnItemClickListener listener) {
+    public AddToBagAdapter(List<ResCartDetailDTO> cartDetails, OnItemClickListener listener) {
         this.cartDetails = cartDetails;
         this.onItemClickListener = listener;
     }
@@ -43,7 +44,7 @@ public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ResCartDTO.CartDetail item = cartDetails.get(position);
+        ResCartDetailDTO item = cartDetails.get(position);
 
         holder.productName.setText(item.getProduct().getProductName());
         holder.productPrice.setText(String.format(Locale.getDefault(), "%,.0f VND", item.getProduct().getSellingPrice()));

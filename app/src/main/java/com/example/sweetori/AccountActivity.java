@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.graphics.drawable.GradientDrawable;
@@ -93,9 +94,9 @@ public class AccountActivity extends AppCompatActivity {
 
             //Lắng nghe sự kiện click
             btnLogOut.setOnClickListener(v1 -> {
-                String accessToken = SharedPref.getAccessToken(AccountActivity.this);
+                Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AccountActivity.this);
 
-                AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
+                AuthFetching authFetching = APIClient.getClientWithToken(accessTokenWithUserId.first).create(AuthFetching.class);
 
                 authFetching.logout().enqueue(new Callback<Void>() {
                     @Override
@@ -154,9 +155,9 @@ public class AccountActivity extends AppCompatActivity {
 
         //Lắng nghe sự kiện click
         btnLogOut.setOnClickListener(v -> {
-            String accessToken = SharedPref.getAccessToken(AccountActivity.this);
+            Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AccountActivity.this);
 
-            AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
+            AuthFetching authFetching = APIClient.getClientWithToken(accessTokenWithUserId.first).create(AuthFetching.class);
 
             authFetching.logout().enqueue(new Callback<Void>() {
                 @Override

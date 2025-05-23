@@ -3,6 +3,7 @@ package com.example.sweetori.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.sweetori.CartActivity;
+import com.example.sweetori.ProductActivity;
 import com.example.sweetori.R;
+import com.example.sweetori.content.CartFetching;
 import com.example.sweetori.dto.response.ResProductDTO;
 import com.example.sweetori.ProductDetailActivity;
 import com.example.sweetori.APIClient;
@@ -82,9 +86,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
             holder.imgHeart.setOnClickListener(v -> {
                 int productId = product.getProductId();
-                String accessToken = SharedPref.getAccessToken(context);
+                Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(v.getContext());
 
-                WishlistFetching apiService = APIClient.getClientWithToken(accessToken).create(WishlistFetching.class);
+                WishlistFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(WishlistFetching.class);
                 Call<Void> call = apiService.addToWishlist(productId);
 
                 call.enqueue(new Callback<Void>() {

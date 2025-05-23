@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -15,33 +16,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sweetori.R;
-import com.example.sweetori.dto.response.ResCartDTO;
+import com.example.sweetori.dto.response.ResCartDetailDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.ViewHolder> {
 
-    private List<ResCartDTO.CartDetail> cartDetails;
+    private List<ResCartDetailDTO> cartDetails;
     private OnItemClickListener onItemClickListener;
     private SelectAllCheckboxListener selectAllCheckboxListener;
 
+    // Map trạng thái chọn: key = cartDetailsId, value = isSelected
+    private Map<Integer, Boolean> selectedMap;
 
-    // Interface để callback khi xoá hoặc thay đổi số lượng
     public interface OnItemClickListener {
-        void onDeleteClick(ResCartDTO.CartDetail item, int position);
+        void onDeleteClick(ResCartDetailDTO item, int position);
         void onQuantityChanged();
+        void onItemSelectedChanged(int cartDetailId, boolean isSelected);
     }
 
     public interface SelectAllCheckboxListener {
         void onSelectAllChecked(boolean isAllSelected);
     }
 
-    public CartDetailAdapter(List<ResCartDTO.CartDetail> cartDetails, OnItemClickListener listener, SelectAllCheckboxListener selectAllCheckboxListener) {
+    public CartDetailAdapter(List<ResCartDetailDTO> cartDetails,
+                             OnItemClickListener listener,
+                             SelectAllCheckboxListener selectAllCheckboxListener,
+                             Map<Integer, Boolean> selectedMap) {
         this.cartDetails = cartDetails;
         this.onItemClickListener = listener;
         this.selectAllCheckboxListener = selectAllCheckboxListener;
+        this.selectedMap = selectedMap;
     }
 
     @NonNull
@@ -53,29 +60,24 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ResCartDTO.CartDetail item = cartDetails.get(position);
+        ResCartDetailDTO item = cartDetails.get(position);
 
         holder.productName.setText(item.getProduct().getProductName());
-        holder.productPrice.setText(String.format(Locale.getDefault(), "%, .0f VND", item.getProduct().getSellingPrice()));
+        holder.productPrice.setText(String.format(Locale.getDefault(), "%,.0f VND", item.getProduct().getSellingPrice()));
         holder.quantityText.setText(String.valueOf(item.getQuantity()));
 
         int radius = 20;
-
         Glide.with(holder.itemView.getContext())
                 .load(item.getProduct().getImage())
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(radius)))
                 .into(holder.productImage);
 
-
-        // Xoá sản phẩm
         holder.icDelete.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onDeleteClick(item, holder.getAdapterPosition());
             }
         });
 
-
-        // Tăng số lượng
         holder.plusBtn.setOnClickListener(v -> {
             int quantity = item.getQuantity() + 1;
             item.setQuantity(quantity);
@@ -85,8 +87,6 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
             }
         });
 
-
-        // Giảm số lượng (tối thiểu là 1)
         holder.minusBtn.setOnClickListener(v -> {
             int quantity = item.getQuantity();
             if (quantity > 1) {
@@ -99,16 +99,24 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
             }
         });
 
+        // Tránh listener cũ gây lỗi khi tái sử dụng view
+        holder.checkboxSelect.setOnCheckedChangeListener(null);
+
+        // Set trạng thái checkbox dựa trên selectedMap
+        Boolean isSelected = selectedMap.get(item.getCartDetailsId());
+        holder.checkboxSelect.setChecked(isSelected != null && isSelected);
+
+        // Bắt sự kiện check change, gọi callback cập nhật map bên activity
         holder.checkboxSelect.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            item.setSelected(isChecked);
             if (onItemClickListener != null) {
-                onItemClickListener.onQuantityChanged();
+                onItemClickListener.onItemSelectedChanged(item.getCartDetailsId(), isChecked);
             }
 
-            // Đồng bộ lại trạng thái checkboxSelectAll nếu cần
+            // Kiểm tra tất cả item đã chọn chưa để cập nhật checkbox "select all"
             boolean allSelected = true;
-            for (ResCartDTO.CartDetail detail : cartDetails) {
-                if (!detail.isSelected()) {
+            for (ResCartDetailDTO detail : cartDetails) {
+                Boolean selected = selectedMap.get(detail.getCartDetailsId());
+                if (selected == null || !selected) {
                     allSelected = false;
                     break;
                 }
@@ -117,8 +125,6 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
                 selectAllCheckboxListener.onSelectAllChecked(allSelected);
             }
         });
-
-
     }
 
     public void removeItem(int position) {
@@ -128,27 +134,14 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
     }
 
     public void setAllSelected(boolean isSelected) {
-        for (ResCartDTO.CartDetail item : cartDetails) {
-            item.setSelected(isSelected);
+        for (ResCartDetailDTO item : cartDetails) {
+            selectedMap.put(item.getCartDetailsId(), isSelected);
         }
         notifyDataSetChanged();
         if (onItemClickListener != null) {
             onItemClickListener.onQuantityChanged();
         }
     }
-
-
-    public List<ResCartDTO.CartDetail> getSelectedItems() {
-        List<ResCartDTO.CartDetail> selected = new ArrayList<>();
-        for (ResCartDTO.CartDetail item : cartDetails) {
-            if (item.isSelected()) {
-                selected.add(item);
-            }
-        }
-        return selected;
-    }
-
-
 
     @Override
     public int getItemCount() {
@@ -157,7 +150,7 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage, icDelete;
-        TextView productName, productDesc, productPrice, quantityText;
+        TextView productName, productPrice, quantityText;
         Button minusBtn, plusBtn;
         CheckBox checkboxSelect;
 

@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ProductFetching {
-    @GET("api/products")
+    @GET("products")
     Call<APIResponse<ResProductDTO>> getAllProducts();
 
 }

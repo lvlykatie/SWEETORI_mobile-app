@@ -6,6 +6,6 @@ import retrofit2.http.POST;
 import com.example.sweetori.dto.request.ReqCartDetailDTO;
 
 public interface CartDetailFetching {
-    @POST("/api/add-to-cart")
+    @POST("add-to-cart")
     Call<Void> addCartDetail(@Body ReqCartDetailDTO cartDetailRequest);
 }

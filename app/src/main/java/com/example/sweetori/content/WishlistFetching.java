@@ -8,7 +8,7 @@ import retrofit2.http.Path;
 import com.example.sweetori.dto.request.ReqWishlistDTO;
 
 public interface WishlistFetching {
-    @POST("/api/add-favorites/{productId}")
+    @POST("add-favorites/{productId}")
     Call<Void> addToWishlist(@Path("productId") int productId);
 }
 

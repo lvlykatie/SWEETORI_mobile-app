@@ -62,9 +62,11 @@ public class ResProductDTO {
         private double listPrice;
         private int quantity;
         private double avgRate;
+        private ResDiscountDTO discount;
 
         public ProductData(int productId, String productName, String description, String descriptionDetails, String image,
-                           String productCode, String brand, double sellingPrice, double listPrice, int quantity, double avgRate) {
+                           String productCode, String brand, double sellingPrice, double listPrice, int quantity, double avgRate,
+                           ResDiscountDTO discount) {
             this.productId = productId;
             this.productName = productName;
             this.description = description;
@@ -76,6 +78,15 @@ public class ResProductDTO {
             this.listPrice = listPrice;
             this.quantity = quantity;
             this.avgRate = avgRate;
+            this.discount = discount;
+        }
+
+        public ResDiscountDTO getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(ResDiscountDTO discount) {
+            this.discount = discount;
         }
 
         // Getters
