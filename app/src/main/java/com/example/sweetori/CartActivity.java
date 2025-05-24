@@ -213,7 +213,7 @@ public class CartActivity extends AppCompatActivity {
             for (ResCartDetailDTO detail : cartDetails) {
                 Boolean isSelected = selectedMap.get(detail.getCartDetailsId());
                 if (isSelected != null && isSelected) {
-                    totalQuantity += detail.getQuantity();
+                    totalQuantity += 1;
                     totalPrice += detail.getQuantity() * detail.getProduct().getSellingPrice();
                 }
             }

@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.sweetori.R;
 import com.example.sweetori.dto.response.ResCartDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
+import com.example.sweetori.dto.response.ResDiscountDTO;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +26,8 @@ public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHo
 
     private List<ResCartDetailDTO> cartDetails;
     private OnItemClickListener onItemClickListener;
+    private List<ResDiscountDTO> discounts;
+
     public interface OnItemClickListener {
         void onQuantityChanged();
     }
@@ -85,6 +88,15 @@ public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHo
     public int getItemCount() {
         return cartDetails.size();
     }
+    public List<ResCartDetailDTO> getCartDetails() {
+        return cartDetails;
+    }
+
+    public void setDiscounts(List<ResDiscountDTO> discounts) {
+        this.discounts = discounts;
+    }
+
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImag;

@@ -58,7 +58,7 @@
             android:name=".AddToBagActivity"
             android:exported="false" />
         <activity
-            android:name=".PaymentsActivity"
+            android:name=".PaymentActivity"
             android:exported="false" />
 
         <meta-data

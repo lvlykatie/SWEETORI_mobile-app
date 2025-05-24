@@ -1,3 +1,4 @@
+
 package com.example.sweetori.dto.response;
 
 public class ResDiscountDTO {
