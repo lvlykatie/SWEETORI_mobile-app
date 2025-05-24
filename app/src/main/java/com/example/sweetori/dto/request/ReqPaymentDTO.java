@@ -5,13 +5,13 @@ import java.time.OffsetDateTime;
 public class ReqPaymentDTO {
     private String name;
     private String description;
-    private Double paymentCost;
+    private Long paymentCost;
     private String createdAt;
 
 
 
     public ReqPaymentDTO() {}
-    public ReqPaymentDTO(String name, String description, Double paymentCost, String createdAt) {
+    public ReqPaymentDTO(String name, String description, Long paymentCost, String createdAt) {
         this.name = name;
         this.description = description;
         this.paymentCost = paymentCost;
@@ -36,11 +36,11 @@ public class ReqPaymentDTO {
         this.description = description;
     }
 
-    public Double getPaymentCost() {
+    public Long getPaymentCost() {
         return paymentCost;
     }
 
-    public void setPaymentCost(Double paymentCost) {
+    public void setPaymentCost(Long paymentCost) {
         this.paymentCost = paymentCost;
     }
 }

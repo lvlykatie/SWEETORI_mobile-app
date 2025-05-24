@@ -1,6 +1,7 @@
 package com.example.sweetori;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -12,9 +13,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sweetori.content.MomoFetching;
 import com.example.sweetori.content.PaymentFetching;
-import com.example.sweetori.dto.request.ReqCartDetailDTO;
+import com.example.sweetori.APIResponse;
+import com.example.sweetori.dto.request.ReqMomoDTO;
 import com.example.sweetori.dto.request.ReqPaymentDTO;
+import com.example.sweetori.dto.response.ResMomoDTO;
 
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
@@ -68,7 +72,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         orderButton.setOnClickListener(v -> {
             String paymentMethod = "";
-            double totalPriceDouble = 0.0;
+            Long totalPriceDouble = 0L;
             try {
                 // Xử lý chuỗi tiền: loại bỏ VND, dấu cách, dấu chấm
                 String cleanedTotal = total.getText().toString()
@@ -77,7 +81,7 @@ public class PaymentActivity extends AppCompatActivity {
                         .replace(".", "")
                         .replaceAll("\\s+", "");  // loại bỏ khoảng trắng thừa nếu có
 
-                totalPriceDouble = Double.parseDouble(cleanedTotal);
+                totalPriceDouble = Long.parseLong(cleanedTotal);
                 Log.d("PaymentActivity", "Total price parsed: " + totalPriceDouble);
             } catch (NumberFormatException e) {
                 Toast.makeText(PaymentActivity.this, "Invalid total price value", Toast.LENGTH_SHORT).show();
@@ -115,6 +119,33 @@ public class PaymentActivity extends AppCompatActivity {
                 });
             } else if (radioMomo.isChecked()) {
                 paymentMethod = "MoMo";
+
+                MomoFetching momoapi = APIClient.getClientWithToken(accessTokenWithUserId.first).create(MomoFetching.class);
+                ReqMomoDTO order = new ReqMomoDTO("Payment for order ABC", totalPriceDouble);
+
+                Call<APIResponse<ResMomoDTO>> call = momoapi.momopayment(order);
+                call.enqueue(new Callback<APIResponse<ResMomoDTO>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<ResMomoDTO>> call, Response<APIResponse<ResMomoDTO>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String payUrl = response.body().getData().getPaymentUrl();
+                            Log.d("MoMo", "Payment URL: " + payUrl);
+                            Intent intent = new Intent(PaymentActivity.this, MomoActivity.class);
+                            intent.putExtra("url", payUrl);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(PaymentActivity.this, "Failed to get payment URL", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<APIResponse<ResMomoDTO>> call, Throwable t) {
+                        Log.e("MoMo", "Network error", t);
+                        Toast.makeText(PaymentActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             } else if (radioZaloPay.isChecked()) {
                 paymentMethod = "ZaloPay";
             } else if (radioVNPAY.isChecked()) {

@@ -112,8 +112,6 @@ public class ProductActivity extends AppCompatActivity {
                     R.anim.slide_out_left
             );
         });
-
-
     }
 
     // Callback khi filter xong
