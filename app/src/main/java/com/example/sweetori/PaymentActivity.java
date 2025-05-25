@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sweetori.content.CartFetching;
@@ -20,9 +21,11 @@ import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.request.ReqCheckoutDTO;
 import com.example.sweetori.dto.request.ReqMomoDTO;
 import com.example.sweetori.dto.request.ReqPaymentDTO;
+import com.example.sweetori.dto.request.ReqZalopayDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.example.sweetori.dto.response.ResMomoDTO;
 import com.example.sweetori.dto.response.ResPaymentDTO;
+import com.example.sweetori.dto.response.ResZalopayDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -210,6 +213,35 @@ public class PaymentActivity extends AppCompatActivity {
 
             } else if (radioZaloPay.isChecked()) {
                 paymentMethod = "ZaloPay";
+
+                // Gọi API ZaloPay
+                PaymentFetching zalopayApi = APIClient.getClientWithToken(accessTokenWithUserId.first).create(PaymentFetching.class);
+                ReqZalopayDTO zaloOrder = new ReqZalopayDTO("Thanh toán đơn hàng", totalPrice);
+
+                Call<APIResponse<ResZalopayDTO>> zalopayCall = zalopayApi.zalopayment(zaloOrder);
+                zalopayCall.enqueue(new Callback<APIResponse<ResZalopayDTO>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<ResZalopayDTO>> call, Response<APIResponse<ResZalopayDTO>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String paymentUrl = response.body().getData().getPaymentUrl();
+
+                            // Mở ZalopayActivity với URL thanh toán
+                            Intent intent = new Intent(PaymentActivity.this, ZaloPayActivity.class);
+                            intent.putExtra("url", paymentUrl);
+                            startActivity(intent);
+
+                            // Giả định thành công trong môi trường test
+                            Toast.makeText(PaymentActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(PaymentActivity.this, "Lỗi kết nối ZaloPay", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<APIResponse<ResZalopayDTO>> call, Throwable t) {
+                        Toast.makeText(PaymentActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else if (radioVNPAY.isChecked()) {
                 paymentMethod = "VNPAY";
             }
@@ -250,5 +282,8 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
 }
