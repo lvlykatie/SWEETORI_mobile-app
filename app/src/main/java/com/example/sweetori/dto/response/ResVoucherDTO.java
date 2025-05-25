@@ -51,19 +51,19 @@ public class ResVoucherDTO {
     }
 
     public static class VoucherData {
-        private Long voucherId;
+        private Integer voucherId;
         private String code;
         private Double discountAmount;
         private String validFrom;
         private String validTo;
         private List<ResUserDTO> users;
-        private List<Object> userVouchers; // Bạn có thể thay Object bằng kiểu cụ thể nếu biết rõ cấu trúc
+        private List<Object> userVouchers; //
 
         // Constructors
         public VoucherData() {
         }
 
-        public VoucherData(Long voucherId, String code, Double discountAmount, String validFrom, String validTo, List<ResUserDTO> users, List<Object> userVouchers) {
+        public VoucherData(Integer voucherId, String code, Double discountAmount, String validFrom, String validTo, List<ResUserDTO> users, List<Object> userVouchers) {
             this.voucherId = voucherId;
             this.code = code;
             this.discountAmount = discountAmount;
@@ -74,11 +74,11 @@ public class ResVoucherDTO {
         }
 
         // Getters and Setters
-        public Long getVoucherId() {
+        public Integer getVoucherId() {
             return voucherId;
         }
 
-        public void setVoucherId(Long voucherId) {
+        public void setVoucherId(Integer voucherId) {
             this.voucherId = voucherId;
         }
 

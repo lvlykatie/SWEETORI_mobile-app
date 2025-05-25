@@ -40,7 +40,6 @@ public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate layout item mới bạn gửi (ví dụ tên file: item_product_2.xml)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
         return new ViewHolder(view);
     }
@@ -48,7 +47,6 @@ public class AddToBagAdapter extends RecyclerView.Adapter<AddToBagAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ResCartDetailDTO item = cartDetails.get(position);
-
         holder.productName.setText(item.getProduct().getProductName());
         holder.productPrice.setText(String.format(Locale.getDefault(), "%,.0f VND", item.getProduct().getSellingPrice()));
         holder.quantityText.setText(String.valueOf(item.getQuantity()));
