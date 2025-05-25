@@ -1,7 +1,9 @@
 package com.example.sweetori.dto.response;
 
+import java.time.ZonedDateTime;
+
 public class ResPaymentDTO {
-    private Long paymentId;
+    private int paymentId;
     private String name;
     private String description;
     private Double paymentCost;
@@ -10,7 +12,12 @@ public class ResPaymentDTO {
     private String updatedAt;
     private String updatedBy;
 
-    public ResPaymentDTO(Long paymentId, String name, String description, Double paymentCost, String createdAt, String createdBy, String updatedAt, String updatedBy) {
+    public ResPaymentDTO() {
+    }
+
+    public ResPaymentDTO(int paymentId, String name, String description, Double paymentCost,
+                         String createdAt, String createdBy,
+                         String updatedAt, String updatedBy) {
         this.paymentId = paymentId;
         this.name = name;
         this.description = description;
@@ -21,11 +28,11 @@ public class ResPaymentDTO {
         this.updatedBy = updatedBy;
     }
 
-    public Long getPaymentId() {
+    public int getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(Long paymentId) {
+    public void setPaymentId(int paymentId) {
         this.paymentId = paymentId;
     }
 

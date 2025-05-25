@@ -33,7 +33,7 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
 
     public interface OnItemClickListener {
         void onDeleteClick(ResCartDetailDTO item, int position);
-        void onQuantityChanged();
+        void onQuantityChanged(ResCartDetailDTO item);
         void onItemSelectedChanged(int cartDetailId, boolean isSelected);
     }
 
@@ -83,7 +83,7 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
             item.setQuantity(quantity);
             holder.quantityText.setText(String.valueOf(quantity));
             if (onItemClickListener != null) {
-                onItemClickListener.onQuantityChanged();
+                onItemClickListener.onQuantityChanged(item);
             }
         });
 
@@ -94,7 +94,7 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
                 item.setQuantity(quantity);
                 holder.quantityText.setText(String.valueOf(quantity));
                 if (onItemClickListener != null) {
-                    onItemClickListener.onQuantityChanged();
+                    onItemClickListener.onQuantityChanged(item);
                 }
             }
         });
@@ -138,9 +138,6 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
             selectedMap.put(item.getCartDetailsId(), isSelected);
         }
         notifyDataSetChanged();
-        if (onItemClickListener != null) {
-            onItemClickListener.onQuantityChanged();
-        }
     }
 
     @Override

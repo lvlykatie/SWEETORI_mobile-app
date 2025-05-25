@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sweetori.adapter.CartDetailAdapter;
 import com.example.sweetori.content.CartFetching;
 import com.example.sweetori.APIResponse;
+import com.example.sweetori.dto.request.ReqCartDetailDTO;
 import com.example.sweetori.dto.response.ResCartDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.google.gson.Gson;
@@ -41,6 +42,7 @@ public class CartActivity extends AppCompatActivity {
 
     private boolean isSelectAllChangingProgrammatically = false;
     private List<ResCartDetailDTO> cartDetails;
+    private int cartId;
     private Map<Integer, Boolean> selectedMap = new HashMap<>();
 
     @Override
@@ -72,12 +74,11 @@ public class CartActivity extends AppCompatActivity {
         // Buy now button
         imgbtn_buynow_cart.setOnClickListener(v -> {
             if (cartDetailAdapter == null) return;
-
             List<ResCartDetailDTO> selectedItems = getSelectedItems();
             if (selectedItems.isEmpty()) {
                 Toast.makeText(this, "Please select at least one item", Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(this, AddToBagActivity.class);
+                Intent intent = new Intent(CartActivity.this, AddToBagActivity.class);
                 intent.putExtra("selectedItems", new Gson().toJson(selectedItems));
                 startActivity(intent);
             }
@@ -107,6 +108,7 @@ public class CartActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null &&
                         response.body().getData() != null &&
                         response.body().getData().getListOfCartdetails() != null) {
+                    cartId = response.body().getData().getCartId();
                     Log.d("CartActivity", "Data fetched successfully");
                     cartDetails = response.body().getData().getListOfCartdetails();
                     Log.d("CartActivity", cartDetails.toString());
@@ -124,9 +126,15 @@ public class CartActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onQuantityChanged() {
+                                public void onQuantityChanged(ResCartDetailDTO item) {
                                     updateTotals();
                                     updateSelectAllCheckbox();
+                                    updateCartDetailQuantity(
+                                            item.getCartDetailsId(),
+                                            item.getQuantity(),
+                                            cartId,
+                                            item.getProduct().getProductId()
+                                    );
                                 }
 
                                 @Override
@@ -244,4 +252,40 @@ public class CartActivity extends AppCompatActivity {
         checkboxall.setChecked(allSelected);
         isSelectAllChangingProgrammatically = false;
     }
+
+    private void updateCartDetailQuantity(int cartDetailsId, int quantity, int cartId, int productId) {
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(this);
+        CartFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
+
+        ReqCartDetailDTO.Cart reqCart = new ReqCartDetailDTO.Cart();
+        reqCart.setCartId(cartId);
+
+        ReqCartDetailDTO.Product reqProduct = new ReqCartDetailDTO.Product();
+        reqProduct.setProductId(productId);
+
+        ReqCartDetailDTO request = new ReqCartDetailDTO(
+                cartDetailsId,
+                quantity,
+                reqCart,
+                reqProduct
+        );
+
+
+        apiService.updateCartDetailQuantity(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("CartActivity", "Quantity updated successfully");
+                } else {
+                    Log.e("CartActivity", "Failed to update quantity");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("CartActivity", "API error updating quantity: " + t.getMessage());
+            }
+        });
+    }
+
 }

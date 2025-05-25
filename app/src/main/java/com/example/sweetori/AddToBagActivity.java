@@ -44,7 +44,7 @@ public class AddToBagActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AddToBagAdapter adapter;
     private List<ResDiscountDTO> discountList = new ArrayList<>();
-
+    private int selectedVoucherCode ;
     private double totalPrice, total, discountedPrice;
     private double totalQuantity;
     private int deliveryId;
@@ -73,6 +73,31 @@ public class AddToBagActivity extends AppCompatActivity {
         total_Price = findViewById(R.id.totalPrice);
         Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AddToBagActivity.this);
 
+        int selectedDeliveryId = deliveryId;
+        // Lấy JSON string từ intent
+        // Nhận danh sách sản phẩm đã chọn từ Intent
+        String selectedItemsJson = getIntent().getStringExtra("selectedItems");
+        Type listType = new TypeToken<List<ResCartDetailDTO>>() {}.getType();
+        List<ResCartDetailDTO> selectedItems = new Gson().fromJson(selectedItemsJson, listType);
+
+        // Lấy danh sách productId để gọi API giảm giá
+        List<Integer> productIds = new ArrayList<>();
+        for (ResCartDetailDTO item : selectedItems) {
+            productIds.add(item.getProduct().getProductId());
+        }
+
+        // Thiết lập RecyclerView
+        recyclerView = findViewById(R.id.recyclerViewCart);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AddToBagAdapter(selectedItems, () -> {
+            updateTotalPrice();
+        });
+        recyclerView.setAdapter(adapter);
+        updateGrandTotal();
+        updateTotalPrice();
+        fetchVoucherWithMaxDiscountByUserId();
+
+
         checkoutBtn = findViewById(R.id.checkoutBtn);
         checkoutBtn.setOnClickListener(v -> {
             Intent noti = new Intent(AddToBagActivity.this, PaymentActivity.class);
@@ -81,6 +106,9 @@ public class AddToBagActivity extends AppCompatActivity {
             noti.putExtra("voucher", voucher_discount.getText().toString());
             noti.putExtra("shipping", shipping.getText().toString());
             noti.putExtra("total_Price", total_Price.getText().toString());
+            noti.putExtra("voucher_code", selectedVoucherCode);
+            noti.putExtra("productListJson", new Gson().toJson(selectedItems));
+            noti.putExtra("selectedDeliveryId", deliveryId);
             startActivity(noti);
         });
 
@@ -248,28 +276,7 @@ public class AddToBagActivity extends AppCompatActivity {
             }
         });
 
-        // Lấy JSON string từ intent
-        // Nhận danh sách sản phẩm đã chọn từ Intent
-        String selectedItemsJson = getIntent().getStringExtra("selectedItems");
-        Type listType = new TypeToken<List<ResCartDetailDTO>>() {}.getType();
-        List<ResCartDetailDTO> selectedItems = new Gson().fromJson(selectedItemsJson, listType);
 
-        // Lấy danh sách productId để gọi API giảm giá
-        List<Integer> productIds = new ArrayList<>();
-        for (ResCartDetailDTO item : selectedItems) {
-            productIds.add(item.getProduct().getProductId());
-        }
-
-        // Thiết lập RecyclerView
-        recyclerView = findViewById(R.id.recyclerViewCart);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddToBagAdapter(selectedItems, () -> {
-            updateTotalPrice();
-        });
-        recyclerView.setAdapter(adapter);
-        updateGrandTotal();
-        updateTotalPrice();
-        fetchVoucherWithMaxDiscountByUserId();
     }
 
     private void updateTotalPrice() {
@@ -351,6 +358,7 @@ public class AddToBagActivity extends AppCompatActivity {
                         }
 
                         if (maxDiscountVoucher != null) {
+                            selectedVoucherCode = maxDiscountVoucher.getVoucherId();
                             Log.d("VoucherInfo", "🎟️ Max discount voucher for userId " + accessTokenWithUserId.second +
                                     ": " + maxDiscountVoucher.getCode() + " with discount " + maxDiscountVoucher.getDiscountAmount());
                             voucher_discount.setText(String.format("%,.0f VND", maxDiscountVoucher.getDiscountAmount()));
