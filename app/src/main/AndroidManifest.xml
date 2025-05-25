@@ -63,6 +63,11 @@
         <activity
             android:name=".MomoActivity"
             android:exported="false" />
+        <activity
+            android:name=".ZaloPayActivity"
+            android:exported="false">
+        </activity>
+
 
 
         <meta-data
