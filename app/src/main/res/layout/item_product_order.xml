@@ -41,37 +41,20 @@
                 android:textSize="14sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"/>
 
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/productCount"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:id="@+id/productDesc"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/productCount"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"/>
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:id="@+id/productPrice"
