@@ -107,7 +107,6 @@ public class PaymentActivity extends AppCompatActivity {
         orderButton.setOnClickListener(v -> {
             String paymentMethod = "";
             Long totalPrice = 0L;
-            int setPaymentId = 0;
             try {
                 // Xử lý chuỗi tiền: loại bỏ VND, dấu cách, dấu chấm
                 String cleanedTotal = total.getText().toString()
