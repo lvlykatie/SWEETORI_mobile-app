@@ -67,6 +67,10 @@
             android:name=".ZaloPayActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".VNPayActivity"
+            android:exported="false">
+        </activity>
 
 
 
