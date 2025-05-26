@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.example.sweetori.content.CartFetching;
 import com.example.sweetori.content.MomoFetching;
@@ -21,10 +23,12 @@ import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.request.ReqCheckoutDTO;
 import com.example.sweetori.dto.request.ReqMomoDTO;
 import com.example.sweetori.dto.request.ReqPaymentDTO;
+import com.example.sweetori.dto.request.ReqVNpayDTO;
 import com.example.sweetori.dto.request.ReqZalopayDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.example.sweetori.dto.response.ResMomoDTO;
 import com.example.sweetori.dto.response.ResPaymentDTO;
+import com.example.sweetori.dto.response.ResVNpayDTO;
 import com.example.sweetori.dto.response.ResZalopayDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -242,6 +246,36 @@ public class PaymentActivity extends AppCompatActivity {
                 });
             } else if (radioVNPAY.isChecked()) {
                 paymentMethod = "VNPAY";
+                // Gọi API tạo đơn VNPay trên server (trả về paymentUrl ở môi trường test)
+                PaymentFetching vnpayApi = APIClient.getClientWithToken(accessTokenWithUserId.first)
+                        .create(PaymentFetching.class);
+                ReqVNpayDTO vnOrder = new ReqVNpayDTO("Thanh toán đơn hàng", totalPrice);
+                Call<APIResponse<ResVNpayDTO>> call = vnpayApi.vnpaypayment(vnOrder);
+                call.enqueue(new Callback<APIResponse<ResVNpayDTO>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<ResVNpayDTO>> call, Response<APIResponse<ResVNpayDTO>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String paymentUrl = response.body().getData().getPaymentUrl();
+                            // Mở bằng Chrome Custom Tabs
+                            Uri uri = Uri.parse(paymentUrl);
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            builder.setShowTitle(true);
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(PaymentActivity.this, uri);
+                        } else {
+                            Toast.makeText(PaymentActivity.this,
+                                    "Lỗi kết nối VNPay: " + response.code(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<APIResponse<ResVNpayDTO>> call, Throwable t) {
+                        Toast.makeText(PaymentActivity.this,
+                                "Lỗi mạng VNPay: " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return;  // thoát để không chạy tiếp các logic khác
             }
 
             if (paymentMethod.isEmpty()) {
