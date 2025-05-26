@@ -3,9 +3,11 @@ package com.example.sweetori.content;
 import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.request.ReqMomoDTO;
 import com.example.sweetori.dto.request.ReqPaymentDTO;
+import com.example.sweetori.dto.request.ReqVNpayDTO;
 import com.example.sweetori.dto.request.ReqZalopayDTO;
 import com.example.sweetori.dto.response.ResMomoDTO;
 import com.example.sweetori.dto.response.ResPaymentDTO;
+import com.example.sweetori.dto.response.ResVNpayDTO;
 import com.example.sweetori.dto.response.ResZalopayDTO;
 
 import retrofit2.Call;
@@ -20,4 +22,6 @@ public interface PaymentFetching {
     Call<APIResponse<ResPaymentDTO>> addpayments(@Body ReqPaymentDTO paymentsRequest);
     @POST("zalopay")
     Call<APIResponse<ResZalopayDTO>> zalopayment(@Body ReqZalopayDTO zaloOrder);
+    @POST("vnpay")
+    Call<APIResponse<ResVNpayDTO>> vnpaypayment(@Body ReqVNpayDTO vnOrder);
 }
