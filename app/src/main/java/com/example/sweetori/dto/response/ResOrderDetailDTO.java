@@ -1,5 +1,7 @@
 package com.example.sweetori.dto.response;
 
+import java.util.List;
+
 public class ResOrderDetailDTO {
     private int orderDetailsId;
     private int quantity;
@@ -8,8 +10,9 @@ public class ResOrderDetailDTO {
     private String createdBy;
     private String updatedAt;
     private String updatedBy;
+    private List<ResProductDTO.ProductData> product;
 
-    public ResOrderDetailDTO(int orderDetailsId, int quantity, double price, String createdAt, String createdBy, String updatedAt, String updatedBy) {
+    public ResOrderDetailDTO(int orderDetailsId, int quantity, double price, String createdAt, String createdBy, String updatedAt, String updatedBy, List<ResProductDTO.ProductData> product) {
         this.orderDetailsId = orderDetailsId;
         this.quantity = quantity;
         this.price = price;
@@ -17,6 +20,7 @@ public class ResOrderDetailDTO {
         this.createdBy = createdBy;
         this.updatedAt = updatedAt;
         this.updatedBy = updatedBy;
+        this.product = product;
     }
 
     public int getOrderDetailsId() {
@@ -73,5 +77,13 @@ public class ResOrderDetailDTO {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public List<ResProductDTO.ProductData> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<ResProductDTO.ProductData> product) {
+        this.product = product;
     }
 }

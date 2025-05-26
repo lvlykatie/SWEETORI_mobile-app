@@ -56,7 +56,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     ImageView btnNoti;
     ImageView btnVoucher;
     private ImageView productImage;
-    private ImageButton imgbtnCart, btnIncrease, btnDecrease, imgbtn_heart, imgbtn_buynow;
+    private ImageButton imgbtnCart, btnIncrease, btnDecrease, imgbtn_heart, imgbtn_buynow, imgbtn_cart;
     private TextView productName, productPrice, productDesc, productBrand, quantity, productRating;
     private RecyclerView recyclerReview;
     private ReviewAdapter reviewAdapter;
@@ -90,6 +90,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         btnDecrease = findViewById(R.id.imgbtn_decrease);
         imgbtn_heart = findViewById(R.id.imgbtn_heart);
         imgbtn_buynow = findViewById(R.id.imgbtn_buynow);
+        imgbtn_cart = findViewById(R.id.imgbtn_cart);
         productRatingBar = findViewById(R.id.productRatingBar);
         productRating = findViewById(R.id.productRating);
         recyclerReview = findViewById(R.id.recyclerReview);
@@ -192,6 +193,11 @@ public class ProductDetailActivity extends AppCompatActivity {
                 quantity.setText(String.valueOf(quantityValue[0]));
             }
         });
+
+        imgbtn_cart.setOnClickListener(v -> {
+            addToCart(productId, quantityValue[0], accessTokenWithUserId.first, () -> {});
+        });
+
         imgbtn_buynow.setOnClickListener(v -> {
             addToCart(productId, quantityValue[0], accessTokenWithUserId.first, () -> {
                 List<String> filters = Arrays.asList("cart:" + cartId, "product:" + productId);

@@ -71,6 +71,7 @@ public class CartActivity extends AppCompatActivity {
         btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
         btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
 
+
         // Buy now button
         imgbtn_buynow_cart.setOnClickListener(v -> {
             if (cartDetailAdapter == null) return;

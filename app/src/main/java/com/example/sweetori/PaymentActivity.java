@@ -47,7 +47,6 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView item, dateTextView, shipping, discount, voucher_discount, total;
     RadioButton radioCOD, radioMomo, radioZaloPay, radioVNPAY;
     Button orderButton;
-    private int paymentIdFromCOD;
     int context;
 
     @SuppressLint("MissingInflatedId")

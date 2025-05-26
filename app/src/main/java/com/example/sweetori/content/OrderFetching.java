@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface OrderFetching {
-    @GET("orders/{userId}")
+    @GET("order-by-user/{userId}")
     Call<APIResponse<ResOrderDTO>> getOrder(@Path("userId") int userId);
 }
