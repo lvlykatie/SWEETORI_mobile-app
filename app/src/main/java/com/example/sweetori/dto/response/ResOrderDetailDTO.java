@@ -10,9 +10,9 @@ public class ResOrderDetailDTO {
     private String createdBy;
     private String updatedAt;
     private String updatedBy;
-    private List<ResProductDTO.ProductData> product;
+    private ResProductDTO.ProductData product;
 
-    public ResOrderDetailDTO(int orderDetailsId, int quantity, double price, String createdAt, String createdBy, String updatedAt, String updatedBy, List<ResProductDTO.ProductData> product) {
+    public ResOrderDetailDTO(int orderDetailsId, int quantity, double price, String createdAt, String createdBy, String updatedAt, String updatedBy, ResProductDTO.ProductData product) {
         this.orderDetailsId = orderDetailsId;
         this.quantity = quantity;
         this.price = price;
@@ -79,11 +79,11 @@ public class ResOrderDetailDTO {
         this.updatedBy = updatedBy;
     }
 
-    public List<ResProductDTO.ProductData> getProduct() {
+    public ResProductDTO.ProductData getProduct() {
         return product;
     }
 
-    public void setProduct(List<ResProductDTO.ProductData> product) {
+    public void setProduct(ResProductDTO.ProductData product) {
         this.product = product;
     }
 }

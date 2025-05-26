@@ -146,4 +146,10 @@ public class ResOrderDTO {
     public void setPayment(ResPaymentDTO payment) {
         this.payment = payment;
     }
+    public class OrderDataHolder {
+        private List<ResOrderDTO> orderList;
+        public List<ResOrderDTO> getOrderList() { return orderList; }
+        public void setOrderList(List<ResOrderDTO> orderList) { this.orderList = orderList; }
+    }
 }
+

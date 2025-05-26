@@ -41,28 +41,28 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.Orde
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         if (position >= 0 && position < listOfOrderdetails.size()) {
             final ResOrderDetailDTO orderItem = listOfOrderdetails.get(position);
-            final ResProductDTO.ProductData product = (ResProductDTO.ProductData) orderItem.getProduct();// final ở đây
+            final ResProductDTO.ProductData product = orderItem.getProduct();
+            if (product != null) {
+                holder.tvProductName.setText(product.getProductName() != null ? product.getProductName() : "No name");
 
-            // Set text for product name
-            holder.tvProductName.setText(product.getProductName() != null ? product.getProductName() : "No name");
+                if (product.getProductName().length() > 30) {
+                    holder.tvProductName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                } else {
+                    holder.tvProductName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                }
 
-            if (product.getProductName().length() > 30) {
-                holder.tvProductName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-            } else {
-                holder.tvProductName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            }
+                holder.tvProductPrice.setText(String.format("%,.0f VND", product.getSellingPrice()));
+                holder.tvQuantity.setText(String.format("x%d", orderItem.getQuantity()));
 
-            holder.tvProductPrice.setText(String.format("%,.0f VND", product.getSellingPrice()));
-            holder.tvQuantity.setText(String.format("%.1f", orderItem.getQuantity()));
-
-            if (product.getImage() != null && !product.getImage().isEmpty()) {
-                Glide.with(context)
-                        .load(product.getImage())
-                        .placeholder(R.drawable.moimahong)
-                        .error(R.drawable.moimahong)
-                        .into(holder.ivProductImage);
-            } else {
-                holder.ivProductImage.setImageResource(R.drawable.moimahong);
+                if (product.getImage() != null && !product.getImage().isEmpty()) {
+                    Glide.with(context)
+                            .load(product.getImage())
+                            .placeholder(R.drawable.moimahong)
+                            .error(R.drawable.moimahong)
+                            .into(holder.ivProductImage);
+                } else {
+                    holder.ivProductImage.setImageResource(R.drawable.moimahong);
+                }
             }
 
         }

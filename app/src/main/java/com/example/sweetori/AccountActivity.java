@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -21,8 +22,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.sweetori.adapter.OrderAdapter;
 import com.example.sweetori.content.AuthFetching;
+import com.example.sweetori.content.OrderFetching;
+import com.example.sweetori.dto.response.ResOrderDTO;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,8 +50,10 @@ public class AccountActivity extends AppCompatActivity {
     Button btnGeneral, btnPurchase, btnSupport;
     FrameLayout tabContent;
     LinearLayout btnLogOut;
+    LinearLayout llPending;
     LinearLayout btnResetPass;
     LinearLayout btn_wishlist;
+    RecyclerView orderRecyclerView;
 
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
@@ -68,6 +75,8 @@ public class AccountActivity extends AppCompatActivity {
         btnVoucher = findViewById(R.id.btnVoucher);
         btnLogOut = findViewById(R.id.btnLogOut);
         btn_wishlist = findViewById(R.id.btn_wishlist);
+        llPending = findViewById(R.id.llPending);
+        orderRecyclerView = findViewById(R.id.orderRecyclerView);
 
         btnHome.setOnClickListener(v -> {
             Intent home = new Intent(AccountActivity.this, HomepageActivity.class);
@@ -127,6 +136,41 @@ public class AccountActivity extends AppCompatActivity {
         btnPurchase.setOnClickListener(v -> {
             highlightTab(btnPurchase);
             showTab(R.layout.tab_purchase);
+
+            // Lấy lại llPending từ view vừa inflate vào tabContent
+            View purchaseView = tabContent.getChildAt(0); // view của tab_purchase layout vừa add
+            LinearLayout llPending = purchaseView.findViewById(R.id.llPending);
+            LinearLayout llWaiting = purchaseView.findViewById(R.id.llWaiting);
+            LinearLayout llTransport = purchaseView.findViewById(R.id.llTransport);
+            LinearLayout llCompleted = purchaseView.findViewById(R.id.llCompleted);
+            LinearLayout llCancelled = purchaseView.findViewById(R.id.llCancelled);
+            llPending.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                // Nếu muốn, bạn có thể truyền thêm dữ liệu qua intent, ví dụ userId hoặc trạng thái "PENDING"
+                intent.putExtra("orderStatus", "PENDING");
+                startActivity(intent);
+            });
+            llWaiting.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "WAITING");
+                startActivity(intent);
+            });
+            llTransport.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "TRANSPORT");
+                startActivity(intent);
+            });
+            llCompleted.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "COMPLETED");
+                startActivity(intent);
+            });
+            llCancelled.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "CANCELLED");
+                startActivity(intent);
+            });
+
         });
 
         btnSupport.setOnClickListener(v -> {

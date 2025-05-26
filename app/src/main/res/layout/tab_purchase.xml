@@ -33,7 +33,7 @@
             android:padding="10dp">
 
             <LinearLayout
-                android:id="@+id/pending"
+                android:id="@+id/llPending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Pendding"
+                    android:text="Pending"
                     android:layout_marginEnd="10dp"
                     android:textSize="20sp"
                     android:textColor="@color/black"
@@ -63,7 +63,7 @@
                 android:background="#CCCCCC"/>
 
             <LinearLayout
-                android:id="@+id/waiting"
+                android:id="@+id/llWaiting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -93,7 +93,7 @@
                 android:background="#CCCCCC"/>
 
             <LinearLayout
-                android:id="@+id/transport"
+                android:id="@+id/llTransport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -123,7 +123,7 @@
                 android:background="#CCCCCC"/>
 
             <LinearLayout
-                android:id="@+id/completed"
+                android:id="@+id/llCompleted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -152,7 +152,7 @@
                 android:layout_height="1dp"
                 android:background="#CCCCCC"/>
             <LinearLayout
-                android:id="@+id/canceled"
+                android:id="@+id/llCancelled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
