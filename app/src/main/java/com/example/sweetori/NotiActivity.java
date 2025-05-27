@@ -2,12 +2,14 @@ package com.example.sweetori;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.sweetori.dto.response.ResLoginDTO;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +33,7 @@ public class NotiActivity extends AppCompatActivity {
 
     Button btnPersonal, btnDiscount;
     FrameLayout tabContent;
+    TextView txtHello;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,6 +51,21 @@ public class NotiActivity extends AppCompatActivity {
         btnPersonal = findViewById(R.id.btnPersonal);
         btnDiscount = findViewById(R.id.btnDiscount);
         tabContent = findViewById(R.id.tabContent);
+        txtHello = findViewById(R.id.txtHello);
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userJson = prefs.getString("user", null);
+
+        if (userJson != null) {
+            Gson gson = new Gson();
+            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+            if (user != null) {
+                String userName = user.getFirstName();
+                txtHello.setText("Hello, "+ userName);
+            } else {
+                txtHello.setText("Guest");
+            }
+        }
 
         //Intent
         btnAccount.setOnClickListener(v -> {

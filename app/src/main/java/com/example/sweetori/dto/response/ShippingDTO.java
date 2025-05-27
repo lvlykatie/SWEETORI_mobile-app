@@ -2,11 +2,13 @@ package com.example.sweetori.dto.response;
 
 public class ShippingDTO {
     public String name;
-    public int distanceKm;
+    public double deliveryCost;
+    public int deliveryId;
 
-    public ShippingDTO(String name, int distanceKm) {
+    public ShippingDTO(String name, double deliveryCost, int deliveryId) {
         this.name = name;
-        this.distanceKm = distanceKm;
+        this.deliveryCost = deliveryCost;
+        this.deliveryId = deliveryId;
     }
 
     @Override

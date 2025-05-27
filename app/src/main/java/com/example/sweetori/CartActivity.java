@@ -1,6 +1,7 @@
 package com.example.sweetori;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -21,6 +22,7 @@ import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.request.ReqCartDetailDTO;
 import com.example.sweetori.dto.response.ResCartDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
+import com.example.sweetori.dto.response.ResLoginDTO;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class CartActivity extends AppCompatActivity {
     ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
     RecyclerView recyclerViewCart;
     CartDetailAdapter cartDetailAdapter;
-    TextView txtTotalQuantity, txtTotalPrice;
+    TextView txtTotalQuantity, txtTotalPrice, txtHello;
     Button imgbtn_buynow_cart;
     CheckBox checkboxall;
 
@@ -60,10 +62,24 @@ public class CartActivity extends AppCompatActivity {
         recyclerViewCart = findViewById(R.id.recyclerViewCart);
         txtTotalQuantity = findViewById(R.id.txtTotalQuantity);
         txtTotalPrice = findViewById(R.id.txtTotalPrice);
+        txtHello = findViewById(R.id.txtHello);
         imgbtn_buynow_cart = findViewById(R.id.imgbtn_buynow_cart);
         checkboxall = findViewById(R.id.checkboxall);
-
         recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userJson = prefs.getString("user", null);
+        
+        if (userJson != null) {
+            Gson gson = new Gson();
+            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+            if (user != null) {
+                String userName = user.getFirstName();
+                txtHello.setText("Hello, "+ userName);
+            } else {
+                txtHello.setText("Guest");
+            }
+        }
 
         // Navigation listeners
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
@@ -93,7 +109,6 @@ public class CartActivity extends AppCompatActivity {
                 updateTotals();
             }
         });
-
         // Fetch cart data
         fetchCartData();
     }
