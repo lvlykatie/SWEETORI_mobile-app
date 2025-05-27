@@ -51,7 +51,6 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView item, dateTextView, shipping, discount, voucher_discount, total;
     RadioButton radioCOD, radioMomo, radioZaloPay, radioVNPAY;
     Button orderButton;
-    int context;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,9 +81,10 @@ public class PaymentActivity extends AppCompatActivity {
         int deliveryId = getIntent().getIntExtra("selectedDeliveryId", -1);
         String productListJson = getIntent().getStringExtra("productListJson");
         List<ResCartDetailDTO> productList = new Gson().fromJson(productListJson, new TypeToken<List<ResCartDetailDTO>>(){}.getType());
+        String selectedItemsJson = getIntent().getStringExtra("selectedItems");
+        Type listType = new TypeToken<List<ResCartDetailDTO>>() {}.getType();
+        List<ResCartDetailDTO> bestVoucherList = new Gson().fromJson(selectedItemsJson, listType);
 
-
-        // Set text
         dateTextView.setText(currentDate);
         item.setText(itemStr);
         discount.setText(discountStr);
@@ -97,7 +97,6 @@ public class PaymentActivity extends AppCompatActivity {
             radioMomo.setChecked(false);
             radioZaloPay.setChecked(false);
             radioVNPAY.setChecked(false);
-
             ((RadioButton) v).setChecked(true);
         };
 
@@ -106,90 +105,84 @@ public class PaymentActivity extends AppCompatActivity {
         radioZaloPay.setOnClickListener(radioClickListener);
         radioVNPAY.setOnClickListener(radioClickListener);
 
-
         orderButton.setOnClickListener(v -> {
             String paymentMethod = "";
             Long totalPrice = 0L;
+
             try {
-                // Xử lý chuỗi tiền: loại bỏ VND, dấu cách, dấu chấm
                 String cleanedTotal = total.getText().toString()
                         .replace("VND", "")
                         .replace(",", "")
                         .replace(".", "")
-                        .replaceAll("\\s+", "");  // loại bỏ khoảng trắng thừa nếu có
+                        .replaceAll("\\s+", "");
 
                 totalPrice = Long.parseLong(cleanedTotal);
-                Log.d("PaymentActivity", "Total price parsed: " + totalPrice);
+                Log.d("PaymentActivity", "Parsed total price: " + totalPrice);
             } catch (NumberFormatException e) {
-                Toast.makeText(PaymentActivity.this, "Invalid total price value", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PaymentActivity.this, "Invalid total price", Toast.LENGTH_SHORT).show();
                 Log.e("PaymentActivity", "Failed to parse total price: " + e.getMessage());
                 return;
             }
 
             OffsetDateTime now = OffsetDateTime.now();
-            String isoTime = now.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME); // chuẩn ISO8601
+            String isoTime = now.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
             if (radioCOD.isChecked()) {
                 paymentMethod = "COD";
-                handlePayment(accessTokenWithUserId.first, paymentMethod, totalPrice, isoTime, new PaymentCallback() {
+                int paymentId = 1;
+
+                List<ReqCheckoutDTO.ProductWithQuantity> productWithQuantityList = new ArrayList<>();
+                List<Integer> setVoucherIds = new ArrayList<>();
+
+                if (voucherCode != null && !voucherCode.isEmpty()) {
+                    try {
+                        setVoucherIds.add(Integer.parseInt(voucherCode));
+                    } catch (NumberFormatException e) {
+                        Log.e("PaymentActivity", "Invalid voucher code", e);
+                    }
+                }
+
+                for (ResCartDetailDTO item : productList) {
+                    productWithQuantityList.add(
+                            new ReqCheckoutDTO.ProductWithQuantity(item.getProduct().getProductId(), item.getQuantity())
+                    );
+                }
+
+                ReqCheckoutDTO request = new ReqCheckoutDTO();
+                request.setUserId(accessTokenWithUserId.second);
+                request.setProductWithQuantityList(productWithQuantityList);
+                request.setDeliveryId(deliveryId);
+                request.setPaymentId(paymentId);
+                request.setVoucherIds(setVoucherIds);
+
+                CartFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
+                Call<Void> call = apiService.paymentCash(request);
+
+                call.enqueue(new Callback<Void>() {
                     @Override
-                    public void onSuccess(int paymentId) {
-                        Log.e("Payment successful.", "ID: " + deliveryId +paymentId);
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
 
-                        List<ReqCheckoutDTO.ProductWithQuantity> productWithQuantityList = new ArrayList<>();
-                        List<Integer> setVoucherIds = new ArrayList<>();
+                            Toast.makeText(PaymentActivity.this, "Order placed successfully!", Toast.LENGTH_SHORT).show();
 
-                        try {
-                            if (voucherCode != null && !voucherCode.isEmpty()) {
-                                setVoucherIds.add(Integer.parseInt(voucherCode));
-                            }
-                        } catch (NumberFormatException e) {
-                            Log.e("PaymentActivity", "Invalid voucher code", e);
+                            Intent intent = new Intent(PaymentActivity.this, DonePaymentActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(PaymentActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                         }
-
-                        for (ResCartDetailDTO item : productList) {
-                            productWithQuantityList.add(
-                                    new ReqCheckoutDTO.ProductWithQuantity(item.getProduct().getProductId(), item.getQuantity())
-                            );
-                        }
-
-                        ReqCheckoutDTO request = new ReqCheckoutDTO();
-                        request.setUserId(accessTokenWithUserId.second);
-                        request.setProductWithQuantityList(productWithQuantityList);
-                        request.setDeliveryId(deliveryId);
-                        request.setPaymentId(paymentId);
-                        request.setVoucherIds(setVoucherIds);
-
-                        CartFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
-                        Call<Void> call = apiService.paymentCash(request);
-
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(PaymentActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(PaymentActivity.this, "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Toast.makeText(PaymentActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
 
                     @Override
-                    public void onError(String errorMessage) {
-                        Log.e("PaymentActivity", errorMessage);
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(PaymentActivity.this, "Connection error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
             } else if (radioMomo.isChecked()) {
                 paymentMethod = "MoMo";
 
                 MomoFetching momoapi = APIClient.getClientWithToken(accessTokenWithUserId.first).create(MomoFetching.class);
-                ReqMomoDTO order = new ReqMomoDTO("Payment for order ABC", totalPrice);
+                ReqMomoDTO order = new ReqMomoDTO("Order payment", totalPrice);
 
                 Call<APIResponse<ResMomoDTO>> call = momoapi.momopayment(order);
                 call.enqueue(new Callback<APIResponse<ResMomoDTO>>() {
@@ -202,7 +195,7 @@ public class PaymentActivity extends AppCompatActivity {
                             intent.putExtra("url", payUrl);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(PaymentActivity.this, "Failed to get payment URL", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivity.this, "Failed to retrieve MoMo payment URL", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -216,9 +209,8 @@ public class PaymentActivity extends AppCompatActivity {
             } else if (radioZaloPay.isChecked()) {
                 paymentMethod = "ZaloPay";
 
-                // Gọi API ZaloPay
                 PaymentFetching zalopayApi = APIClient.getClientWithToken(accessTokenWithUserId.first).create(PaymentFetching.class);
-                ReqZalopayDTO zaloOrder = new ReqZalopayDTO("Thanh toán đơn hàng", totalPrice);
+                ReqZalopayDTO zaloOrder = new ReqZalopayDTO("Order payment", totalPrice);
 
                 Call<APIResponse<ResZalopayDTO>> zalopayCall = zalopayApi.zalopayment(zaloOrder);
                 zalopayCall.enqueue(new Callback<APIResponse<ResZalopayDTO>>() {
@@ -227,36 +219,34 @@ public class PaymentActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             String paymentUrl = response.body().getData().getPaymentUrl();
 
-                            // Mở ZalopayActivity với URL thanh toán
                             Intent intent = new Intent(PaymentActivity.this, ZaloPayActivity.class);
                             intent.putExtra("url", paymentUrl);
                             startActivity(intent);
 
-                            // Giả định thành công trong môi trường test
-                            Toast.makeText(PaymentActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivity.this, "Payment successful!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(PaymentActivity.this, "Lỗi kết nối ZaloPay", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivity.this, "ZaloPay connection error", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<APIResponse<ResZalopayDTO>> call, Throwable t) {
-                        Toast.makeText(PaymentActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
             } else if (radioVNPAY.isChecked()) {
                 paymentMethod = "VNPAY";
-                // Gọi API tạo đơn VNPay trên server (trả về paymentUrl ở môi trường test)
+
                 PaymentFetching vnpayApi = APIClient.getClientWithToken(accessTokenWithUserId.first)
                         .create(PaymentFetching.class);
-                ReqVNpayDTO vnOrder = new ReqVNpayDTO("Thanh toán đơn hàng", totalPrice);
+                ReqVNpayDTO vnOrder = new ReqVNpayDTO("Order payment", totalPrice);
                 Call<APIResponse<ResVNpayDTO>> call = vnpayApi.vnpaypayment(vnOrder);
                 call.enqueue(new Callback<APIResponse<ResVNpayDTO>>() {
                     @Override
                     public void onResponse(Call<APIResponse<ResVNpayDTO>> call, Response<APIResponse<ResVNpayDTO>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String paymentUrl = response.body().getData().getPaymentUrl();
-                            // Mở bằng Chrome Custom Tabs
                             Uri uri = Uri.parse(paymentUrl);
                             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                             builder.setShowTitle(true);
@@ -264,58 +254,29 @@ public class PaymentActivity extends AppCompatActivity {
                             customTabsIntent.launchUrl(PaymentActivity.this, uri);
                         } else {
                             Toast.makeText(PaymentActivity.this,
-                                    "Lỗi kết nối VNPay: " + response.code(),
+                                    "VNPay connection error: " + response.code(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<APIResponse<ResVNpayDTO>> call, Throwable t) {
                         Toast.makeText(PaymentActivity.this,
-                                "Lỗi mạng VNPay: " + t.getMessage(),
+                                "VNPay network error: " + t.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-                return;  // thoát để không chạy tiếp các logic khác
+                return;
             }
 
             if (paymentMethod.isEmpty()) {
                 Toast.makeText(PaymentActivity.this, "Please select a payment method", Toast.LENGTH_SHORT).show();
-                return;
             }
         });
-
     }
 
     public interface PaymentCallback {
         void onSuccess(int paymentId);
         void onError(String errorMessage);
     }
-    private void handlePayment(String accessToken, String paymentMethod, Long totalPrice, String isoTime, PaymentCallback callback) {
-        ReqPaymentDTO request = new ReqPaymentDTO(paymentMethod, paymentMethod, totalPrice, isoTime);
-
-        PaymentFetching api = APIClient.getClientWithToken(accessToken).create(PaymentFetching.class);
-        Call<APIResponse<ResPaymentDTO>> call = api.addpayments(request);
-
-        call.enqueue(new Callback<APIResponse<ResPaymentDTO>>() {
-            @Override
-            public void onResponse(Call<APIResponse<ResPaymentDTO>> call, Response<APIResponse<ResPaymentDTO>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    int paymentId = response.body().getData().getPaymentId();
-                    context = paymentId;
-                    callback.onSuccess(paymentId);
-                } else {
-                    callback.onError("Error: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<APIResponse<ResPaymentDTO>> call, Throwable t) {
-                callback.onError("Connection error: " + t.getMessage());
-            }
-        });
-    }
-
-
-
-
 }

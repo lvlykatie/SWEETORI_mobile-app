@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sweetori.dto.response.ResLoginDTO;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +36,7 @@ public class WishlistActivity extends AppCompatActivity {
     ImageView btnVoucher;
     Button delete;
     LinearLayout editList;
+    TextView txtHello;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,6 +53,21 @@ public class WishlistActivity extends AppCompatActivity {
         btnVoucher = findViewById(R.id.btnVoucher);
         delete = findViewById(R.id.delete);
         editList = findViewById(R.id.editList);
+        txtHello = findViewById(R.id.txtHello);
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userJson = prefs.getString("user", null);
+
+        if (userJson != null) {
+            Gson gson = new Gson();
+            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+            if (user != null) {
+                String userName = user.getFirstName();
+                txtHello.setText("Hello, "+ userName);
+            } else {
+                txtHello.setText("Guest");
+            }
+        }
 
         //Intent
         btnAccount.setOnClickListener(v -> {

@@ -67,17 +67,53 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/poppins_semibold" />
-
-            <EditText
-                android:id="@+id/Editaddress"
+            <LinearLayout
+                android:id="@+id/linearDiaChi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter address"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:padding="1dp"
-                android:fontFamily="@font/poppins_semibold" />
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/txtDiaChi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Số nhà, đường, quận/huyện"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_semibold" />
+                <EditText
+                    android:id="@+id/Editaddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter address"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_semibold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearTinhTP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/txtTinhTP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chọn Tỉnh/Thành phố"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_semibold" />
+                <Spinner
+                    android:id="@+id/spinnerOptions"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Product Card -->
@@ -114,16 +150,6 @@
                 android:layout_marginStart="8dp"/>
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinnerOptions"
-            android:layout_width="250dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:padding="12dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown"/>
-
         <!-- Price Detail -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -146,13 +172,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Item (1): "
+                        android:text="Item (1) "
                         android:textSize="16sp"
                         android:layout_marginBottom="4dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Shipping: "
+                        android:text="Shipping "
                         android:textSize="16sp"
                         android:layout_marginBottom="4dp"/>
                     <TextView

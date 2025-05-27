@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.AddToBagAdapter;
 import com.example.sweetori.content.VoucherFetching;
+import com.example.sweetori.dto.response.PaginationWrapper;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.example.sweetori.dto.response.ResDeliveryDTO;
 import com.example.sweetori.dto.response.ResDiscountDTO;
@@ -32,8 +33,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,10 +50,14 @@ public class AddToBagActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AddToBagAdapter adapter;
     private List<ResDiscountDTO> discountList = new ArrayList<>();
+
+    private List<ResDeliveryDTO> deliveryList = new ArrayList<>();
     private int selectedVoucherCode ;
     private double totalPrice, total, discountedPrice;
-    private double totalQuantity;
+    private Integer voucherId;
     private int deliveryId;
+    private String deliveryName;
+
     private TextView item, userName, Phone, shipping, discount, voucher_discount, total_Price;
     private EditText Editaddress, couponEdit;
     private Button checkoutBtn, applyBtn;
@@ -106,9 +116,10 @@ public class AddToBagActivity extends AppCompatActivity {
             noti.putExtra("voucher", voucher_discount.getText().toString());
             noti.putExtra("shipping", shipping.getText().toString());
             noti.putExtra("total_Price", total_Price.getText().toString());
-            noti.putExtra("voucher_code", selectedVoucherCode);
+            noti.putExtra("voucherId", String.valueOf(voucherId));
             noti.putExtra("productListJson", new Gson().toJson(selectedItems));
             noti.putExtra("selectedDeliveryId", deliveryId);
+            Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
             startActivity(noti);
         });
 
@@ -130,123 +141,57 @@ public class AddToBagActivity extends AppCompatActivity {
         double grandTotal = itemTotal + shippingCost - discountproduct - voucher;
         total_Price.setText(String.format("%.0f VND", grandTotal));
 
-        // Khởi tạo danh sách tỉnh thành và khoảng cách
         List<ShippingDTO> provinceList = new ArrayList<>();
-        provinceList.add(new ShippingDTO("An Giang", 190));
-        provinceList.add(new ShippingDTO("Bà Rịa - Vũng Tàu", 95));
-        provinceList.add(new ShippingDTO("Bạc Liêu", 290));
-        provinceList.add(new ShippingDTO("Bắc Giang", 1600));
-        provinceList.add(new ShippingDTO("Bắc Kạn", 1800));
-        provinceList.add(new ShippingDTO("Bắc Ninh", 1650));
-        provinceList.add(new ShippingDTO("Bến Tre", 90));
-        provinceList.add(new ShippingDTO("Bình Dương", 30));
-        provinceList.add(new ShippingDTO("Bình Định", 630));
-        provinceList.add(new ShippingDTO("Bình Phước", 120));
-        provinceList.add(new ShippingDTO("Bình Thuận", 200));
-        provinceList.add(new ShippingDTO("Cà Mau", 350));
-        provinceList.add(new ShippingDTO("Cao Bằng", 1950));
-        provinceList.add(new ShippingDTO("Cần Thơ", 170));
-        provinceList.add(new ShippingDTO("Đà Nẵng", 960));
-        provinceList.add(new ShippingDTO("Đắk Lắk", 350));
-        provinceList.add(new ShippingDTO("Đắk Nông", 250));
-        provinceList.add(new ShippingDTO("Điện Biên", 2000));
-        provinceList.add(new ShippingDTO("Đồng Nai", 40));
-        provinceList.add(new ShippingDTO("Đồng Tháp", 160));
-        provinceList.add(new ShippingDTO("Gia Lai", 520));
-        provinceList.add(new ShippingDTO("Hà Giang", 2000));
-        provinceList.add(new ShippingDTO("Hà Nam", 1700));
-        provinceList.add(new ShippingDTO("Hà Nội", 1730));
-        provinceList.add(new ShippingDTO("Hà Tĩnh", 1170));
-        provinceList.add(new ShippingDTO("Hải Dương", 1680));
-        provinceList.add(new ShippingDTO("Hải Phòng", 1700));
-        provinceList.add(new ShippingDTO("Hậu Giang", 200));
-        provinceList.add(new ShippingDTO("Hòa Bình", 1650));
-        provinceList.add(new ShippingDTO("Hưng Yên", 1680));
-        provinceList.add(new ShippingDTO("Khánh Hòa", 440));
-        provinceList.add(new ShippingDTO("Kiên Giang", 270));
-        provinceList.add(new ShippingDTO("Kon Tum", 580));
-        provinceList.add(new ShippingDTO("Lai Châu", 2100));
-        provinceList.add(new ShippingDTO("Lâm Đồng", 310));
-        provinceList.add(new ShippingDTO("Lạng Sơn", 1850));
-        provinceList.add(new ShippingDTO("Lào Cai", 2000));
-        provinceList.add(new ShippingDTO("Long An", 40));
-        provinceList.add(new ShippingDTO("Nam Định", 1750));
-        provinceList.add(new ShippingDTO("Nghệ An", 1300));
-        provinceList.add(new ShippingDTO("Ninh Bình", 1730));
-        provinceList.add(new ShippingDTO("Ninh Thuận", 350));
-        provinceList.add(new ShippingDTO("Phú Thọ", 1800));
-        provinceList.add(new ShippingDTO("Phú Yên", 550));
-        provinceList.add(new ShippingDTO("Quảng Bình", 1070));
-        provinceList.add(new ShippingDTO("Quảng Nam", 940));
-        provinceList.add(new ShippingDTO("Quảng Ngãi", 820));
-        provinceList.add(new ShippingDTO("Quảng Ninh", 1750));
-        provinceList.add(new ShippingDTO("Quảng Trị", 1010));
-        provinceList.add(new ShippingDTO("Sóc Trăng", 240));
-        provinceList.add(new ShippingDTO("Sơn La", 1900));
-        provinceList.add(new ShippingDTO("Tây Ninh", 95));
-        provinceList.add(new ShippingDTO("Thái Bình", 1770));
-        provinceList.add(new ShippingDTO("Thái Nguyên", 1750));
-        provinceList.add(new ShippingDTO("Thanh Hóa", 1500));
-        provinceList.add(new ShippingDTO("Thừa Thiên Huế", 870));
-        provinceList.add(new ShippingDTO("Tiền Giang", 70));
-        provinceList.add(new ShippingDTO("TP. Hồ Chí Minh", 0));
-        provinceList.add(new ShippingDTO("Trà Vinh", 130));
-        provinceList.add(new ShippingDTO("Tuyên Quang", 1850));
-        provinceList.add(new ShippingDTO("Vĩnh Long", 130));
-        provinceList.add(new ShippingDTO("Vĩnh Phúc", 1700));
-        provinceList.add(new ShippingDTO("Yên Bái", 1900));
 
-        ArrayAdapter<ShippingDTO> adapterSpinner = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                provinceList
-        );
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapterSpinner);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        DeliveryFetching deliveryapiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(DeliveryFetching.class);
+        deliveryapiService.getdelivery().enqueue(new Callback<APIResponse<PaginationWrapper<ResDeliveryDTO>>>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ShippingDTO selected = (ShippingDTO) parent.getItemAtPosition(position);
-                int distance = selected.distanceKm;
-                if (distance < 70) {
-                    deliveryId = 1;
-                } else if (distance >= 70 && distance < 300) {
-                    deliveryId = 2;
-                } else if (distance >= 300 && distance < 500) {
-                    deliveryId = 3;
-                }else if (distance >= 500 && distance < 1000) {
-                    deliveryId = 4;
-                }else {
-                    deliveryId = 5;
-                }
-                Log.d("PROVINCE_SELECT", "Tỉnh: " + selected.name + ", Cách TP.HCM: " + distance + " km");
-                Log.d("PROVINCE_SELECT", "deliveryId: " + deliveryId);
+            public void onResponse(Call<APIResponse<PaginationWrapper<ResDeliveryDTO>>> call, Response<APIResponse<PaginationWrapper<ResDeliveryDTO>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    deliveryList = response.body().getData().getData();
+                    for (ResDeliveryDTO delivery : deliveryList) {
+                        provinceList.add(new ShippingDTO(delivery.getName(), delivery.getShippingCost(), delivery.getDeliveryId()));
+                    }
 
-                DeliveryFetching deliveryapiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(DeliveryFetching.class);
-                deliveryapiService.getdelivery(deliveryId).enqueue(new Callback<APIResponse<ResDeliveryDTO>>() {
-                    @Override
-                    public void onResponse(Call<APIResponse<ResDeliveryDTO>> call, Response<APIResponse<ResDeliveryDTO>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            ResDeliveryDTO delivery = response.body().getData();
-                            Log.d("USER_API", "cost: " + delivery.getShippingCost());
-                            shipping.setText(String.format("%, .0f VND",(delivery.getShippingCost())));
-                            updateGrandTotal();
-                        } else {
-                            Log.e("USER_API", "Response unsuccessful or body is null");
+                    // Tạo adapter SAU khi đã có dữ liệu
+                    ArrayAdapter<ShippingDTO> adapterSpinner = new ArrayAdapter<>(
+                            AddToBagActivity.this,
+                            android.R.layout.simple_spinner_item,
+                            provinceList
+                    );
+                    adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapterSpinner);
+
+                    // Set listener sau khi gán adapter
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            ShippingDTO selected = (ShippingDTO) parent.getItemAtPosition(position);
+                            double distance = selected.deliveryCost;
+                            shipping.setText(String.format("%,.0f VND", distance).replace(",", "."));
+                            deliveryId = selected.deliveryId;
+                            deliveryName = selected.name;
+                            Log.d("PROVINCE_SELECT", "Name: " + selected.name + ", Cost: " + distance + " km");
+                            Log.d("PROVINCE_SELECT", "deliveryId: " + deliveryId);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<APIResponse<ResDeliveryDTO>> call, Throwable t) {
-                        Log.e("USER_API", "Network error: " + t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {}
+                    });
+
+                    spinner.setSelection(0);
+                    updateGrandTotal();
+                } else {
+                    Log.e("USER_API", "Response unsuccessful or body is null");
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onFailure(Call<APIResponse<PaginationWrapper<ResDeliveryDTO>>> call, Throwable t) {
+                Log.e("USER_API", "Network error: " + t.getMessage());
+            }
         });
+
 
 
         int userId = accessTokenWithUserId.second;
@@ -261,7 +206,7 @@ public class AddToBagActivity extends AppCompatActivity {
                     Log.d("USER_API", "First: " + user.getFirstName());
                     Log.d("USER_API", "Last: " + user.getLastName());
                     Log.d("USER_API", "Phone: " + user.getPhoneNumber());
-                    Log.d("USER_API", "Address: " + user.getBuyingAddress());
+                    Log.d("USER_API",user.getBuyingAddress());
                     userName.setText("Name: " + user.getFirstName() + " " + user.getLastName());
                     Phone.setText("Phone: " + user.getPhoneNumber());
                     Editaddress.setText("Address: " + user.getBuyingAddress());
@@ -285,20 +230,27 @@ public class AddToBagActivity extends AppCompatActivity {
 
         for (ResCartDetailDTO detail : adapter.getCartDetails()) {
             double price = detail.getProduct().getSellingPrice();
-            double discountPercent = detail.getProduct().getDiscount().getDiscountPercentage();
             int quantity = detail.getQuantity();
-
             totalPriceBeforeDiscount += price * quantity;
-            totalPriceAfterDiscount += price * (discountPercent) * quantity;
+
+            ResDiscountDTO discountDTO = detail.getProduct().getDiscount();
+            if (discountDTO != null && isWithinDiscountPeriod(discountDTO.getStartDate(), discountDTO.getEndDate())) {
+                double discountPercent = discountDTO.getDiscountPercentage();
+                double discountedPrice = price * (1 - discountPercent);
+                totalPriceAfterDiscount += discountedPrice * quantity;
+            } else {
+                totalPriceAfterDiscount += price * quantity;
+            }
         }
 
-        totalPrice = totalPriceBeforeDiscount;
+        double discountAmount = totalPriceBeforeDiscount - totalPriceAfterDiscount;
+        totalPrice = totalPriceAfterDiscount;
 
-        discount.setText(String.format("- %,.0f VND", totalPriceAfterDiscount).replace(",", "."));
-        item.setText(String.format("%,.0f VND", totalPrice).replace(",", "."));
+        discount.setText(String.format("- %,.0f VND", discountAmount).replace(",", "."));
+        item.setText(String.format("%,.0f VND", totalPriceBeforeDiscount).replace(",", "."));
         updateGrandTotal();
-
     }
+
     private void fetchAndCompareVoucherCode(String testCode) {
         Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AddToBagActivity.this);
         VoucherFetching api_ServiceVouch = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
@@ -312,8 +264,15 @@ public class AddToBagActivity extends AppCompatActivity {
                     for (ResVoucherDTO.VoucherData voucher : voucherList) {
                         if (voucher.getCode().equalsIgnoreCase(testCode)) {
                             Log.d("VoucherMatch", "✅ Mã hợp lệ: " + voucher.getCode());
-                            voucher_discount.setText(String.format("%, .0f VND",(voucher.getDiscountAmount())));
+                            // XÓA voucher cũ nếu có
+                            voucherId = voucher.getVoucherId();
+                            Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
+                            // Cập nhật hiển thị
+                            voucher_discount.setText(String.format("%,.0f VND", voucher.getDiscountAmount()));
+
+                            // Cập nhật tổng tiền
                             updateGrandTotal();
+
                             found = true;
                             break;
                         }
@@ -358,7 +317,8 @@ public class AddToBagActivity extends AppCompatActivity {
                         }
 
                         if (maxDiscountVoucher != null) {
-                            selectedVoucherCode = maxDiscountVoucher.getVoucherId();
+                            voucherId = maxDiscountVoucher.getVoucherId();
+                            Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
                             Log.d("VoucherInfo", "🎟️ Max discount voucher for userId " + accessTokenWithUserId.second +
                                     ": " + maxDiscountVoucher.getCode() + " with discount " + maxDiscountVoucher.getDiscountAmount());
                             voucher_discount.setText(String.format("%,.0f VND", maxDiscountVoucher.getDiscountAmount()));
@@ -395,7 +355,21 @@ public class AddToBagActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isWithinDiscountPeriod(String startDateStr, String endDateStr) {
+        try {
+            // Chuyển từ String ISO 8601 sang OffsetDateTime rồi lấy LocalDate
+            LocalDate startDate = OffsetDateTime.parse(startDateStr).toLocalDate();
+            LocalDate endDate = OffsetDateTime.parse(endDateStr).toLocalDate();
+            LocalDate currentDate = LocalDate.now();
 
+            // Kiểm tra: startDate <= currentDate <= endDate
+            return (currentDate.isEqual(startDate) || currentDate.isAfter(startDate)) &&
+                    (currentDate.isEqual(endDate) || currentDate.isBefore(endDate));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     private void updateGrandTotal() {
         double itemTotal = safeParse(item.getText().toString());
