@@ -2,18 +2,37 @@ package com.example.sweetori;
 
 import android.os.Bundle;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class DonePaymentActivity  extends AppCompatActivity {
-    private TextView item, dateTextView, shipping, discount, voucher_discount, total;
-
-
+public class DonePaymentActivity extends AppCompatActivity {
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.done_payments);
-        EdgeToEdge.enable(this);
+
+        // Ánh xạ view
+        TextView txtDateShipping = findViewById(R.id.txtDateShipping);
+        TextView txtShipping = findViewById(R.id.txtShipping);
+        TextView txtVoucher = findViewById(R.id.txtVoucher);
+        TextView txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
+        TextView txtxTotal = findViewById(R.id.txtxTotal);
+        TextView txtItems = findViewById(R.id.txtItem);
+
+        // Lấy dữ liệu từ Intent
+        String date = getIntent().getStringExtra("date");
+        String shippingMethod = getIntent().getStringExtra("shippingMethod");
+        String voucher = getIntent().getStringExtra("voucher");
+        String paymentMethod = getIntent().getStringExtra("paymentMethod");
+        String totalPrice = getIntent().getStringExtra("totalPrice");
+        String item = getIntent().getStringExtra("item");
+
+
+        // Hiển thị dữ liệu
+        txtDateShipping.setText(date != null ? date : "N/A");
+        txtShipping.setText(shippingMethod != null ? shippingMethod : "N/A");
+        txtVoucher.setText(voucher != null ? voucher : "N/A");
+        txtPaymentMethod.setText(paymentMethod != null ? paymentMethod : "N/A");
+        txtxTotal.setText(totalPrice != null ? totalPrice : "N/A");
+        txtItems.setText(item != null ? item : "N/A");
     }
 }
