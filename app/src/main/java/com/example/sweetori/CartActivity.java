@@ -71,18 +71,10 @@ public class CartActivity extends AppCompatActivity {
 
         currentUser = SharedPref.getUser(this);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                txtHello.setText("Hello, "+ userName);
-            } else {
-                txtHello.setText("Guest");
-            }
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            txtHello.setText("Guest");
         }
 
         // Navigation listeners

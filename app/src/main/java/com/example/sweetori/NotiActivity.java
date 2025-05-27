@@ -55,18 +55,11 @@ public class NotiActivity extends AppCompatActivity {
         tabContent = findViewById(R.id.tabContent);
         txtHello = findViewById(R.id.txtHello);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                txtHello.setText("Hello, "+ userName);
-            } else {
-                txtHello.setText("Guest");
-            }
+        currentUser = SharedPref.getUser(this);
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            txtHello.setText("Guest");
         }
 
         //Intent

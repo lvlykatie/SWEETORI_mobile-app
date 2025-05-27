@@ -24,20 +24,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.sweetori.dto.response.ResUserDTO;
+
 public class VoucherActivity extends AppCompatActivity {
-    ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
+    ImageView btnAccount;
+    ImageView btnHome;
+    ImageView btnCart;
+    ImageView btnNoti;
+    ImageView btnVoucher;
+    private ResUserDTO currentUser;
     TextView voucher_discount;
 
     RecyclerView recyclerViewGroup;
     int voucherId = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.voucher);
+        EdgeToEdge.enable(this);
 
-        // Ánh xạ view
+        currentUser = SharedPref.getUser(this);
+        //Component
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);
         btnCart = findViewById(R.id.btnCart);

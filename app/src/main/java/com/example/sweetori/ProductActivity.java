@@ -42,7 +42,7 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product);
 
-        currentUser = SharedPref.getUser(this);
+        currentUser = SharedPref.getUser(this);;
 
 
         // Ánh xạ view
@@ -77,6 +77,7 @@ public class ProductActivity extends AppCompatActivity {
         productList.clear();
         productList.addAll(managerList);
         productAdapter.notifyDataSetChanged();
+
 
         // Footer navigation (giữ nguyên)
         btnAccount.setOnClickListener(v -> {
