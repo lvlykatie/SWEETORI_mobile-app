@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/cart"
-    tools:context=".CartActivity">
+    tools:context=".CartActivity"
+    android:background="#FFFFFF">
 
     <!-- HEADER -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -191,8 +192,9 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="BUY NOW"
+            android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/white"
-            android:background="@drawable/banner_bg"
+            android:background="@drawable/btn_bg"
             android:scaleType="centerInside"
             android:contentDescription="Buy now" />
     </LinearLayout>
