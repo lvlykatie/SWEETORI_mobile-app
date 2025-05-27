@@ -1,5 +1,6 @@
 package com.example.sweetori.dto.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class ResProductDTO {
@@ -50,7 +51,7 @@ public class ResProductDTO {
         this.data = data;
     }
 
-    public static class ProductData {
+    public static class ProductData implements Serializable {
         private int productId;
         private String productName;
         private String description;

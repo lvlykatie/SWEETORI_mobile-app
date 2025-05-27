@@ -56,7 +56,7 @@ public class AccountActivity extends AppCompatActivity {
     LinearLayout btnLogOut;
     LinearLayout btnResetPass;
     LinearLayout btn_wishlist;
-    TextView txtHello;
+    TextView txtHello, txtName;
     EditText txtLastName, txtFirstName, txtEmail, txtPhone, txtAddress;
 
 
@@ -78,6 +78,7 @@ public class AccountActivity extends AppCompatActivity {
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
         txtHello = findViewById(R.id.txtHello);
+        txtName = findViewById(R.id.txtName);
         Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AccountActivity.this);
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String userJson = prefs.getString("user", null);
@@ -92,7 +93,6 @@ public class AccountActivity extends AppCompatActivity {
                 txtHello.setText("Guest");
             }
         }
-
         btnHome.setOnClickListener(v -> {
             Intent home = new Intent(AccountActivity.this, HomepageActivity.class);
             startActivity(home);
@@ -118,12 +118,54 @@ public class AccountActivity extends AppCompatActivity {
             highlightTab(btnGeneral);
             showTab(R.layout.tab_general);
             setupGeneralTab(accessTokenWithUserId);
+            String displayName = "Guest";
+            if (userJson != null) {
+                Gson gson = new Gson();
+                ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+                if (user != null && user.getFirstName() != null) {
+                    displayName = user.getFirstName();
+                }
+            }
+            txtName.setText(displayName);
             updateUserInfo(accessTokenWithUserId);
         });
 
         btnPurchase.setOnClickListener(v -> {
             highlightTab(btnPurchase);
             showTab(R.layout.tab_purchase);
+            // Lấy lại llPending từ view vừa inflate vào tabContent
+            View purchaseView = tabContent.getChildAt(0); // view của tab_purchase layout vừa add
+            LinearLayout llPending = purchaseView.findViewById(R.id.llPending);
+            LinearLayout llWaiting = purchaseView.findViewById(R.id.llWaiting);
+            LinearLayout llTransport = purchaseView.findViewById(R.id.llTransport);
+            LinearLayout llCompleted = purchaseView.findViewById(R.id.llCompleted);
+            LinearLayout llCancelled = purchaseView.findViewById(R.id.llCancelled);
+            llPending.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                // Nếu muốn, bạn có thể truyền thêm dữ liệu qua intent, ví dụ userId hoặc trạng thái "PENDING"
+                intent.putExtra("orderStatus", "PENDING");
+                startActivity(intent);
+            });
+            llWaiting.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "WAITING");
+                startActivity(intent);
+            });
+            llTransport.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "TRANSPORT");
+                startActivity(intent);
+            });
+            llCompleted.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "COMPLETED");
+                startActivity(intent);
+            });
+            llCancelled.setOnClickListener(v1 -> {
+                Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
+                intent.putExtra("orderStatus", "CANCELLED");
+                startActivity(intent);
+            });
         });
 
         btnSupport.setOnClickListener(v -> {

@@ -1,8 +1,9 @@
 package com.example.sweetori.dto.response;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ResOrderDTO {
+public class ResOrderDTO implements Serializable {
     private int orderId;
     private String date;
     private String buyingAddress;

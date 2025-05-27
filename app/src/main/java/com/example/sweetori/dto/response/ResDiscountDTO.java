@@ -1,7 +1,9 @@
 
 package com.example.sweetori.dto.response;
 
-public class ResDiscountDTO {
+import java.io.Serializable;
+
+public class ResDiscountDTO implements Serializable {
     private int discountId;
     private double discountPercentage;
     private String description;

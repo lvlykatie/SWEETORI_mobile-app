@@ -1,6 +1,8 @@
 package com.example.sweetori.dto.response;
 
-public class ResCartDetailDTO {
+import java.io.Serializable;
+
+public class ResCartDetailDTO implements Serializable {
     private int cartDetailsId;
     private int quantity;
     private Cart cart;

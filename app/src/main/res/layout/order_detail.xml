@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_weight="1"/>
                     <TextView
-                        android:id="@+id/tvDateShipping"
+                        android:id="@+id/tvDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -108,10 +108,18 @@
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Items"
+                android:textColor="#002366"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp" />
             <!-- Product Items -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerOrderItems"
+                android:id="@+id/rvOrderItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" />
@@ -145,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_weight="1"/>
                     <TextView
-                        android:id="@+id/tvItemsPrice"
+                        android:id="@+id/tvItemPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -239,6 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cancel order"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textAllCaps="false"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/btn_bg"
@@ -249,6 +258,7 @@
                     android:layout_height="wrap_content"
                     android:text="Haven't received"
                     android:textAllCaps="false"
+                    android:fontFamily="@font/poppins_semibold"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/btn_bg"
                     android:textColor="#FFFFFF" />
@@ -258,6 +268,7 @@
                     android:layout_height="wrap_content"
                     android:text="Received"
                     android:textAllCaps="false"
+                    android:fontFamily="@font/poppins_semibold"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/btn_bg"
                     android:textColor="#FFFFFF" />
@@ -268,6 +279,7 @@
                     android:text="Repurchase"
                     android:textAllCaps="false"
                     android:layout_marginTop="16dp"
+                    android:fontFamily="@font/poppins_semibold"
                     android:background="@drawable/btn_bg"
                     android:textColor="#FFFFFF" />
                 <Button
@@ -276,6 +288,7 @@
                     android:layout_height="wrap_content"
                     android:text="Review"
                     android:textAllCaps="false"
+                    android:fontFamily="@font/poppins_semibold"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/btn_bg"
                     android:textColor="#FFFFFF" />

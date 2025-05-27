@@ -1,8 +1,9 @@
 package com.example.sweetori.dto.response;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class ResPaymentDTO {
+public class ResPaymentDTO implements Serializable {
     private int paymentId;
     private String name;
     private String description;

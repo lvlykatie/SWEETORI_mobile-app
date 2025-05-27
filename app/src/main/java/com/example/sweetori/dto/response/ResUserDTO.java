@@ -1,6 +1,8 @@
 package com.example.sweetori.dto.response;
 
-public class ResUserDTO {
+import java.io.Serializable;
+
+public class ResUserDTO implements Serializable {
     private int userId;
     private String username;
     private String email;

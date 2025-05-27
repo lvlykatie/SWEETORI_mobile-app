@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sweetori.OrderDetailActivity;
 import com.example.sweetori.ProductDetailActivity;
 import com.example.sweetori.R;
 import com.example.sweetori.dto.response.ResOrderDTO;
@@ -40,17 +41,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        ResOrderDTO data = orderList.get(position);
-        holder.tvTotalPrice.setText(String.format("%,.0f VND", data.getTotal()));
+        ResOrderDTO order = orderList.get(position);
+        holder.tvTotalPrice.setText(String.format("%,.0f VND", order.getTotal()));
 
         // Set LayoutManager trước khi gán adapter cho nested RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         holder.orderItemRecyclerView.setLayoutManager(layoutManager);
-        holder.orderItemRecyclerView.setAdapter(new OrderItemAdapter(data.getListOfOrderdetails(), context));
+        holder.orderItemRecyclerView.setAdapter(new OrderItemAdapter(order.getListOfOrderdetails(), context));
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.putExtra("orderId", data.getOrderId());
+            Log.d("OrderAdapter", "Item clicked: " + order.getOrderId());
+            Intent intent = new Intent(context, OrderDetailActivity.class);
+            intent.putExtra("order", order); // truyền đối tượng
             context.startActivity(intent);
         });
     }
