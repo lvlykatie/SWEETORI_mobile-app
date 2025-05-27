@@ -12,6 +12,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -51,6 +53,8 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView item, dateTextView, shipping, discount, voucher_discount, total;
     RadioButton radioCOD, radioMomo, radioZaloPay, radioVNPAY;
     Button orderButton;
+    private ActivityResultLauncher<Intent> customTabLauncher;
+    private static final int PAYMENT_SUCCESS_REQUEST = 1;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,6 +62,7 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payments);
 
+        // Khởi tạo view
         item = findViewById(R.id.item);
         shipping = findViewById(R.id.shipping);
         discount = findViewById(R.id.discount);
@@ -69,8 +74,11 @@ public class PaymentActivity extends AppCompatActivity {
         radioZaloPay = findViewById(R.id.radio_zalopay);
         radioVNPAY = findViewById(R.id.radio_vnpay);
         orderButton = findViewById(R.id.orderButton);
+
+        // Lấy thông tin từ SharedPref
         Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(PaymentActivity.this);
 
+        // Hiển thị thông tin đơn hàng
         String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         String itemStr = getIntent().getStringExtra("item");
         String discountStr = getIntent().getStringExtra("discount");
@@ -92,6 +100,7 @@ public class PaymentActivity extends AppCompatActivity {
         shipping.setText(shippingStr);
         total.setText(total_Price);
 
+        // Xử lý radio button
         View.OnClickListener radioClickListener = v -> {
             radioCOD.setChecked(false);
             radioMomo.setChecked(false);
@@ -105,6 +114,17 @@ public class PaymentActivity extends AppCompatActivity {
         radioZaloPay.setOnClickListener(radioClickListener);
         radioVNPAY.setOnClickListener(radioClickListener);
 
+        // Khởi tạo ActivityResultLauncher cho VNPAY
+        customTabLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        navigateToDonePayment();
+                    }
+                }
+        );
+
+        // Xử lý nút Order
         orderButton.setOnClickListener(v -> {
             String paymentMethod = "";
             Long totalPrice = 0L;
@@ -162,11 +182,8 @@ public class PaymentActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-
                             Toast.makeText(PaymentActivity.this, "Order placed successfully!", Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(PaymentActivity.this, DonePaymentActivity.class);
-                            startActivity(intent);
+                            navigateToDonePayment();
                         } else {
                             Toast.makeText(PaymentActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                         }
@@ -190,10 +207,9 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onResponse(Call<APIResponse<ResMomoDTO>> call, Response<APIResponse<ResMomoDTO>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String payUrl = response.body().getData().getPaymentUrl();
-                            Log.d("MoMo", "Payment URL: " + payUrl);
                             Intent intent = new Intent(PaymentActivity.this, MomoActivity.class);
                             intent.putExtra("url", payUrl);
-                            startActivity(intent);
+                            startActivityForResult(intent, PAYMENT_SUCCESS_REQUEST);
                         } else {
                             Toast.makeText(PaymentActivity.this, "Failed to retrieve MoMo payment URL", Toast.LENGTH_SHORT).show();
                         }
@@ -218,12 +234,9 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onResponse(Call<APIResponse<ResZalopayDTO>> call, Response<APIResponse<ResZalopayDTO>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String paymentUrl = response.body().getData().getPaymentUrl();
-
                             Intent intent = new Intent(PaymentActivity.this, ZaloPayActivity.class);
                             intent.putExtra("url", paymentUrl);
-                            startActivity(intent);
-
-                            Toast.makeText(PaymentActivity.this, "Payment successful!", Toast.LENGTH_SHORT).show();
+                            startActivityForResult(intent, PAYMENT_SUCCESS_REQUEST);
                         } else {
                             Toast.makeText(PaymentActivity.this, "ZaloPay connection error", Toast.LENGTH_SHORT).show();
                         }
@@ -247,11 +260,9 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onResponse(Call<APIResponse<ResVNpayDTO>> call, Response<APIResponse<ResVNpayDTO>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String paymentUrl = response.body().getData().getPaymentUrl();
-                            Uri uri = Uri.parse(paymentUrl);
-                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                            builder.setShowTitle(true);
-                            CustomTabsIntent customTabsIntent = builder.build();
-                            customTabsIntent.launchUrl(PaymentActivity.this, uri);
+                            Intent intent = new Intent(PaymentActivity.this, VNPayActivity.class);
+                            intent.putExtra("url", paymentUrl);
+                            startActivityForResult(intent, PAYMENT_SUCCESS_REQUEST);
                         } else {
                             Toast.makeText(PaymentActivity.this,
                                     "VNPay connection error: " + response.code(),
@@ -266,13 +277,45 @@ public class PaymentActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-                return;
             }
 
             if (paymentMethod.isEmpty()) {
                 Toast.makeText(PaymentActivity.this, "Please select a payment method", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAYMENT_SUCCESS_REQUEST && resultCode == RESULT_OK) {
+            navigateToDonePayment();
+        }
+    }
+
+    private void navigateToDonePayment() {
+        Intent intent = new Intent(PaymentActivity.this, DonePaymentActivity.class);
+
+        // Truyền tất cả dữ liệu cần hiển thị
+        intent.putExtra("date", dateTextView.getText().toString());
+        intent.putExtra("shippingMethod", shipping.getText().toString());
+        intent.putExtra("discount", discount.getText().toString());
+        intent.putExtra("voucher", voucher_discount.getText().toString());
+        intent.putExtra("totalPrice", total.getText().toString());
+        intent.putExtra("paymentMethod", getPaymentMethodName()); // Thêm phương thức thanh toán
+        intent.putExtra("item", item.getText().toString());
+
+        startActivity(intent);
+        finish();
+    }
+
+    // Hàm lấy tên phương thức thanh toán
+    private String getPaymentMethodName() {
+        if (radioCOD.isChecked()) return "COD";
+        if (radioMomo.isChecked()) return "MoMo";
+        if (radioZaloPay.isChecked()) return "ZaloPay";
+        if (radioVNPAY.isChecked()) return "VNPAY";
+        return "Unknown";
     }
 
     public interface PaymentCallback {

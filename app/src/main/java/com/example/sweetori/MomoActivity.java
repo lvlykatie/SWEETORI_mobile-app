@@ -1,25 +1,31 @@
 package com.example.sweetori;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MomoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WebView webView = new WebView(this);
+        setContentView(webView);
 
-        // Nhận URL từ Intent
         String url = getIntent().getStringExtra("url");
+        webView.getSettings().setJavaScriptEnabled(true);
 
-        if (url != null) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(browserIntent);
-        }
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (url.contains("success")) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }
+        });
 
-        // Kết thúc Activity này sau khi mở trình duyệt
-        finish();
+        webView.loadUrl(url);
     }
 }
