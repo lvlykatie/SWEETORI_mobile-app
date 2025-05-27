@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sweetori.dto.response.ResLoginDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -34,6 +35,7 @@ public class NotiActivity extends AppCompatActivity {
     Button btnPersonal, btnDiscount;
     FrameLayout tabContent;
     TextView txtHello;
+    private ResUserDTO currentUser;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -53,18 +55,11 @@ public class NotiActivity extends AppCompatActivity {
         tabContent = findViewById(R.id.tabContent);
         txtHello = findViewById(R.id.txtHello);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                txtHello.setText("Hello, "+ userName);
-            } else {
-                txtHello.setText("Guest");
-            }
+        currentUser = SharedPref.getUser(this);
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            txtHello.setText("Guest");
         }
 
         //Intent

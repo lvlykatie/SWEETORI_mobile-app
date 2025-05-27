@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.ProductAdapter;
 import com.example.sweetori.dto.response.ResProductDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,12 +35,14 @@ public class ProductActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> filterLauncher;
     private List<ResProductDTO.ProductData> managerList;  // dữ liệu gốc
+    private ResUserDTO currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product);
 
+        currentUser = SharedPref.getUser(this);;
         // Ánh xạ view
         btnAccount            = findViewById(R.id.btnAccount);
         btnHome               = findViewById(R.id.btnHome);
@@ -75,11 +78,26 @@ public class ProductActivity extends AppCompatActivity {
 
 
         // Footer navigation (giữ nguyên)
-        btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
-        btnHome   .setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
-        btnCart   .setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
-        btnNoti   .setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
-        btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
+        btnAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AccountActivity.class);
+            startActivity(intent);
+        });
+        btnHome.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomepageActivity.class);
+            startActivity(intent);
+        });
+        btnCart.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
+        btnNoti.setOnClickListener(v -> {
+            Intent intent = new Intent(this, NotiActivity.class);
+            startActivity(intent);
+        });
+        btnVoucher.setOnClickListener(v -> {
+            Intent intent = new Intent(this, VoucherActivity.class);
+            startActivity(intent);
+        });
 
         // --- CHỈNH 2: nhận query từ Homepage ---
         String incomingQuery = getIntent().getStringExtra("searchQuery");

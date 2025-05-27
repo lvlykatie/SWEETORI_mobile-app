@@ -1,9 +1,8 @@
 package com.example.sweetori;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,22 +15,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.sweetori.content.AuthFetching;
+import com.example.sweetori.content.UserFetching;
 import com.example.sweetori.dto.request.ReqLoginDTO;
 import com.example.sweetori.dto.response.ResLoginDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignInActivity extends AppCompatActivity {
     Button btnSignIn;
@@ -42,26 +34,62 @@ public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         EdgeToEdge.enable(this);
 
-        //Ánh xạ component
+        // 1. Check xem token có tồn tại không
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(this);
+        String accessToken = accessTokenWithUserId.first;
+        int userId = accessTokenWithUserId.second;
+
+        if (accessToken != null && !accessToken.isEmpty() && userId != -1) {
+            // Có token, lấy user luôn
+            fetchUser(userId, accessToken, new Callback<APIResponse<ResUserDTO>>() {
+                @Override
+                public void onResponse(Call<APIResponse<ResUserDTO>> call, Response<APIResponse<ResUserDTO>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        ResUserDTO user = response.body().getData();
+                        Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
+                        homepage.putExtra("user", user);
+                        homepage.putExtra("accessToken", accessToken);
+                        homepage.putExtra("userId", userId);
+                        startActivity(homepage);
+                        finish();
+                    } else {
+                        // Token không hợp lệ hoặc fetch user lỗi -> hiện màn login
+                        setupLoginUI();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<APIResponse<ResUserDTO>> call, Throwable t) {
+                    // Kết nối lỗi, vẫn cho hiển thị login để user đăng nhập lại
+                    setupLoginUI();
+                }
+            });
+        } else {
+            // Không có token -> hiển thị màn login
+            setupLoginUI();
+        }
+
+        // Khởi tạo quảng cáo (nếu có)
+        MobileAds.initialize(this, initializationStatus -> {});
+    }
+
+    private void setupLoginUI() {
+        // Ánh xạ component và set onClickListener
         btnSignIn = findViewById(R.id.btnSignIn);
         btnForgot = findViewById(R.id.btnForgot);
         btnRegisterNow = findViewById(R.id.btnRegisterNow);
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextPassword = findViewById(R.id.editTextPassword);
 
-        //Intent
         btnSignIn.setOnClickListener(v -> {
-            editTextUsername = findViewById(R.id.editTextUsername);
-            editTextPassword = findViewById(R.id.editTextPassword);
-
             ReqLoginDTO reqLoginDTO = new ReqLoginDTO();
             reqLoginDTO.setUsername(editTextUsername.getText().toString());
             reqLoginDTO.setPassword(editTextPassword.getText().toString());
 
-            // Lấy instance từ ApiClient
             AuthFetching authFetching = APIClient.getClient().create(AuthFetching.class);
 
             authFetching.login(reqLoginDTO).enqueue(new Callback<APIResponse<ResLoginDTO>>() {
@@ -69,25 +97,34 @@ public class SignInActivity extends AppCompatActivity {
                 public void onResponse(Call<APIResponse<ResLoginDTO>> call, Response<APIResponse<ResLoginDTO>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(SignInActivity.this, "Sign in successfully!", Toast.LENGTH_SHORT).show();
-                        ResLoginDTO.UserLogin user = response.body().getData().getUserLogin();
-                        APIResponse<ResLoginDTO> apiResponse = response.body();
-                        ResLoginDTO resLoginDTO = apiResponse.getData();
+                        ResLoginDTO resLoginDTO = response.body().getData();
 
+                        // Lưu token và userId
                         SharedPref.saveTokens(SignInActivity.this,
                                 resLoginDTO.getAccess_token(),
-                                resLoginDTO.getRefresh_token());
+                                resLoginDTO.getRefresh_token());// nhớ lưu userId
+                        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(SignInActivity.this);
+                        // Sau khi có token, lấy user rồi chuyển sang homepage
+                        fetchUser(accessTokenWithUserId.second, resLoginDTO.getAccess_token(), new Callback<APIResponse<ResUserDTO>>() {
+                            @Override
+                            public void onResponse(Call<APIResponse<ResUserDTO>> call, Response<APIResponse<ResUserDTO>> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    ResUserDTO user = response.body().getData();
+                                    SharedPref.saveUser(SignInActivity.this, user);
+                                    Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
+                                    homepage.putExtra("user", user);
+                                    startActivity(homepage);
+                                    finish();
+                                } else {
+                                    Toast.makeText(SignInActivity.this, "Failed to fetch user info", Toast.LENGTH_SHORT).show();
+                                }
+                            }
 
-
-                        Log.d("LOGIN", "Access Token: " + resLoginDTO.getAccess_token());
-
-                        Intent homepage = new Intent(SignInActivity.this, HomepageActivity.class);
-                        Gson gson = new Gson();
-
-                        String userJson = gson.toJson(user);
-
-                        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                        prefs.edit().putString("user", userJson).apply();
-                        startActivity(homepage);
+                            @Override
+                            public void onFailure(Call<APIResponse<ResUserDTO>> call, Throwable t) {
+                                Toast.makeText(SignInActivity.this, "Fetch user failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(SignInActivity.this, "Username or password is wrong!", Toast.LENGTH_SHORT).show();
                     }
@@ -101,27 +138,24 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         btnForgot.setOnClickListener(v -> {
-            // Chuyển đến ShoppingActivity
             Intent forgetEmail = new Intent(SignInActivity.this, ForgetEmailActivity.class);
             startActivity(forgetEmail);
         });
+
         btnRegisterNow.setOnClickListener(v -> {
-            // Chuyển đến ShoppingActivity
             Intent register = new Intent(SignInActivity.this, RegisterActivity.class);
             startActivity(register);
         });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
-        // Khởi tạo Mobile Ads SDK
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                // Callback khi khởi tạo xong (có thể để trống nếu chưa cần)
-            }
-        });
+    private void fetchUser(int userId, String accessToken, Callback<APIResponse<ResUserDTO>> callback) {
+        UserFetching apiService = APIClient.getClientWithToken(accessToken).create(UserFetching.class);
+        apiService.getUser(userId).enqueue(callback);
     }
 }

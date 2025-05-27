@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Pair;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sweetori.adapter.OrderAdapter;
 import com.example.sweetori.content.OrderFetching;
 import com.example.sweetori.dto.response.ResOrderDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,8 @@ public class OrderTrackingActivity extends AppCompatActivity {
     private ImageView tabPending, tabWaiting, tabTransport, tabCompleted, tabCancelled;
     private RecyclerView orderRecyclerView;
     private OrderAdapter orderAdapter;
+    private TextView txtHello;
+    private ResUserDTO currentUser;
     private String currentOrderStatus = "";
 
     @Override
@@ -43,6 +47,13 @@ public class OrderTrackingActivity extends AppCompatActivity {
 
         // Nhận trạng thái đơn hàng ban đầu từ Intent
         currentOrderStatus = getIntent().getStringExtra("orderStatus");
+        currentUser = SharedPref.getUser(this);
+
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            txtHello.setText("Guest");
+        }
         setupInitialTab(); // Highlight tab đúng trạng thái
 
         // Lấy userId và token
@@ -69,13 +80,26 @@ public class OrderTrackingActivity extends AppCompatActivity {
         tabCompleted = findViewById(R.id.tabCompleted);
         tabCancelled = findViewById(R.id.tabCancelled);
         orderRecyclerView = findViewById(R.id.orderRecyclerView);
+        txtHello = findViewById(R.id.txtHello);
     }
 
     private void setupNavigation() {
-        btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
-        btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
-        btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
-        btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
+        btnHome.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomepageActivity.class);
+            startActivity(intent);
+        });
+        btnCart.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
+        btnNoti.setOnClickListener(v -> {
+            Intent intent = new Intent(this, NotiActivity.class);
+            startActivity(intent);
+        });
+        btnVoucher.setOnClickListener(v -> {
+            Intent intent = new Intent(this, VoucherActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void setupOrderTabs() {

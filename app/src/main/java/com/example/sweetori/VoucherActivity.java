@@ -10,12 +10,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.sweetori.dto.response.ResUserDTO;
+
 public class VoucherActivity extends AppCompatActivity {
     ImageView btnAccount;
     ImageView btnHome;
     ImageView btnCart;
     ImageView btnNoti;
     ImageView btnVoucher;
+    private ResUserDTO currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,7 @@ public class VoucherActivity extends AppCompatActivity {
         setContentView(R.layout.voucher);
         EdgeToEdge.enable(this);
 
+        currentUser = SharedPref.getUser(this);
         //Component
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);

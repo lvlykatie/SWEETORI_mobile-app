@@ -6,6 +6,8 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.example.sweetori.dto.response.ResLoginDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -60,17 +62,33 @@ public class SharedPref {
         editor.apply();
     }
 
-    public static void saveUserId(Context context, int userId) {
+    private static final String KEY_USER = "user";
+
+    public static void saveUser(Context context, ResUserDTO user) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("userId", userId);
+        Gson gson = new Gson();
+        String userJson = gson.toJson(user);
+        editor.putString(KEY_USER, userJson);
         editor.apply();
-        Log.d("USER_ID", "User ID saved: " + userId);
+        Log.d("USER", "User saved: " + userJson);
     }
 
-    public static int getUserId(Context context) {
+    public static ResUserDTO getUser(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getInt("userId", -1); // -1 nếu chưa có userId
+        String userJson = prefs.getString(KEY_USER, null);
+        if (userJson != null) {
+            Gson gson = new Gson();
+            return gson.fromJson(userJson, ResUserDTO.class);
+        }
+        return null;
+    }
+    public static void clearUser(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(KEY_USER);
+        editor.apply();
+        Log.d("USER", "User cleared.");
     }
     // Lưu OTP và thời gian hết hạn
     public static void saveOTP(Context context, String otp, String exp) {

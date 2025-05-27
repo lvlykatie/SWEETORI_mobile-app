@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sweetori.adapter.ProductAdapter;
 import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.response.ResProductDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class HomepageActivity extends AppCompatActivity {
     private EditText searchInput;
     private ImageView searchIcon;
     private ProductAdapter productAdapter;
+    private ResUserDTO currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,37 +69,33 @@ public class HomepageActivity extends AppCompatActivity {
         bannerContainer  = findViewById(R.id.bannerContainer);
 
         // Intent cho footer
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                tvUserName.setText("Hello, "+ userName);
-            } else {
-                tvUserName.setText("Guest");
-            }
+        currentUser = SharedPref.getUser(this);
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            tvUserName.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            tvUserName.setText("Guest");
         }
-        btnAccount.setOnClickListener(v ->
-                startActivity(new Intent(this, AccountActivity.class))
-        );
-        btnHome.setOnClickListener(v ->
-                startActivity(new Intent(this, HomepageActivity.class))
-        );
-        btnCart.setOnClickListener(v ->
-                startActivity(new Intent(this, CartActivity.class))
-        );
-        btnNoti.setOnClickListener(v ->
-                startActivity(new Intent(this, NotiActivity.class))
-        );
-        btnVoucher.setOnClickListener(v ->
-                startActivity(new Intent(this, VoucherActivity.class))
-        );
-        btnMore.setOnClickListener(v ->
-                startActivity(new Intent(this, ProductActivity.class))
-        );
+
+        btnAccount.setOnClickListener(v -> {
+            Intent account = new Intent(HomepageActivity.this, AccountActivity.class);// user là ResUserDTO
+            startActivity(account);
+        });
+        btnCart.setOnClickListener(v -> {
+            Intent cart = new Intent(HomepageActivity.this, CartActivity.class);
+            startActivity(cart);
+        });
+        btnNoti.setOnClickListener(v ->{
+            Intent noti = new Intent(HomepageActivity.this, NotiActivity.class);
+            startActivity(noti);
+        });
+        btnVoucher.setOnClickListener(v ->{
+            Intent voucher = new Intent(HomepageActivity.this, VoucherActivity.class);
+            startActivity(voucher);
+        });
+        btnMore.setOnClickListener(v ->{
+            Intent more = new Intent(HomepageActivity.this, ProductActivity.class);
+            startActivity(more);
+        });
 
         // Auto-scroll banner
         bannerScrollView.post(() -> {

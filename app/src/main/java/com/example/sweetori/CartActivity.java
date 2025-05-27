@@ -23,6 +23,7 @@ import com.example.sweetori.dto.request.ReqCartDetailDTO;
 import com.example.sweetori.dto.response.ResCartDTO;
 import com.example.sweetori.dto.response.ResCartDetailDTO;
 import com.example.sweetori.dto.response.ResLoginDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class CartActivity extends AppCompatActivity {
     private List<ResCartDetailDTO> cartDetails;
     private int cartId;
     private Map<Integer, Boolean> selectedMap = new HashMap<>();
+    private ResUserDTO currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +69,31 @@ public class CartActivity extends AppCompatActivity {
         checkboxall = findViewById(R.id.checkboxall);
         recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-        
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                txtHello.setText("Hello, "+ userName);
-            } else {
-                txtHello.setText("Guest");
-            }
+        currentUser = SharedPref.getUser(this);
+
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
+        } else {
+            txtHello.setText("Guest");
         }
 
         // Navigation listeners
-        btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
-        btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
-        btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
-        btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
+        btnAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AccountActivity.class);
+            startActivity(intent);
+        });
+        btnHome.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomepageActivity.class);
+            startActivity(intent);
+        });
+        btnNoti.setOnClickListener(v -> {
+            Intent intent = new Intent(this, NotiActivity.class);
+            startActivity(intent);
+        });
+        btnVoucher.setOnClickListener(v -> {
+            Intent intent = new Intent(this, VoucherActivity.class);
+            startActivity(intent);
+        });
 
 
         // Buy now button

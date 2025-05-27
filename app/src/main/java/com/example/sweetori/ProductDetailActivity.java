@@ -33,6 +33,7 @@ import com.example.sweetori.content.WishlistFetching;
 import com.example.sweetori.dto.request.ReqWishlistDTO;
 import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.response.PaginationWrapper;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private List<ResCartDetailDTO> cartDetails;
     private int cartId = -1;
     private List<ResReviewDTO> reviewList = new ArrayList<>();
+    private ResUserDTO currentUser;
 
 
     @SuppressLint("MissingInflatedId")
@@ -72,6 +74,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_detail);
         EdgeToEdge.enable(this);
+        currentUser = SharedPref.getUser(this);
 
         //Component
         btnAccount = findViewById(R.id.btnAccount);
