@@ -34,9 +34,9 @@
             android:paddingVertical="2dp">
 
             <TextView
-                android:id="@+id/voucherDiscount"
+                android:id="@+id/productDiscount"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:text="-20%"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
