@@ -69,11 +69,18 @@ public class HomepageActivity extends AppCompatActivity {
         bannerContainer  = findViewById(R.id.bannerContainer);
 
         // Intent cho footer
-        currentUser = SharedPref.getUser(this);
-        if (currentUser != null && currentUser.getFirstName() != null) {
-            tvUserName.setText("Hello, " + currentUser.getFirstName());
-        } else {
-            tvUserName.setText("Guest");
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String userJson = prefs.getString("user", null);
+
+        if (userJson != null) {
+            Gson gson = new Gson();
+            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
+            if (user != null) {
+                String userName = user.getFirstName();
+                tvUserName.setText("Hello, "+ userName);
+            } else {
+                tvUserName.setText("Guest");
+            }
         }
 
         btnAccount.setOnClickListener(v -> {

@@ -51,7 +51,7 @@
             android:name=".OTPActivity"
             android:exported="false" />
         <activity
-            android:name=".WishlistActivity"
+            android:name=".WishListActivity"
             android:exported="false" />
         <activity
             android:name=".ProductDetailActivity"

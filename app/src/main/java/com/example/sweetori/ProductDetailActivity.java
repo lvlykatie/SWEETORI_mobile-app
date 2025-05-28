@@ -112,9 +112,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             startActivity(account);
         });
         btnHome.setOnClickListener(v ->
-
         {
-            Intent home = new Intent(ProductDetailActivity.this, MainActivity.class);
+            Intent home = new Intent(ProductDetailActivity.this, HomepageActivity.class);
             startActivity(home);
         });
 

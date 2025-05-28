@@ -93,7 +93,9 @@ public class OTPActivity extends AppCompatActivity {
                             String body = response.body().string().trim();
                             if (body.equalsIgnoreCase("ok")) {
                                 Toast.makeText(OTPActivity.this, "New password has been sent to your email", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(OTPActivity.this, SignInActivity.class);
+                                Intent intent = new Intent(OTPActivity.this, CreatePassActivity.class);
+                                intent.putExtra("email", email);
+                                intent.putExtra("otp", otp);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(OTPActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();

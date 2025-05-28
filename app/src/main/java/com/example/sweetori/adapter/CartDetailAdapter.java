@@ -27,14 +27,14 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
     private List<ResCartDetailDTO> cartDetails;
     private OnItemClickListener onItemClickListener;
     private SelectAllCheckboxListener selectAllCheckboxListener;
-
-    // Map trạng thái chọn: key = cartDetailsId, value = isSelected
     private Map<Integer, Boolean> selectedMap;
 
     public interface OnItemClickListener {
         void onDeleteClick(ResCartDetailDTO item, int position);
         void onQuantityChanged(ResCartDetailDTO item);
         void onItemSelectedChanged(int cartDetailId, boolean isSelected);
+        void onItemClick(ResCartDetailDTO item, int position);
+
     }
 
     public interface SelectAllCheckboxListener {
@@ -124,6 +124,10 @@ public class CartDetailAdapter extends RecyclerView.Adapter<CartDetailAdapter.Vi
             if (selectAllCheckboxListener != null) {
                 selectAllCheckboxListener.onSelectAllChecked(allSelected);
             }
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            onItemClickListener.onItemClick(item, position);
         });
     }
 

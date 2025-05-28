@@ -95,5 +95,12 @@ public class ResLoginDTO {
         public void setLastName(String lastName) {
             this.lastName = lastName;
         }
+
+        public void setPhoneNumber(String phoneNumber) {
+        }
+
+        public void setBuyingAddress(String buyingAddress) {
+
+        }
     }
 }

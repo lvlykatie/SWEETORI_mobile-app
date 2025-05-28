@@ -23,7 +23,8 @@
             app:srcCompat="@drawable/header"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:id="@+id/Header1"
@@ -34,7 +35,8 @@
             android:layout_marginBottom="27dp"
             android:layout_marginHorizontal="1dp"
             android:elevation="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:id="@+id/Header1Content"
@@ -154,8 +156,8 @@
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:clickable="true"
-                    android:tint="@color/color01"
-                    app:srcCompat="@drawable/voucher_icon" />
+                    app:srcCompat="@drawable/voucher_icon"
+                    app:tint="@color/color01" />
             </LinearLayout>
 
             <LinearLayout
@@ -242,188 +244,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Brands"
-                android:textSize="16sp"
-                android:textColor="@color/color01"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/poppins_semibold"/>
-
-            <!-- Your main content goes here -->
-            <HorizontalScrollView
-                android:id="@+id/brandCouponScoll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:overScrollMode="never"
-                android:gravity="center_horizontal"
-                android:layout_marginBottom="8dp">
-
-                <LinearLayout
-                    android:id="@+id/couponContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_1"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_2"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_3"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_4"/>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Freeship"
-                android:textSize="16sp"
-                android:textColor="@color/color01"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/poppins_semibold"/>
-
-            <!-- Your main content goes here -->
-            <HorizontalScrollView
-                android:id="@+id/shipCouponScoll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:overScrollMode="never"
-                android:gravity="center_horizontal"
-                android:layout_marginBottom="8dp">
-
-                <LinearLayout
-                    android:id="@+id/couponContainer1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_5"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_6"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_7"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_8"/>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Flash sale"
                 android:textSize="16sp"
                 android:textColor="@color/color01"
@@ -432,86 +252,19 @@
                 android:fontFamily="@font/poppins_semibold"/>
 
             <!-- Your main content goes here -->
-            <HorizontalScrollView
-                android:id="@+id/fsCouponScroll"
+           <LinearLayout
+               android:id="@+id/layoutVoucherSections"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:padding="8dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:overScrollMode="never"
-                android:gravity="center_horizontal"
-                android:layout_marginBottom="8dp">
-
-                <LinearLayout
-                    android:id="@+id/couponContainer2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_9"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_10"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_11"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/coupon_12"/>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
+                android:clipToPadding="false"
+                android:paddingHorizontal="8dp"
+                tools:listitem="@layout/item_voucher_group" />
         </LinearLayout>
     </ScrollView>
 

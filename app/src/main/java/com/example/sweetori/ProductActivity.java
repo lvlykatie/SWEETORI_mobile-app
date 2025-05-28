@@ -76,7 +76,6 @@ public class ProductActivity extends AppCompatActivity {
         productList.addAll(managerList);
         productAdapter.notifyDataSetChanged();
 
-
         // Footer navigation (giữ nguyên)
         btnAccount.setOnClickListener(v -> {
             Intent intent = new Intent(this, AccountActivity.class);

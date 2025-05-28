@@ -2,6 +2,7 @@ package com.example.sweetori;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,11 +41,13 @@ public class CreatePassActivity extends AppCompatActivity {
         btnDone = findViewById(R.id.btnDone);
         edtNewPass = findViewById(R.id.editTextNewPassword);
         edtConfirmPass = findViewById(R.id.editTextConfirmNewPassword);
+        String email = getIntent().getStringExtra("email");
+        String otp = getIntent().getStringExtra("otp");
 
-        btnDone.setOnClickListener(v -> handlePasswordChange());
+        btnDone.setOnClickListener(v -> handlePasswordChange(email, otp));
     }
 
-    private void handlePasswordChange() {
+    private void handlePasswordChange(String email, String otp) {
         String newPassword = edtNewPass.getText().toString().trim();
         String confirmPassword = edtConfirmPass.getText().toString().trim();
 
@@ -58,26 +61,21 @@ public class CreatePassActivity extends AppCompatActivity {
             return;
         }
 
-        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(CreatePassActivity.this);
-
-        if (accessTokenWithUserId.first == null) {
-            Toast.makeText(this, "Please sign in again", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("newPassword", newPassword);
 
-        // Sử dụng ApiClient thay vì tạo lại Retrofit
-        AuthFetching authFetching = APIClient.getClientWithToken(accessTokenWithUserId.first).create(AuthFetching.class);
 
-        authFetching.changePassword(requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
+        AuthFetching authAPI = APIClient.getClient().create(AuthFetching.class);
+        Log.d("DEBUG_MAP", "Body: " + requestBody.toString());
+
+        authAPI.changePassword(email, otp, requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
             @Override
             public void onResponse(Call<APIResponse<Boolean>> call, Response<APIResponse<Boolean>> response) {
                 if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().getData())) {
                     Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
-                    redirectToLogin();
-                } else {
+                    Intent intent = new Intent(CreatePassActivity.this, SignInActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);                } else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
                         Toast.makeText(CreatePassActivity.this, "Lỗi: " + response.code() + " - " + errorBody, Toast.LENGTH_SHORT).show();
@@ -94,12 +92,4 @@ public class CreatePassActivity extends AppCompatActivity {
         });
     }
 
-
-    private void redirectToLogin() {
-        SharedPref.clearTokens(CreatePassActivity.this);
-        Intent intent = new Intent(this, SignInActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
 }
