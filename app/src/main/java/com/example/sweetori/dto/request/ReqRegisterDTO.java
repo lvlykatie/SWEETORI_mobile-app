@@ -9,12 +9,25 @@ public class ReqRegisterDTO {
     private String gender;
     private String phoneNumber;
     private String buyingAddress;
+    private String shippingAddress;
     private Role role = new Role(2); // Mặc định roleId = 2
 
     // Constructor mặc định (cần cho Retrofit)
-    public ReqRegisterDTO() {}
 
-    // --------------- Getter và Setter ---------------
+
+    public ReqRegisterDTO() {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.buyingAddress = buyingAddress;
+        this.shippingAddress = shippingAddress;
+        this.role = role;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -51,7 +64,6 @@ public class ReqRegisterDTO {
         return password;
     }
 
-    // Phương thức setPassword() bị thiếu - nguyên nhân gây lỗi
     public void setPassword(String password) {
         this.password = password;
     }
@@ -78,6 +90,14 @@ public class ReqRegisterDTO {
 
     public void setBuyingAddress(String buyingAddress) {
         this.buyingAddress = buyingAddress;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
     public Role getRole() {

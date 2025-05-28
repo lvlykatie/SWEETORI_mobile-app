@@ -76,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
             reqRegisterDTO.setLastName(etLastname.getText().toString().trim());
             reqRegisterDTO.setPhoneNumber(etPhone.getText().toString().trim());
             reqRegisterDTO.setBuyingAddress(etAddress.getText().toString().trim());
+            reqRegisterDTO.setShippingAddress(etAddress.getText().toString().trim());
             String gender;
             if (rbMale.isChecked()) {
                 gender = "MALE";
