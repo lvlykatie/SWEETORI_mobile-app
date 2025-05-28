@@ -42,7 +42,9 @@ public class ProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product);
 
-        currentUser = SharedPref.getUser(this);;
+        currentUser = SharedPref.getUser(this);
+
+
         // Ánh xạ view
         btnAccount            = findViewById(R.id.btnAccount);
         btnHome               = findViewById(R.id.btnHome);

@@ -64,6 +64,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private RatingBar productRatingBar;
     private List<ResCartDetailDTO> cartDetails;
     private int cartId = -1;
+    ResProductDTO.ProductData productDt;
     private List<ResReviewDTO> reviewList = new ArrayList<>();
     private ResUserDTO currentUser;
 
@@ -135,26 +136,16 @@ public class ProductDetailActivity extends AppCompatActivity {
             startActivity(voucher);
         });
 
-
-        int productId = getIntent().getIntExtra("productId", -1);
-
-        if (productId != -1) {
-            // Tìm sản phẩm trong danh sách đã cache
-            List<ResProductDTO.ProductData> cachedList = ResProductDTO.ProductDataManager.getInstance().getProductList();
-            if (cachedList != null) {
-                for (ResProductDTO.ProductData product : cachedList) {
-                    if (product.getProductId() == productId) {
-                        showProductDetails(product);
-                        break;
-                    }
-                }
-            }
+        //Lấy thông tin product từ đây
+        productDt = (ResProductDTO.ProductData) getIntent().getSerializableExtra("product");
+        if (productDt != null) {
+            showProductDetails(productDt);
         } else {
-            Log.e("ProductDetail", "Invalid productId received");
+            Log.e("ProductDetail", "No product data received");
         }
 
         FeedbackFetching apiService = APIClient.getClient().create(FeedbackFetching.class);
-        String filter = "product:" + productId;
+        String filter = "product:" + productDt.getProductId() + ",status:approved";
         apiService.getFeedback(filter).enqueue(new Callback<APIResponse<PaginationWrapper<ResReviewDTO>>>() {
             @Override
             public void onResponse(Call<APIResponse<PaginationWrapper<ResReviewDTO>>> call, Response<APIResponse<PaginationWrapper<ResReviewDTO>>> response) {
@@ -197,12 +188,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         imgbtn_cart.setOnClickListener(v -> {
-            addToCart(productId, quantityValue[0], accessTokenWithUserId.first, () -> {});
+            addToCart(productDt.getProductId(), quantityValue[0], accessTokenWithUserId.first, () -> {});
         });
 
         imgbtn_buynow.setOnClickListener(v -> {
-            addToCart(productId, quantityValue[0], accessTokenWithUserId.first, () -> {
-                List<String> filters = Arrays.asList("cart:" + cartId, "product:" + productId);
+            addToCart(productDt.getProductId(), quantityValue[0], accessTokenWithUserId.first, () -> {
+                List<String> filters = Arrays.asList("cart:" + cartId, "product:" + productDt.getProductId());
                 CartFetching api_Service = APIClient.getClientWithToken(accessTokenWithUserId.first).create(CartFetching.class);
 
                 api_Service.getCartDetail(filters).enqueue(new Callback<APIResponse<PaginationWrapper<ResCartDetailDTO>>>() {
@@ -238,14 +229,14 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
         imgbtn_heart.setOnClickListener(v -> {
-            if (productId == -1) {
+            if (productDt.getProductId() == -1) {
                 Toast.makeText(this, "Error: product does not exist", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             WishlistFetching api_Service = APIClient.getClientWithToken(accessTokenWithUserId.first).create(WishlistFetching.class);
 
-            Call<Void> call = api_Service.addToWishlist(productId);
+            Call<Void> call = api_Service.addToWishlist(productDt.getProductId());
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {

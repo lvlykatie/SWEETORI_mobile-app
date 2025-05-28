@@ -27,6 +27,8 @@ import com.example.sweetori.SharedPref;
 import com.example.sweetori.content.WishlistFetching;
 import com.example.sweetori.dto.request.ReqWishlistDTO;
 import com.example.sweetori.APIResponse;
+
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import retrofit2.Response;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<ResProductDTO.ProductData> productList;
+    private ResProductDTO.ProductData clickedProduct;
     private Context context;
 
     // Constructor
@@ -54,23 +57,33 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         if (position >= 0 && position < productList.size()) {
-            final ResProductDTO.ProductData product = productList.get(position);  // final ở đây
+            final ResProductDTO.ProductData[] product = {productList.get(position)};  // final ở đây
 
             // Set text for product name
-            holder.productName.setText(product.getProductName() != null ? product.getProductName() : "No name");
+            holder.productName.setText(product[0].getProductName() != null ? product[0].getProductName() : "No name");
+            if (product[0].getDiscount() != null
+                    && product[0].getDiscount().getDiscountPercentage() > 0) {
 
-            if (product.getProductName().length() > 30) {
+                double percentage = product[0].getDiscount().getDiscountPercentage() * 100;
+                holder.productDiscount.setVisibility(View.VISIBLE);
+                holder.productDiscount.setText(String.format("%.0f%%", percentage));
+            } else {
+                holder.productDiscount.setVisibility(View.GONE);
+            }
+
+
+            if (product[0].getProductName().length() > 30) {
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
             } else {
                 holder.productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             }
 
-            holder.productPrice.setText(String.format("%,.0f VND", product.getSellingPrice()));
-            holder.productRate.setText(String.format("%.1f", product.getAvgRate()));
+            holder.productPrice.setText(String.format("%,.0f VND", product[0].getSellingPrice()));
+            holder.productRate.setText(String.format("%.1f", product[0].getAvgRate()));
 
-            if (product.getImage() != null && !product.getImage().isEmpty()) {
+            if (product[0].getImage() != null && !product[0].getImage().isEmpty()) {
                 Glide.with(context)
-                        .load(product.getImage())
+                        .load(product[0].getImage())
                         .placeholder(R.drawable.moimahong)
                         .error(R.drawable.moimahong)
                         .into(holder.productImage);
@@ -80,12 +93,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, ProductDetailActivity.class);
-                intent.putExtra("productId", product.getProductId());
+                clickedProduct = productList.get(holder.getAdapterPosition());
+                intent.putExtra("product", clickedProduct);
                 context.startActivity(intent);
             });
 
             holder.imgHeart.setOnClickListener(v -> {
-                int productId = product.getProductId();
+                int productId = product[0].getProductId();
                 Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(v.getContext());
 
                 WishlistFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(WishlistFetching.class);
@@ -132,7 +146,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     // ViewHolder class
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
-        TextView productName, productPrice, productRate;
+        TextView productName, productPrice, productRate, productDiscount;
         ImageView imgHeart;
 
 
@@ -142,6 +156,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
             productRate = itemView.findViewById(R.id.productRate);
+            productDiscount = itemView.findViewById(R.id.productDiscount);
             imgHeart = itemView.findViewById(R.id.imgHeart);
 
         }
