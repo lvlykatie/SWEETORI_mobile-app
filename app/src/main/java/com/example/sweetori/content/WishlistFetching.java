@@ -15,7 +15,7 @@ import com.example.sweetori.dto.response.ResWishListDTO;
 public interface WishlistFetching {
     @GET("favorites")
     Call<APIResponse<PaginationWrapper<ResWishListDTO>>> getwishlist(@Query("filter") String userId);
-    @POST("add-favorites/{productId}")
+    @POST("add-favorite/{productId}")
     Call<Void> addToWishlist(@Path("productId") int productId);
     @DELETE("favorites/{favoritesId}")
     Call<Void> deleteWishlistItem(@Path("favoritesId") int favoritesId);

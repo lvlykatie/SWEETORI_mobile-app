@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -39,7 +39,7 @@ public class AccountActivity extends AppCompatActivity {
     ImageView btnCart;
     ImageView btnNoti;
     ImageView btnVoucher, btnEdit;
-    Button btnGeneral, btnPurchase, btnSupport;
+    Button btnGeneral, btnPurchase, btnSupport, btnApply;
     FrameLayout tabContent;
     LinearLayout btnLogOut;
     LinearLayout btnResetPass;
@@ -50,6 +50,16 @@ public class AccountActivity extends AppCompatActivity {
     private ResUserDTO currentUser;
     private String accessToken;
     private int userId;
+
+    // ✅ Thêm listener để ẩn bàn phím khi mất focus
+    private final View.OnFocusChangeListener onDoneListener = (view, hasFocus) -> {
+        if (!hasFocus) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+    };
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -69,7 +79,6 @@ public class AccountActivity extends AppCompatActivity {
         btnVoucher = findViewById(R.id.btnVoucher);
         txtHello = findViewById(R.id.txtHello);
 
-        // Gán dữ liệu từ Intent
         currentUser = SharedPref.getUser(this);
         accessToken = SharedPref.getAccessTokenWithUserId(this).first;
         userId = SharedPref.getAccessTokenWithUserId(this).second;
@@ -80,27 +89,11 @@ public class AccountActivity extends AppCompatActivity {
             txtHello.setText("Guest");
         }
 
-        btnHome.setOnClickListener(v -> {
-            Intent home = new Intent(AccountActivity.this, HomepageActivity.class);
-            startActivity(home);
-        });
+        btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
+        btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
+        btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
+        btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));
 
-        btnCart.setOnClickListener(v -> {
-            Intent cart = new Intent(AccountActivity.this, CartActivity.class);
-            startActivity(cart);
-        });
-
-        btnNoti.setOnClickListener(v -> {
-            Intent noti = new Intent(AccountActivity.this, NotiActivity.class);
-            startActivity(noti);
-        });
-
-        btnVoucher.setOnClickListener(v -> {
-            Intent voucher = new Intent(AccountActivity.this, VoucherActivity.class);
-            startActivity(voucher);
-        });
-
-        // Mặc định hiển thị tab General
         showTab(R.layout.tab_general);
         highlightTab(btnGeneral);
         setupGeneralTab();
@@ -114,19 +107,12 @@ public class AccountActivity extends AppCompatActivity {
         btnPurchase.setOnClickListener(v -> {
             highlightTab(btnPurchase);
             showTab(R.layout.tab_purchase);
-
             View purchaseView = tabContent.getChildAt(0);
-            LinearLayout llPending = purchaseView.findViewById(R.id.llPending);
-            LinearLayout llWaiting = purchaseView.findViewById(R.id.llWaiting);
-            LinearLayout llTransport = purchaseView.findViewById(R.id.llTransport);
-            LinearLayout llCompleted = purchaseView.findViewById(R.id.llCompleted);
-            LinearLayout llCancelled = purchaseView.findViewById(R.id.llCancelled);
-
-            llPending.setOnClickListener(v1 -> openOrderTracking("PENDING", currentUser));
-            llWaiting.setOnClickListener(v1 -> openOrderTracking("WAITING", currentUser));
-            llTransport.setOnClickListener(v1 -> openOrderTracking("TRANSPORT", currentUser));
-            llCompleted.setOnClickListener(v1 -> openOrderTracking("COMPLETED", currentUser));
-            llCancelled.setOnClickListener(v1 -> openOrderTracking("CANCELLED", currentUser));
+            purchaseView.findViewById(R.id.llPending).setOnClickListener(v1 -> openOrderTracking("PENDING"));
+            purchaseView.findViewById(R.id.llWaiting).setOnClickListener(v1 -> openOrderTracking("WAITING"));
+            purchaseView.findViewById(R.id.llTransport).setOnClickListener(v1 -> openOrderTracking("TRANSPORT"));
+            purchaseView.findViewById(R.id.llCompleted).setOnClickListener(v1 -> openOrderTracking("COMPLETED"));
+            purchaseView.findViewById(R.id.llCancelled).setOnClickListener(v1 -> openOrderTracking("CANCELLED"));
         });
 
         btnSupport.setOnClickListener(v -> {
@@ -135,19 +121,13 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         btn_wishlist = findViewById(R.id.btn_wishlist);
-        btn_wishlist.setOnClickListener(v -> {
-            Intent wishlist = new Intent(AccountActivity.this, WishListActivity.class);
-            startActivity(wishlist);
-        });
+        btn_wishlist.setOnClickListener(v -> startActivity(new Intent(this, WishListActivity.class)));
 
         btnResetPass = findViewById(R.id.btn_reset_password);
-        btnResetPass.setOnClickListener(v -> {
-            Intent intent = new Intent(AccountActivity.this, CreatePassActivity.class);
-            startActivity(intent);
-        });
+        btnResetPass.setOnClickListener(v -> startActivity(new Intent(this, CreatePassActivity.class)));
     }
 
-    private void openOrderTracking(String status, ResUserDTO currentUser) {
+    private void openOrderTracking(String status) {
         Intent intent = new Intent(AccountActivity.this, OrderTrackingActivity.class);
         intent.putExtra("orderStatus", status);
         intent.putExtra("user", currentUser);
@@ -173,19 +153,23 @@ public class AccountActivity extends AppCompatActivity {
         btnEdit = tabView.findViewById(R.id.btnEdit);
         btnLogOut = tabView.findViewById(R.id.btnLogOut);
         txtName = tabView.findViewById(R.id.txtName);
+        btnApply = tabView.findViewById(R.id.btnApply);
 
-        txtName.setText(currentUser.getFirstName());
-        txtFirstName.setText(currentUser.getFirstName());
-        txtLastName.setText(currentUser.getLastName());
-        txtEmail.setText(currentUser.getEmail());
-        txtPhone.setText(currentUser.getPhoneNumber());
-        txtAddress.setText(currentUser.getBuyingAddress());
+        if (currentUser != null) {
+            txtName.setText(currentUser.getFirstName());
+            txtFirstName.setText(currentUser.getFirstName());
+            txtLastName.setText(currentUser.getLastName());
+            txtEmail.setText(currentUser.getEmail());
+            txtPhone.setText(currentUser.getPhoneNumber());
+            txtAddress.setText(currentUser.getBuyingAddress());
+        }
 
         txtFirstName.setEnabled(false);
         txtLastName.setEnabled(false);
         txtEmail.setEnabled(false);
         txtPhone.setEnabled(false);
         txtAddress.setEnabled(false);
+        btnApply.setVisibility(View.GONE);
 
         btnEdit.setOnClickListener(v -> {
             txtFirstName.setEnabled(true);
@@ -194,28 +178,27 @@ public class AccountActivity extends AppCompatActivity {
             txtPhone.setEnabled(true);
             txtAddress.setEnabled(true);
             txtFirstName.requestFocus();
+            btnApply.setVisibility(View.VISIBLE);
         });
 
-        View.OnFocusChangeListener onDoneListener = (v, hasFocus) -> {
-            if (!hasFocus) {
-                updateUserInfo();
-                txtFirstName.setEnabled(false);
-                txtLastName.setEnabled(false);
-                txtEmail.setEnabled(false);
-                txtPhone.setEnabled(false);
-                txtAddress.setEnabled(false);
-            }
-        };
+        btnApply.setOnClickListener(v -> {
+            updateUserInfo();
+            txtFirstName.setEnabled(false);
+            txtLastName.setEnabled(false);
+            txtEmail.setEnabled(false);
+            txtPhone.setEnabled(false);
+            txtAddress.setEnabled(false);
+            btnApply.setVisibility(View.GONE);
+        });
 
-        txtFirstName.setOnFocusChangeListener(onDoneListener);
-        txtLastName.setOnFocusChangeListener(onDoneListener);
-        txtEmail.setOnFocusChangeListener(onDoneListener);
-        txtPhone.setOnFocusChangeListener(onDoneListener);
-        txtAddress.setOnFocusChangeListener(onDoneListener);
+        // Gán listener để ẩn bàn phím khi mất focus
+        List<EditText> editFields = Arrays.asList(txtFirstName, txtLastName, txtEmail, txtPhone, txtAddress);
+        for (EditText field : editFields) {
+            field.setOnFocusChangeListener(onDoneListener);
+        }
 
         btnLogOut.setOnClickListener(v -> {
             AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
-
             authFetching.logout().enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -248,8 +231,12 @@ public class AccountActivity extends AppCompatActivity {
         apiService.updateUser(request).enqueue(new Callback<APIResponse<ResUserDTO>>() {
             @Override
             public void onResponse(Call<APIResponse<ResUserDTO>> call, Response<APIResponse<ResUserDTO>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    ResUserDTO updatedUser = response.body().getData();
                     Toast.makeText(AccountActivity.this, "Update successful!", Toast.LENGTH_SHORT).show();
+                    currentUser = updatedUser;
+                    txtName.setText(updatedUser.getFirstName());
+                    SharedPref.saveUser(AccountActivity.this, updatedUser);
                 } else {
                     Toast.makeText(AccountActivity.this, "Update failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -271,15 +258,11 @@ public class AccountActivity extends AppCompatActivity {
 
     private void highlightTab(Button activeTab) {
         List<Button> tabs = Arrays.asList(btnGeneral, btnPurchase, btnSupport);
-
         for (Button tab : tabs) {
             tab.setBackground(null);
             tab.setTextColor(ContextCompat.getColor(this, R.color.black));
         }
-
-        activeTab.setBackground(getRoundedBackground(
-                ContextCompat.getColor(this, R.color.color02)
-        ));
+        activeTab.setBackground(getRoundedBackground(ContextCompat.getColor(this, R.color.color02)));
         activeTab.setTextColor(ContextCompat.getColor(this, R.color.white));
     }
 }

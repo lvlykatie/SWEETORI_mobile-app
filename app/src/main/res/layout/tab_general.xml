@@ -95,121 +95,145 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
->
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp">
 
+                <!-- First Name -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="First Name: "
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
+                        android:text="First Name: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
                     <EditText
                         android:id="@+id/txtFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Lisa"
+                        android:singleLine="true"
                         android:textSize="16sp"
                         android:enabled="false" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="Last Name: "
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
-                        <EditText
-                            android:id="@+id/txtLastName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textSize="16sp"
-                            android:enabled="false" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="Phone: "
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
-                        <EditText
-                            android:id="@+id/txtPhone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="0123456789"
-                            android:textSize="16sp"
-                            android:enabled="false" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="Email: "
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
-                        <EditText
-                            android:id="@+id/txtEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="123@gm.com"
-                            android:textSize="16sp"
-                            android:enabled="false" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="Streeet Address: "
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
-                        <EditText
-                            android:id="@+id/txtAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TP.HCM"
-                            android:textSize="16sp"
-                            android:enabled="false" />
-                    </LinearLayout>
                 </LinearLayout>
+
+                <!-- Last Name -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Last Name: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                    <EditText
+                        android:id="@+id/txtLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:enabled="false" />
+                </LinearLayout>
+
+                <!-- Phone -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Phone: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                    <EditText
+                        android:id="@+id/txtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0123456789"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:enabled="false" />
+                </LinearLayout>
+
+                <!-- Email -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Email: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                    <EditText
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="123@gm.com"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:enabled="false" />
+                </LinearLayout>
+
+                <!-- Street Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="Street Address: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                    <EditText
+                        android:id="@+id/txtAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TP.HCM"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        android:enabled="false" />
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#CCCCCC" />
+
+                <!-- Apply Button -->
+                <Button
+                    android:id="@+id/btnApply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apply Changes"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:background="@drawable/btn_bg"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginTop="8dp" />
+
             <LinearLayout
                 android:id="@+id/btn_wishlist"
                 android:layout_width="match_parent"
