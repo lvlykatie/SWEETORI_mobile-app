@@ -12,6 +12,7 @@ import java.util.Map;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -34,9 +35,10 @@ public interface AuthFetching {
     Call<ResponseBody> verifyOTP(@Query("email") String email, @Query("otp") String otp);
 
     @POST("auth/change-forgot-passwd")
-    Call<APIResponse<Boolean>> changePassword(
+    Call<ResponseBody> changePassword(
             @Query("email") String email,
             @Query("otp") String otp,
             @Body Map<String, String> requestBody
     );
+
 }

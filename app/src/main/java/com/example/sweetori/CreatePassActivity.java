@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,33 +62,45 @@ public class CreatePassActivity extends AppCompatActivity {
             return;
         }
 
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("newPassword", newPassword);
-
+        Map<String, String> body = new HashMap<>();
+        body.put("newPassword", newPassword);  // Sử dụng đúng dữ liệu nhập từ user
 
         AuthFetching authAPI = APIClient.getClient().create(AuthFetching.class);
-        Log.d("DEBUG_MAP", "Body: " + requestBody.toString());
+        Log.d("DEBUG_MAP", "Body: " + body.toString());
 
-        authAPI.changePassword(email, otp, requestBody).enqueue(new Callback<APIResponse<Boolean>>() {
+        authAPI.changePassword(email, otp, body).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<APIResponse<Boolean>> call, Response<APIResponse<Boolean>> response) {
-                if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().getData())) {
-                    Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CreatePassActivity.this, SignInActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);                } else {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
                     try {
-                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
-                        Toast.makeText(CreatePassActivity.this, "Lỗi: " + response.code() + " - " + errorBody, Toast.LENGTH_SHORT).show();
+                        String res = response.body() != null ? response.body().string().trim() : "";
+                        Log.d("DEBUG_RESPONSE", "res = " + res);
+                        if (res.equalsIgnoreCase("ok")) {
+                            Toast.makeText(CreatePassActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CreatePassActivity.this, SignInActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(CreatePassActivity.this, "Unexpected response: " + res, Toast.LENGTH_SHORT).show();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Toast.makeText(CreatePassActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "Unknown error";
+                        Toast.makeText(CreatePassActivity.this, "Error: " + response.code() + " - " + errorBody, Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CreatePassActivity.this, "Error reading error response", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<APIResponse<Boolean>> call, Throwable t) {
-                Toast.makeText(CreatePassActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(CreatePassActivity.this, "Connection error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
