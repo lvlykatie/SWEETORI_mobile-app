@@ -22,6 +22,7 @@ import com.example.sweetori.adapter.WishListAdapter;
 import com.example.sweetori.content.WishlistFetching;
 import com.example.sweetori.dto.response.PaginationWrapper;
 import com.example.sweetori.dto.response.ResLoginDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.example.sweetori.dto.response.ResWishListDTO;
 import com.google.gson.Gson;
 
@@ -40,7 +41,7 @@ public class WishListActivity extends AppCompatActivity {
     LinearLayout edit_List;
     TextView txtHello;
     private boolean isEditMode = false;
-
+    private ResUserDTO currentUser;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -60,12 +61,10 @@ public class WishListActivity extends AppCompatActivity {
         wishlistRecyclerView = findViewById(R.id.wishlistRecyclerView);
 
         // Display user name
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
+        currentUser = SharedPref.getUser(this);
 
-        if (userJson != null) {
-            ResLoginDTO.UserLogin user = new Gson().fromJson(userJson, ResLoginDTO.UserLogin.class);
-            txtHello.setText("Hello, " + user.getFirstName());
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
         } else {
             txtHello.setText("Guest");
         }

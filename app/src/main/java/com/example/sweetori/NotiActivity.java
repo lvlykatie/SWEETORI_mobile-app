@@ -31,6 +31,7 @@ import com.example.sweetori.adapter.NotifyAdapter;
 import com.example.sweetori.content.ProductFetching;
 import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.response.ResProductDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class NotiActivity extends AppCompatActivity {
     FrameLayout tabContent;
     TextView txtHello;
     RecyclerView notifyRecyclerView;
-
+    private ResUserDTO currentUser;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +73,10 @@ public class NotiActivity extends AppCompatActivity {
         notifyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Load user name from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
-                txtHello.setText("Hello, " + userName);
-            } else {
-                txtHello.setText("Guest");
-            }
+        currentUser = SharedPref.getUser(this);
+
+        if (currentUser != null && currentUser.getFirstName() != null) {
+            txtHello.setText("Hello, " + currentUser.getFirstName());
         } else {
             txtHello.setText("Guest");
         }
