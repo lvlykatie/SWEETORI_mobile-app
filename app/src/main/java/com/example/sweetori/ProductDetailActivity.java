@@ -87,7 +87,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         productName = findViewById(R.id.productName);
         productPrice = findViewById(R.id.productPrice);
         productDesc = findViewById(R.id.productDesc);
-        imgbtnCart = findViewById(R.id.imgbtn_cart);
         productBrand = findViewById(R.id.brand);
         quantity = findViewById(R.id.quantity);
         btnIncrease = findViewById(R.id.imgbtn_increase);
@@ -143,33 +142,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         } else {
             Log.e("ProductDetail", "No product data received");
         }
-
-        FeedbackFetching apiService = APIClient.getClient().create(FeedbackFetching.class);
-        String filter = "product:" + productDt.getProductId() + ",status:approved";
-        apiService.getFeedback(filter).enqueue(new Callback<APIResponse<PaginationWrapper<ResReviewDTO>>>() {
-            @Override
-            public void onResponse(Call<APIResponse<PaginationWrapper<ResReviewDTO>>> call, Response<APIResponse<PaginationWrapper<ResReviewDTO>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    APIResponse<PaginationWrapper<ResReviewDTO>> apiResponse = response.body();
-                    PaginationWrapper<ResReviewDTO> pagination = apiResponse.getData();
-                    if (pagination != null) {
-                        List<ResReviewDTO> reviewListResponse = pagination.getData();
-                        if (reviewListResponse != null && !reviewListResponse.isEmpty()) {
-                            reviewAdapter.updateReviewList(reviewListResponse);
-                            // Gọi hàm set chiều cao cho RecyclerView ở đây
-                            setRecyclerViewHeightBasedOnChildren(recyclerReview);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<APIResponse<PaginationWrapper<ResReviewDTO>>> call, Throwable t) {
-                Log.e("API_ERROR", "Error loading reviews", t);
-                Toast.makeText(ProductDetailActivity.this, "Error loading reviews: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
 
         int[] quantityValue = {1};
 

@@ -128,7 +128,7 @@ public class WishListActivity extends AppCompatActivity {
                 (item, position) -> {
                     // Open product detail
                     Intent intent = new Intent(WishListActivity.this, ProductDetailActivity.class);
-                    intent.putExtra("productId", item.getProduct().getProductId());
+                    intent.putExtra("product", item.getProduct());
                     startActivity(intent);
                 },
                 (item, position) -> {
