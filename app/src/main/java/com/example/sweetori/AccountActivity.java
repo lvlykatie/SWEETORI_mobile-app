@@ -1,9 +1,7 @@
 package com.example.sweetori;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,7 +54,6 @@ public class AccountActivity extends AppCompatActivity {
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account);
         EdgeToEdge.enable(this);
@@ -236,11 +233,6 @@ public class AccountActivity extends AppCompatActivity {
                 }
             });
         });
-
-        btn_wishlist.setOnClickListener(v -> {
-            Intent intent = new Intent(AccountActivity.this, WishListActivity.class);
-            startActivity(intent);
-        });
     }
 
     private void updateUserInfo() {
@@ -278,20 +270,16 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void highlightTab(Button activeTab) {
-        // Tạo danh sách các tab để dễ dàng xử lý
         List<Button> tabs = Arrays.asList(btnGeneral, btnPurchase, btnSupport);
 
-        // Reset tất cả tab về trong suốt và thay đổi màu chữ về mặc định
         for (Button tab : tabs) {
             tab.setBackground(null);
             tab.setTextColor(ContextCompat.getColor(this, R.color.black));
         }
 
-        // Đặt màu nền cho tab đang được chọn
         activeTab.setBackground(getRoundedBackground(
                 ContextCompat.getColor(this, R.color.color02)
         ));
         activeTab.setTextColor(ContextCompat.getColor(this, R.color.white));
     }
 }
-

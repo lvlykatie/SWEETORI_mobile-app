@@ -168,10 +168,9 @@ public class CartActivity extends AppCompatActivity {
                                     updateSelectAllCheckbox();
                                 }
 
+                                @Override
                                 public void onItemClick(ResCartDetailDTO item, int position) {
-                                    Intent intent = new Intent(CartActivity.this, ProductDetailActivity.class);
-                                    intent.putExtra("productId", item.getProduct().getProductId());
-                                    startActivity(intent);
+
                                 }
                             },
                             isAllSelected -> {
@@ -299,6 +298,7 @@ public class CartActivity extends AppCompatActivity {
                 reqCart,
                 reqProduct
         );
+
 
         apiService.updateCartDetailQuantity(request).enqueue(new Callback<Void>() {
             @Override
