@@ -50,7 +50,7 @@ import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private TextView item, dateTextView, shipping, discount, voucher_discount, total;
+    private TextView item, dateTextView, shipping, discount, voucher_discount, total, itemCount;
     RadioButton radioCOD, radioMomo, radioZaloPay, radioVNPAY;
     Button orderButton;
     private ActivityResultLauncher<Intent> customTabLauncher;
@@ -64,6 +64,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         // Khởi tạo view
         item = findViewById(R.id.item);
+        itemCount = findViewById(R.id.itemCount);
         shipping = findViewById(R.id.shipping);
         discount = findViewById(R.id.discount);
         voucher_discount = findViewById(R.id.voucher);
@@ -81,6 +82,7 @@ public class PaymentActivity extends AppCompatActivity {
         // Hiển thị thông tin đơn hàng
         String currentDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
         String itemStr = getIntent().getStringExtra("item");
+        String itemCountStr = getIntent().getStringExtra("itemCount");
         String discountStr = getIntent().getStringExtra("discount");
         String voucherStr = getIntent().getStringExtra("voucher");
         String shippingStr = getIntent().getStringExtra("shipping");
@@ -99,6 +101,7 @@ public class PaymentActivity extends AppCompatActivity {
         voucher_discount.setText(voucherStr);
         shipping.setText(shippingStr);
         total.setText(total_Price);
+        itemCount.setText("Item (" + itemCountStr + ")");
 
         // Xử lý radio button
         View.OnClickListener radioClickListener = v -> {
@@ -304,6 +307,7 @@ public class PaymentActivity extends AppCompatActivity {
         intent.putExtra("totalPrice", total.getText().toString());
         intent.putExtra("paymentMethod", getPaymentMethodName()); // Thêm phương thức thanh toán
         intent.putExtra("item", item.getText().toString());
+        intent.putExtra("itemCount", itemCount.getText().toString());
 
         startActivity(intent);
         finish();

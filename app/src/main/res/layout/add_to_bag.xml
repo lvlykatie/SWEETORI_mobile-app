@@ -18,18 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp">
 
-            <ImageView
-                android:id="@+id/arrowIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="120dp"
-                android:src="@drawable/arrow"
-                android:contentDescription="Arrow" />
 
             <TextView
                 android:id="@+id/title"
@@ -102,7 +94,7 @@
                     android:id="@+id/txtTinhTP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chọn Tỉnh/Thành phố"
+                    android:text="Choose delivery method"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/poppins_semibold" />
@@ -161,95 +153,124 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="20dp">
 
-                <LinearLayout
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Item (1) "
-                        android:textSize="16sp"
-                        android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Shipping "
-                        android:textSize="16sp"
-                        android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Product discount"
-                        android:textSize="16sp"
-                        android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Voucher discount"
-                        android:textSize="16sp"
-                        android:layout_marginBottom="8dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="---------------------------------"
-                        android:textSize="16sp"
-                        android:textColor="#cccc" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total Price: "
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#223263"/>
-                </LinearLayout>
-
+                <!-- Một hàng: Item -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/itemCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Item (1)"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp"/>
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Một hàng: Shipping -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Shipping"
+                        android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/shipping"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp"/>
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Một hàng: Product discount -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Product discount"
+                        android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/discount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:text="0"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Một hàng: Voucher discount -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Voucher discount"
+                        android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/voucher_discount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:text="- 0"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-----------------------------------------"
                         android:textSize="16sp"
-                        android:textColor="#cccc" />
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Dòng kẻ -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="---------------------------------------"
+                    android:textSize="16sp"
+                    android:textColor="#cccc"
+                    android:layout_marginBottom="4dp"/>
+
+                <!-- Một hàng: Total Price -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total Price:"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#223263" />
+
                     <TextView
                         android:id="@+id/totalPrice"
                         android:layout_width="wrap_content"
@@ -259,6 +280,7 @@
                         android:textColor="@color/color02"/>
                 </LinearLayout>
             </LinearLayout>
+
 
         </androidx.cardview.widget.CardView>
 

@@ -17,6 +17,7 @@ public class DonePaymentActivity extends AppCompatActivity {
         TextView txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
         TextView txtxTotal = findViewById(R.id.txtxTotal);
         TextView txtItems = findViewById(R.id.txtItem);
+        TextView txtItemCount = findViewById(R.id.txtItemCount);
 
         // Lấy dữ liệu từ Intent
         String date = getIntent().getStringExtra("date");
@@ -25,6 +26,7 @@ public class DonePaymentActivity extends AppCompatActivity {
         String paymentMethod = getIntent().getStringExtra("paymentMethod");
         String totalPrice = getIntent().getStringExtra("totalPrice");
         String item = getIntent().getStringExtra("item");
+        String itemCount = getIntent().getStringExtra("itemCount");
 
 
         // Hiển thị dữ liệu
@@ -34,5 +36,6 @@ public class DonePaymentActivity extends AppCompatActivity {
         txtPaymentMethod.setText(paymentMethod != null ? paymentMethod : "N/A");
         txtxTotal.setText(totalPrice != null ? totalPrice : "N/A");
         txtItems.setText(item != null ? item : "N/A");
+        txtItemCount.setText("Item (" + (itemCount != null ? itemCount : "N/A") + ")");
     }
 }

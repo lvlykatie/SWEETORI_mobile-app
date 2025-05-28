@@ -58,7 +58,7 @@ public class AddToBagActivity extends AppCompatActivity {
     private int deliveryId;
     private String deliveryName;
 
-    private TextView item, userName, Phone, shipping, discount, voucher_discount, total_Price;
+    private TextView item, userName, Phone, shipping, discount, voucher_discount, total_Price, itemCount;
     private EditText Editaddress, couponEdit;
     private Button checkoutBtn, applyBtn;
     Spinner spinner;
@@ -71,6 +71,7 @@ public class AddToBagActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewCart);
         item = findViewById(R.id.item);
+        itemCount = findViewById(R.id.itemCount);
         Phone = findViewById(R.id.Phone);
         userName = findViewById(R.id.userName);
         Editaddress = findViewById(R.id.Editaddress);
@@ -116,6 +117,7 @@ public class AddToBagActivity extends AppCompatActivity {
             noti.putExtra("voucher", voucher_discount.getText().toString());
             noti.putExtra("shipping", shipping.getText().toString());
             noti.putExtra("total_Price", total_Price.getText().toString());
+            noti.putExtra("itemCount", String.valueOf(adapter.getItemCount()));
             noti.putExtra("voucherId", String.valueOf(voucherId));
             noti.putExtra("productListJson", new Gson().toJson(selectedItems));
             noti.putExtra("selectedDeliveryId", deliveryId);
@@ -248,6 +250,7 @@ public class AddToBagActivity extends AppCompatActivity {
 
         discount.setText(String.format("- %,.0f VND", discountAmount).replace(",", "."));
         item.setText(String.format("%,.0f VND", totalPriceBeforeDiscount).replace(",", "."));
+        itemCount.setText("Item ("+ String.valueOf(adapter.getItemCount()) + ")");
         updateGrandTotal();
     }
 
