@@ -24,7 +24,7 @@ public class ResCartDTO implements Serializable {
         this.cartId = cartId;
     }
 
-    public List<ResCartDetailDTO> getListOfCartdetails() {
+    public List<ResCartDetailDTO>  getListOfCartdetails() {
         return listOfCartdetails;
     }
 

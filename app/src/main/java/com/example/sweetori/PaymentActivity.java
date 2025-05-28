@@ -88,6 +88,7 @@ public class PaymentActivity extends AppCompatActivity {
         String shippingStr = getIntent().getStringExtra("shipping");
         String total_Price = getIntent().getStringExtra("total_Price");
         String voucherCode = getIntent().getStringExtra("voucher_code");
+        int voucher_id = getIntent().getIntExtra("voucherId", -1);
         int deliveryId = getIntent().getIntExtra("selectedDeliveryId", -1);
         String productListJson = getIntent().getStringExtra("productListJson");
         List<ResCartDetailDTO> productList = new Gson().fromJson(productListJson, new TypeToken<List<ResCartDetailDTO>>(){}.getType());
@@ -147,6 +148,7 @@ public class PaymentActivity extends AppCompatActivity {
                 return;
             }
 
+
             OffsetDateTime now = OffsetDateTime.now();
             String isoTime = now.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
@@ -157,12 +159,8 @@ public class PaymentActivity extends AppCompatActivity {
                 List<ReqCheckoutDTO.ProductWithQuantity> productWithQuantityList = new ArrayList<>();
                 List<Integer> setVoucherIds = new ArrayList<>();
 
-                if (voucherCode != null && !voucherCode.isEmpty()) {
-                    try {
-                        setVoucherIds.add(Integer.parseInt(voucherCode));
-                    } catch (NumberFormatException e) {
-                        Log.e("PaymentActivity", "Invalid voucher code", e);
-                    }
+                if (voucher_id != -1) {
+                    setVoucherIds.add(voucher_id);
                 }
 
                 for (ResCartDetailDTO item : productList) {

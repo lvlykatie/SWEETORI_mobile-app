@@ -99,8 +99,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                         }
                     }
 
-                    tvProductDiscount.setText(String.format("-%,.0f VND", productDiscount));
-                    tvVoucherDiscount.setText(String.format("-%,.0f VND", voucherDiscount));
+                    tvProductDiscount.setText(String.format("%,.0f VND", productDiscount));
+                    tvVoucherDiscount.setText(String.format("%,.0f VND", voucherDiscount));
                 }
             }
 

@@ -1,6 +1,8 @@
 package com.example.sweetori;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,10 +19,13 @@ public class DonePaymentActivity extends AppCompatActivity {
         TextView txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
         TextView txtxTotal = findViewById(R.id.txtxTotal);
         TextView txtItems = findViewById(R.id.txtItem);
+        TextView txtProductDiscount = findViewById(R.id.txtProductDiscount);
         TextView txtItemCount = findViewById(R.id.txtItemCount);
+        Button btnDone = findViewById(R.id.btnDone);
 
         // Lấy dữ liệu từ Intent
         String date = getIntent().getStringExtra("date");
+        String discount = getIntent().getStringExtra("discount");
         String shippingMethod = getIntent().getStringExtra("shippingMethod");
         String voucher = getIntent().getStringExtra("voucher");
         String paymentMethod = getIntent().getStringExtra("paymentMethod");
@@ -36,6 +41,15 @@ public class DonePaymentActivity extends AppCompatActivity {
         txtPaymentMethod.setText(paymentMethod != null ? paymentMethod : "N/A");
         txtxTotal.setText(totalPrice != null ? totalPrice : "N/A");
         txtItems.setText(item != null ? item : "N/A");
-        txtItemCount.setText("Item (" + (itemCount != null ? itemCount : "N/A") + ")");
+        txtProductDiscount.setText(discount != null ? discount : "N/A");
+        txtItemCount.setText(itemCount != null ? itemCount : "0");
+
+        btnDone.setOnClickListener(v -> {
+            Intent intent = new Intent(DonePaymentActivity.this, HomepageActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // đóng Activity hiện tại
+        });
+
     }
 }

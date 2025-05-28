@@ -87,9 +87,8 @@ public class AddToBagActivity extends AppCompatActivity {
         int selectedDeliveryId = deliveryId;
         // Lấy JSON string từ intent
         // Nhận danh sách sản phẩm đã chọn từ Intent
-        String selectedItemsJson = getIntent().getStringExtra("selectedItems");
+        ArrayList<ResCartDetailDTO> selectedItems = (ArrayList<ResCartDetailDTO>) getIntent().getSerializableExtra("selectedItems");
         Type listType = new TypeToken<List<ResCartDetailDTO>>() {}.getType();
-        List<ResCartDetailDTO> selectedItems = new Gson().fromJson(selectedItemsJson, listType);
 
         // Lấy danh sách productId để gọi API giảm giá
         List<Integer> productIds = new ArrayList<>();
@@ -118,7 +117,7 @@ public class AddToBagActivity extends AppCompatActivity {
             noti.putExtra("shipping", shipping.getText().toString());
             noti.putExtra("total_Price", total_Price.getText().toString());
             noti.putExtra("itemCount", String.valueOf(adapter.getItemCount()));
-            noti.putExtra("voucherId", String.valueOf(voucherId));
+            noti.putExtra("voucherId", voucherId);
             noti.putExtra("productListJson", new Gson().toJson(selectedItems));
             noti.putExtra("selectedDeliveryId", deliveryId);
             Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
@@ -271,8 +270,7 @@ public class AddToBagActivity extends AppCompatActivity {
                             voucherId = voucher.getVoucherId();
                             Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
                             // Cập nhật hiển thị
-                            voucher_discount.setText(String.format("%,.0f VND", voucher.getDiscountAmount()));
-
+                            voucher_discount.setText("- " + String.format("%,.0f VND", voucher.getDiscountAmount()));
                             // Cập nhật tổng tiền
                             updateGrandTotal();
 
@@ -308,24 +306,9 @@ public class AddToBagActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     List<ResVoucherDTO.VoucherData> voucherList = response.body().getData().getData();
 
+                    // Chỉ log thông tin, không tự động áp dụng voucher
                     if (!voucherList.isEmpty()) {
-                        ResVoucherDTO.VoucherData maxDiscountVoucher = null;
-                        double maxDiscount = Double.MIN_VALUE;
-
-                        for (ResVoucherDTO.VoucherData voucher : voucherList) {
-                            if (voucher.getDiscountAmount() > maxDiscount) {
-                                maxDiscount = voucher.getDiscountAmount();
-                                maxDiscountVoucher = voucher;
-                            }
-                        }
-
-                        if (maxDiscountVoucher != null) {
-                            voucherId = maxDiscountVoucher.getVoucherId();
-                            Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
-                            Log.d("VoucherInfo", "🎟️ Max discount voucher for userId " + accessTokenWithUserId.second +
-                                    ": " + maxDiscountVoucher.getCode() + " with discount " + maxDiscountVoucher.getDiscountAmount());
-                            voucher_discount.setText(String.format("%,.0f VND", maxDiscountVoucher.getDiscountAmount()));
-                        }
+                        Log.d("VoucherInfo", "User has " + voucherList.size() + " available vouchers");
                     } else {
                         Log.d("VoucherInfo", "⚠️ No vouchers found for userId: " + accessTokenWithUserId.second);
                     }

@@ -3,6 +3,8 @@ package com.example.sweetori.content;
 import com.example.sweetori.APIResponse;
 import com.example.sweetori.dto.response.ResVoucherDTO;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

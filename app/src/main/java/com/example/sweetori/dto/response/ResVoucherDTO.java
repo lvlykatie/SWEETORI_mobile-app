@@ -1,8 +1,9 @@
 package com.example.sweetori.dto.response;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-public class ResVoucherDTO {
+public class ResVoucherDTO implements Serializable{
     private PaginationWrapper.Meta meta;
     private List<ResVoucherDTO.VoucherData> data;
 
@@ -50,20 +51,18 @@ public class ResVoucherDTO {
         this.data = data;
     }
 
-    public static class VoucherData {
+    public static class VoucherData implements Serializable {
         private Integer voucherId;
         private String code;
         private Double discountAmount;
         private String validFrom;
         private String validTo;
         private List<ResUserDTO> users;
-        private List<Object> userVouchers; //
+        private  List<ResUserVoucherDTO> userVouchers;//
 
         // Constructors
-        public VoucherData() {
-        }
 
-        public VoucherData(Integer voucherId, String code, Double discountAmount, String validFrom, String validTo, List<ResUserDTO> users, List<Object> userVouchers) {
+        public VoucherData(Integer voucherId, String code, Double discountAmount, String validFrom, String validTo, List<ResUserDTO> users, List<ResUserVoucherDTO> userVouchers) {
             this.voucherId = voucherId;
             this.code = code;
             this.discountAmount = discountAmount;
@@ -73,7 +72,6 @@ public class ResVoucherDTO {
             this.userVouchers = userVouchers;
         }
 
-        // Getters and Setters
         public Integer getVoucherId() {
             return voucherId;
         }
@@ -122,11 +120,11 @@ public class ResVoucherDTO {
             this.users = users;
         }
 
-        public List<Object> getUserVouchers() {
+        public List<ResUserVoucherDTO> getUserVouchers() {
             return userVouchers;
         }
 
-        public void setUserVouchers(List<Object> userVouchers) {
+        public void setUserVouchers(List<ResUserVoucherDTO> userVouchers) {
             this.userVouchers = userVouchers;
         }
     }

@@ -26,6 +26,7 @@ import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,19 +72,13 @@ public class CartActivity extends AppCompatActivity {
 
         currentUser = SharedPref.getUser(this);
 
-        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String userJson = prefs.getString("user", null);
 
-        if (userJson != null) {
-            Gson gson = new Gson();
-            ResLoginDTO.UserLogin user = gson.fromJson(userJson, ResLoginDTO.UserLogin.class);
-            if (user != null) {
-                String userName = user.getFirstName();
+            if (currentUser != null) {
+                String userName = currentUser.getFirstName();
                 txtHello.setText("Hello, "+ userName);
             } else {
                 txtHello.setText("Guest");
             }
-        }
 
         // Navigation listeners
         btnAccount.setOnClickListener(v -> {
@@ -112,7 +107,7 @@ public class CartActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please select at least one item", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(CartActivity.this, AddToBagActivity.class);
-                intent.putExtra("selectedItems", new Gson().toJson(selectedItems));
+                intent.putExtra("selectedItems", new ArrayList<>(selectedItems));
                 startActivity(intent);
             }
         });

@@ -8,82 +8,68 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sweetori.adapter.VoucherGroupAdapter;
+import com.example.sweetori.adapter.VoucherAdapter;
 import com.example.sweetori.content.VoucherFetching;
 import com.example.sweetori.dto.response.ResVoucherDTO;
+import com.example.sweetori.dto.response.ResUserDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.example.sweetori.dto.response.ResUserDTO;
-
 public class VoucherActivity extends AppCompatActivity {
-    ImageView btnAccount;
-    ImageView btnHome;
-    ImageView btnCart;
-    ImageView btnNoti;
-    ImageView btnVoucher;
+    ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
     private ResUserDTO currentUser;
-    TextView voucher_discount;
+    RecyclerView rvVoucher;
 
-    RecyclerView recyclerViewGroup;
-    int voucherId = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.voucher);
-        EdgeToEdge.enable(this);
 
         currentUser = SharedPref.getUser(this);
-        //Component
+
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);
         btnCart = findViewById(R.id.btnCart);
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
-        recyclerViewGroup = findViewById(R.id.recyclerViewGroup);
+        rvVoucher = findViewById(R.id.rvVoucher);
 
-        // Xử lý chuyển màn hình
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
         btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
         btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
         btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
 
-        // Gọi API
         fetchVoucherByUserId();
     }
 
     private void fetchVoucherByUserId() {
-        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(VoucherActivity.this);
+        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(this);
         if (accessTokenWithUserId == null) {
             Log.e("VoucherAPI", "Token hoặc UserId không hợp lệ");
             return;
         }
 
         VoucherFetching voucherService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
-        String filter = "users:" + accessTokenWithUserId.second;
 
-        voucherService.getVoucherByUser(filter).enqueue(new Callback<APIResponse<ResVoucherDTO>>() {
+        voucherService.getAllVouchers().enqueue(new Callback<APIResponse<ResVoucherDTO>>() {
             @Override
             public void onResponse(Call<APIResponse<ResVoucherDTO>> call, Response<APIResponse<ResVoucherDTO>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     List<ResVoucherDTO.VoucherData> voucherList = response.body().getData().getData();
 
-                    if (voucherList!= null && !voucherList.isEmpty()) {
-                        List<List<ResVoucherDTO.VoucherData>> grouped = groupVouchers(voucherList);
-                        VoucherGroupAdapter groupAdapter = new VoucherGroupAdapter(VoucherActivity.this, grouped);
-
-                        recyclerViewGroup.setLayoutManager(new LinearLayoutManager(VoucherActivity.this));
-                        recyclerViewGroup.setAdapter(groupAdapter);
+                    if (voucherList != null && !voucherList.isEmpty()) {
+                        // Lọc voucher chỉ dành cho user hiện tại và chưa dùng (có thể làm trực tiếp trong adapter, nhưng lọc ở đây cũng được)
+                        VoucherAdapter adapter = new VoucherAdapter(VoucherActivity.this, voucherList);
+                        rvVoucher.setLayoutManager(new LinearLayoutManager(VoucherActivity.this));
+                        rvVoucher.setAdapter(adapter);
                     } else {
                         Toast.makeText(VoucherActivity.this, "Không có voucher nào.", Toast.LENGTH_SHORT).show();
                     }
@@ -99,16 +85,5 @@ public class VoucherActivity extends AppCompatActivity {
                 Log.e("VoucherAPI", "Lỗi: " + t.getMessage());
             }
         });
-    }
-
-
-    private List<List<ResVoucherDTO.VoucherData>> groupVouchers(List<ResVoucherDTO.VoucherData> originalList) {
-        List<List<ResVoucherDTO.VoucherData>> groups = new ArrayList<>();
-        int size = originalList.size();
-        for (int i = 0; i < size; i += 4) {
-            int end = Math.min(size, i + 4);
-            groups.add(new ArrayList<>(originalList.subList(i, end)));
-        }
-        return groups;
     }
 }
