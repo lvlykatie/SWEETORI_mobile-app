@@ -236,6 +236,8 @@ public class AccountActivity extends AppCompatActivity {
                     Toast.makeText(AccountActivity.this, "Update successful!", Toast.LENGTH_SHORT).show();
                     currentUser = updatedUser;
                     txtName.setText(updatedUser.getFirstName());
+                    txtHello.setText("Hello, " + updatedUser.getFirstName());
+                    
                     SharedPref.saveUser(AccountActivity.this, updatedUser);
                 } else {
                     Toast.makeText(AccountActivity.this, "Update failed!", Toast.LENGTH_SHORT).show();
