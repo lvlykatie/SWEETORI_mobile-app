@@ -411,6 +411,68 @@
 
                 </LinearLayout>
 
+                <!-- Sản phẩm tương tự với hiệu ứng đổ bóng -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardElevation="5dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Dòng chứa Similar product và More -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Similar product (căn trái) -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <TextView
+                                    android:text="Similar product"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                            </LinearLayout>
+
+                            <!-- Nút More (căn phải) -->
+                            <Button
+                                android:id="@+id/btn_more_similarproduct"
+                                android:text="More"
+                                android:textColor="@color/color02"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <!-- RecyclerView sản phẩm tương tự -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerSimilarProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginTop="8dp" />
+
                 <!-- Đánh giá với hiệu ứng đổ bóng -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -483,67 +545,7 @@
                     android:nestedScrollingEnabled="false"
                     android:layout_marginTop="8dp" />
 
-                <!-- Sản phẩm tương tự với hiệu ứng đổ bóng -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardElevation="5dp"
-                    app:cardBackgroundColor="@color/white">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- Dòng chứa Similar product và More -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <!-- Similar product (căn trái) -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-
-                                <TextView
-                                    android:text="Similar product"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/black"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                            </LinearLayout>
-
-                            <!-- Nút More (căn phải) -->
-                            <Button
-                                android:id="@+id/btn_more_similarproduct"
-                                android:text="More"
-                                android:textColor="@color/color02"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:background="?attr/selectableItemBackgroundBorderless"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-
-                <!-- RecyclerView sản phẩm tương tự -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerSimilarProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:layout_marginTop="8dp" />
             </LinearLayout>
         </LinearLayout>
 
