@@ -69,7 +69,7 @@
                     android:id="@+id/txtDiaChi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Số nhà, đường, quận/huyện"
+                    android:text="House number, street, district"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/poppins_semibold" />

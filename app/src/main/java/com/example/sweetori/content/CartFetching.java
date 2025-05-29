@@ -27,7 +27,7 @@ public interface CartFetching {
     Call<APIResponse<ResCartDTO>> addCartDetail(@Body ReqAddToCartDTO addToCartRequest);
 
     @POST("check-out")
-    Call<Void> paymentCash(@Body ReqCheckoutDTO oerderRequest);
+    Call<Void> paymentCash(@Body ReqCheckoutDTO orderRequest);
 
     @DELETE("cart-details/{id}")
     Call<Void> deleteCartItem(@Path("id") int cartDetailId);

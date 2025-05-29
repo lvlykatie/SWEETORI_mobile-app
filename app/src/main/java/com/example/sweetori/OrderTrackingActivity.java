@@ -139,10 +139,10 @@ public class OrderTrackingActivity extends AppCompatActivity {
                     orderAdapter.updateOrderList(filteredOrders);
 
                     if (filteredOrders.isEmpty()) {
-                        Toast.makeText(OrderTrackingActivity.this, "Không có đơn hàng nào.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderTrackingActivity.this, "There is no order.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(OrderTrackingActivity.this, "Không thể tải đơn hàng.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderTrackingActivity.this, "Cant not load orders.", Toast.LENGTH_SHORT).show();
                 }
             }
 
