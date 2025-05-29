@@ -124,7 +124,25 @@ public class AccountActivity extends AppCompatActivity {
         btn_wishlist.setOnClickListener(v -> startActivity(new Intent(this, WishListActivity.class)));
 
         btnResetPass = findViewById(R.id.btn_reset_password);
-        btnResetPass.setOnClickListener(v -> startActivity(new Intent(this, CreatePassActivity.class)));
+        btnResetPass.setOnClickListener(v -> {
+            AuthFetching authFetching = APIClient.getClientWithToken(accessToken).create(AuthFetching.class);
+            authFetching.logout().enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(AccountActivity.this, "Enter email to reset password", Toast.LENGTH_SHORT).show();
+                    SharedPref.clearTokens(AccountActivity.this);
+                    SharedPref.clearUser(AccountActivity.this);
+                    Intent loginIntent = new Intent(AccountActivity.this, ForgetEmailActivity.class);
+                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(loginIntent);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(AccountActivity.this, "Log out failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+    });
     }
 
     private void openOrderTracking(String status) {
@@ -212,7 +230,7 @@ public class AccountActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(AccountActivity.this, "Lỗi khi đăng xuất: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountActivity.this, "Log out failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });
