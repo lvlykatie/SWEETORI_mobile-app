@@ -16,8 +16,10 @@ import com.bumptech.glide.Glide;
 import com.example.sweetori.R;
 import com.example.sweetori.dto.response.ResReviewDTO;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
@@ -52,8 +54,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         }
 
         holder.txtName.setText(fullName);
-        holder.txtDate.setText(review.getUpdatedAt() != null ? review.getUpdatedAt() : "N/A");
-        holder.txtComment.setText(review.getFeedback() != null ? review.getFeedback() : "Không có bình luận.");
+        holder.txtDate.setText( review.getCreatedAt() != null ? formatDate(review.getCreatedAt()) : "Unknown date");
+        holder.txtComment.setText(review.getFeedback() != null ? review.getFeedback() : "No comment");
         holder.ratingBar.setRating((float) review.getRate());
 
         // Load avatar: ưu tiên ảnh sản phẩm, nếu không có thì dùng icon mặc định
@@ -77,12 +79,25 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public int getItemCount() {
         return reviewList.size();
     }
-
+    private String formatDate(String dateString) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            return outputFormat.format(inputFormat.parse(dateString));
+        } catch (Exception e) {
+            Log.e("ReviewAdapter", "Error formatting date: " + e.getMessage());
+            return "Invalid date";
+        }
+    }
     // Cập nhật danh sách review mới, đảm bảo tránh lỗi null
     public void updateReviewList(List<ResReviewDTO> newList) {
         if (newList == null) return;
         reviewList.clear();
         reviewList.addAll(newList);
+        reviewList.sort((r1, r2) -> {
+            if (r1.getCreatedAt() == null || r2.getCreatedAt() == null) return 0;
+            return r2.getCreatedAt().compareTo(r1.getCreatedAt());
+        });
         notifyDataSetChanged();
     }
 

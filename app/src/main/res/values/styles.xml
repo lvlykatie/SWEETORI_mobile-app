@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="colorControlNormal">@color/gray</item>  <!-- Màu khi chưa chọn -->
+        <item name="colorControlActivated">@color/color04</item>  <!-- Màu khi đã chọn -->
+    </style>
+</resources>

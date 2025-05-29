@@ -1,59 +1,58 @@
-package com.example.sweetori.dto.request;
 
-import java.util.List;
+package com.example.sweetori.dto.request;
 
 public class ReqReviewDTO {
     private String userName;
     private String avatarUrl;
-    private float rating;
-    private String comment;
-    private String date;
-
-    public ReqReviewDTO(String userName, String avatarUrl, float rating, String comment, String date, List<String> imageUrls) {
-        this.userName = userName;
-        this.avatarUrl = avatarUrl;
-        this.rating = rating;
-        this.comment = comment;
-        this.date = date;
-    }
+    private float rate;
+    private String feedback;
+    private String date;// Thêm trường này
 
     public String getUserName() {
         return userName;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public String getDate() {
-        return date;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public float getRate() {
+        return rate;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setRate(float rate) {
+        this.rate = rate;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
+        this.date = date;
+    }
+
+    public ReqReviewDTO() {
+        this.userName = userName;
+        this.avatarUrl = avatarUrl;
+        this.rate = rate;
+        this.feedback = feedback;
         this.date = date;
     }
 }

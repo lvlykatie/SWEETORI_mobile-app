@@ -4,7 +4,7 @@ public class ResReviewDTO {
     private int feedbackId;
     private String feedback;
     private double rate;
-    private String updatedAt;
+    private String createdAt;
     private User user;
     private Product product;
 
@@ -20,8 +20,8 @@ public class ResReviewDTO {
         return rate;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     public User getUser() {
