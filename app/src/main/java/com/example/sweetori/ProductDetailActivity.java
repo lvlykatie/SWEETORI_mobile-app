@@ -16,6 +16,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sweetori.adapter.ProductAdapter;
+import com.example.sweetori.content.ProductFetching;
 import com.example.sweetori.dto.request.ReqAddToCartDTO;
 import com.example.sweetori.dto.response.ResCartDTO;
 import com.example.sweetori.APIResponse;
@@ -36,8 +38,10 @@ import com.example.sweetori.dto.response.PaginationWrapper;
 import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.activity.EdgeToEdge;
@@ -67,6 +71,22 @@ public class ProductDetailActivity extends AppCompatActivity {
     ResProductDTO.ProductData productDt;
     private List<ResReviewDTO> reviewList = new ArrayList<>();
     private ResUserDTO currentUser;
+
+    // similar product
+    private RecyclerView recyclerSimilarProduct;
+    private ProductAdapter similarAdapter;
+    // danh sách category và brand
+    private static final String[] categories = {
+            "Foundation", "Blush", "Lipstick", "Mascara", "Powder",
+            "Concealer", "Highlighter", "Contour", "EyePalette",
+            "Eyebrows", "Eyeliner", "Eyelashes", "LipPencil",
+            "FixingSpray", "Brush", "Sponge"
+    };
+    private static final String[] brands = {
+            "Judydoll", "Colorkey", "GlamrrQ", "IPKN",
+            "Maybelline", "Merzy", "Blackrouge", "Romand", "Lemonade"
+    };
+    private static final int SIMILAR_LIMIT = 10;
 
 
     @SuppressLint("MissingInflatedId")
@@ -225,6 +245,90 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             });
         });
+
+        // similar product
+        recyclerSimilarProduct = findViewById(R.id.recyclerSimilarProduct);
+        recyclerSimilarProduct.setHasFixedSize(true);
+        LinearLayoutManager lm = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        recyclerSimilarProduct.setLayoutManager(lm);
+
+        // sau khi có productDt
+        if (productDt != null) {
+            showProductDetails(productDt);
+            loadSimilarProducts(productDt);
+        }
+    }
+
+    // phần similar product
+    private void loadSimilarProducts(ResProductDTO.ProductData current) {
+        APIClient.getClientWithToken(
+                        SharedPref.getAccessTokenWithUserId(this).first
+                ).create(ProductFetching.class)
+                .getAllProducts()
+                .enqueue(new Callback<APIResponse<ResProductDTO>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<ResProductDTO>> call,
+                                           Response<APIResponse<ResProductDTO>> res) {
+                        if (!res.isSuccessful() || res.body() == null) return;
+                 List<ResProductDTO.ProductData> all = res.body().getData().getData();
+                        List<ScoredProduct> scored = new ArrayList<>();
+
+                        String curName = current.getProductName().toLowerCase();
+                        String curBrand = current.getBrand();
+
+                        for (ResProductDTO.ProductData p : all) {
+                            if (p.getProductId() == current.getProductId()) continue;
+                            int score = 0;
+                            String name = p.getProductName().toLowerCase();
+                            // +2 nếu chứa category
+                            for (String cat : categories) {
+                                if (name.contains(cat.toLowerCase())) {
+                                    score += 2;
+                                    break;
+                                }
+                            }
+                            // +1 nếu cùng brand
+                            if (curBrand.equalsIgnoreCase(p.getBrand())) {
+                                score += 1;
+                            }
+                            if (score > 0) {
+                                scored.add(new ScoredProduct(p, score));
+                            }
+                        }
+                        // sắp xếp
+                        Collections.sort(scored, (a, b) -> {
+                            if (b.score != a.score)
+                                return Integer.compare(b.score, a.score);
+                            // tie-breaker: rating
+                            return Double.compare(
+                                    b.product.getAvgRate(), a.product.getAvgRate()
+                            );
+                        });
+                        // lấy top N
+                        List<ResProductDTO.ProductData> top = new ArrayList<>();
+                        for (int i = 0; i < Math.min(SIMILAR_LIMIT, scored.size()); i++) {
+                            top.add(scored.get(i).product);
+                        }
+                        // bind vào adapter
+                        similarAdapter = new ProductAdapter(top, ProductDetailActivity.this);
+                        recyclerSimilarProduct.setAdapter(similarAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<APIResponse<ResProductDTO>> call, Throwable t) {
+                        // log hoặc hiển thị lỗi nếu cần
+                    }
+                });
+    }
+
+    // lớp helper để gán score
+    private static class ScoredProduct {
+        ResProductDTO.ProductData product;
+        int score;
+        ScoredProduct(ResProductDTO.ProductData p, int s) {
+            product = p; score = s;
+        }
     }
 
     private void showProductDetails(ResProductDTO.ProductData product) {
