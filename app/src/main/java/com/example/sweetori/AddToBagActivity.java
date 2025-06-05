@@ -26,6 +26,7 @@ import com.example.sweetori.dto.response.ResDeliveryDTO;
 import com.example.sweetori.dto.response.ResDiscountDTO;
 import com.example.sweetori.dto.response.ResUserDTO;
 import com.example.sweetori.content.UserFetching;
+import com.example.sweetori.dto.response.ResUserVoucherDTO;
 import com.example.sweetori.dto.response.ResVoucherDTO;
 import com.example.sweetori.dto.response.ShippingDTO;
 import com.example.sweetori.content.DeliveryFetching;
@@ -255,22 +256,28 @@ public class AddToBagActivity extends AppCompatActivity {
 
     private void fetchAndCompareVoucherCode(String testCode) {
         Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(AddToBagActivity.this);
-        VoucherFetching api_ServiceVouch = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
-        api_ServiceVouch.getAllVouchers().enqueue(new Callback<APIResponse<ResVoucherDTO>>() {
+        VoucherFetching apiService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
+        String filter = "user:" + accessTokenWithUserId.second;
+
+        apiService.getVouchersByUser(filter).enqueue(new Callback<APIResponse<ResUserVoucherDTO>>() {
             @Override
-            public void onResponse(Call<APIResponse<ResVoucherDTO>> call, Response<APIResponse<ResVoucherDTO>> response) {
+            public void onResponse(Call<APIResponse<ResUserVoucherDTO>> call, Response<APIResponse<ResUserVoucherDTO>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<ResVoucherDTO.VoucherData> voucherList = response.body().getData().getData();
+                    List<ResUserVoucherDTO.UserVoucherData> allVouchers = response.body().getData().getData();
 
                     boolean found = false;
-                    for (ResVoucherDTO.VoucherData voucher : voucherList) {
-                        if (voucher.getCode().equalsIgnoreCase(testCode)) {
-                            Log.d("VoucherMatch", "✅ Mã hợp lệ: " + voucher.getCode());
-                            // XÓA voucher cũ nếu có
-                            voucherId = voucher.getVoucherId();
+
+                    for (ResUserVoucherDTO.UserVoucherData voucher : allVouchers) {
+                        if (!voucher.isUsed() && voucher.getVoucher().getCode().equalsIgnoreCase(testCode)) {
+                            Log.d("VoucherMatch", "✅ Mã hợp lệ và chưa dùng: " + voucher.getVoucher().getCode());
+
+                            // Gán ID voucher
+                            voucherId = voucher.getVoucher().getVoucherId();
                             Log.d("CHECK_VOUCHER_ID", "voucherId: " + voucherId);
-                            // Cập nhật hiển thị
-                            voucher_discount.setText("- " + String.format("%,.0f VND", voucher.getDiscountAmount()));
+
+                            // Hiển thị giảm giá
+                            voucher_discount.setText("- " + String.format("%,.0f VND", voucher.getVoucher().getDiscountAmount()));
+
                             // Cập nhật tổng tiền
                             updateGrandTotal();
 
@@ -280,17 +287,20 @@ public class AddToBagActivity extends AppCompatActivity {
                     }
 
                     if (!found) {
-                        Log.d("VoucherMatch", "❌ Không tìm thấy voucher với mã: " + testCode);
+                        Log.d("VoucherMatch", "❌ Không tìm thấy voucher hợp lệ hoặc đã dùng với mã: " + testCode);
+                        Toast.makeText(AddToBagActivity.this, "Mã voucher không hợp lệ hoặc đã được sử dụng.", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Log.e("VoucherAPI", "⚠️ API trả về lỗi hoặc không có dữ liệu.");
+                    Log.e("VoucherAPI", "⚠️ Không thể lấy dữ liệu voucher từ API.");
+                    Toast.makeText(AddToBagActivity.this, "Lỗi khi lấy danh sách voucher.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<APIResponse<ResVoucherDTO>> call, Throwable t) {
+            public void onFailure(Call<APIResponse<ResUserVoucherDTO>> call, Throwable t) {
                 Log.e("VoucherAPI", "❌ Lỗi kết nối API: " + t.getMessage());
+                Toast.makeText(AddToBagActivity.this, "Không thể kết nối đến máy chủ.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -300,28 +310,41 @@ public class AddToBagActivity extends AppCompatActivity {
         VoucherFetching voucherService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
         String filter = "users:" + accessTokenWithUserId.second;
 
-        voucherService.getVoucherByUser(filter).enqueue(new Callback<APIResponse<ResVoucherDTO>>() {
+        voucherService.getVouchersByUser(filter).enqueue(new Callback<APIResponse<ResUserVoucherDTO>>() {
             @Override
-            public void onResponse(Call<APIResponse<ResVoucherDTO>> call, Response<APIResponse<ResVoucherDTO>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<ResVoucherDTO.VoucherData> voucherList = response.body().getData().getData();
+            public void onResponse(Call<APIResponse<ResUserVoucherDTO>> call, Response<APIResponse<ResUserVoucherDTO>> response) {
+                if (response.isSuccessful()) {
+                    APIResponse<ResUserVoucherDTO> apiResponse = response.body();
+                    if (apiResponse != null && apiResponse.getData() != null) {
+                        List<ResUserVoucherDTO.UserVoucherData> allVouchers = apiResponse.getData().getData();
+                        if (allVouchers != null) {
+                            List<ResUserVoucherDTO.UserVoucherData> unusedVouchers = new ArrayList<>();
+                            for (ResUserVoucherDTO.UserVoucherData voucher : allVouchers) {
+                                if (!voucher.isUsed()) {
+                                    unusedVouchers.add(voucher);
+                                }
+                            }
 
-                    // Chỉ log thông tin, không tự động áp dụng voucher
-                    if (!voucherList.isEmpty()) {
-                        Log.d("VoucherInfo", "User has " + voucherList.size() + " available vouchers");
-                    } else {
-                        Log.d("VoucherInfo", "⚠️ No vouchers found for userId: " + accessTokenWithUserId.second);
+                            if (unusedVouchers.isEmpty()) {
+                                Toast.makeText(AddToBagActivity.this, "Không có voucher nào chưa dùng.", Toast.LENGTH_SHORT).show();
+                            }
+                            return;
+                        }
                     }
+                    Toast.makeText(AddToBagActivity.this, "Không có dữ liệu voucher.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("VoucherAPI", "⚠️ API responded with an error or no data.");
+                    Toast.makeText(AddToBagActivity.this, "Không thể tải danh sách voucher.", Toast.LENGTH_SHORT).show();
+                    Log.e("VoucherAPI", "Phản hồi không thành công: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<APIResponse<ResVoucherDTO>> call, Throwable t) {
-                Log.e("VoucherAPI", "❌ Failed to connect to voucher API: " + t.getMessage());
+            public void onFailure(Call<APIResponse<ResUserVoucherDTO>> call, Throwable t) {
+                Toast.makeText(AddToBagActivity.this, "Lỗi kết nối đến máy chủ.", Toast.LENGTH_SHORT).show();
+                Log.e("VoucherAPI", "Lỗi: " + t.getMessage());
             }
         });
+
     }
 
 
@@ -370,4 +393,3 @@ public class AddToBagActivity extends AppCompatActivity {
     }
 
 }
-

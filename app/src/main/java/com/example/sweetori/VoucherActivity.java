@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.VoucherAdapter;
 import com.example.sweetori.content.VoucherFetching;
-import com.example.sweetori.dto.response.ResVoucherDTO;
+import com.example.sweetori.dto.response.ResUserVoucherDTO;
 import com.example.sweetori.dto.response.ResUserDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,9 +24,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VoucherActivity extends AppCompatActivity {
-    ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
+
+    private ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
+    private RecyclerView rvVoucher;
+    private VoucherAdapter adapter;
     private ResUserDTO currentUser;
-    RecyclerView rvVoucher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,53 +36,88 @@ public class VoucherActivity extends AppCompatActivity {
         setContentView(R.layout.voucher);
 
         currentUser = SharedPref.getUser(this);
+        if (currentUser == null) {
+            Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
+        initViews();
+        setupNavigation();
+        setupRecyclerView();
+
+        Pair<String, Integer> tokenWithUserId = SharedPref.getAccessTokenWithUserId(this);
+        if (tokenWithUserId == null) {
+            Log.e("VoucherAPI", "Token hoặc UserId không hợp lệ");
+            Toast.makeText(this, "Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        fetchVouchers(tokenWithUserId.first, currentUser.getUserId());
+    }
+
+    private void initViews() {
         btnAccount = findViewById(R.id.btnAccount);
         btnHome = findViewById(R.id.btnHome);
         btnCart = findViewById(R.id.btnCart);
         btnNoti = findViewById(R.id.btnNoti);
         btnVoucher = findViewById(R.id.btnVoucher);
         rvVoucher = findViewById(R.id.rvVoucher);
+    }
 
+    private void setupNavigation() {
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
         btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
         btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
         btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
-
-        fetchVoucherByUserId();
+        // btnVoucher không set onClick vì đang ở màn hình Voucher
     }
 
-    private void fetchVoucherByUserId() {
-        Pair<String, Integer> accessTokenWithUserId = SharedPref.getAccessTokenWithUserId(this);
-        if (accessTokenWithUserId == null) {
-            Log.e("VoucherAPI", "Token hoặc UserId không hợp lệ");
-            return;
-        }
+    private void setupRecyclerView() {
+        adapter = new VoucherAdapter(this, new ArrayList<>());
+        rvVoucher.setLayoutManager(new LinearLayoutManager(this));
+        rvVoucher.setAdapter(adapter);
+    }
 
-        VoucherFetching voucherService = APIClient.getClientWithToken(accessTokenWithUserId.first).create(VoucherFetching.class);
+    private void fetchVouchers(String token, int userId) {
+        String filter = "user:" + userId;
 
-        voucherService.getAllVouchers().enqueue(new Callback<APIResponse<ResVoucherDTO>>() {
+        VoucherFetching voucherService = APIClient.getClientWithToken(token)
+                .create(VoucherFetching.class);
+
+        voucherService.getVouchersByUser(filter).enqueue(new Callback<APIResponse<ResUserVoucherDTO>>() {
             @Override
-            public void onResponse(Call<APIResponse<ResVoucherDTO>> call, Response<APIResponse<ResVoucherDTO>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                    List<ResVoucherDTO.VoucherData> voucherList = response.body().getData().getData();
+            public void onResponse(Call<APIResponse<ResUserVoucherDTO>> call, Response<APIResponse<ResUserVoucherDTO>> response) {
+                if (response.isSuccessful()) {
+                    APIResponse<ResUserVoucherDTO> apiResponse = response.body();
+                    if (apiResponse != null && apiResponse.getData() != null) {
+                        List<ResUserVoucherDTO.UserVoucherData> allVouchers = apiResponse.getData().getData();
+                        if (allVouchers != null) {
+                            List<ResUserVoucherDTO.UserVoucherData> unusedVouchers = new ArrayList<>();
+                            for (ResUserVoucherDTO.UserVoucherData voucher : allVouchers) {
+                                if (!voucher.isUsed()) {
+                                    unusedVouchers.add(voucher);
+                                }
+                            }
 
-                    if (voucherList != null && !voucherList.isEmpty()) {
-                        // Lọc voucher chỉ dành cho user hiện tại và chưa dùng (có thể làm trực tiếp trong adapter, nhưng lọc ở đây cũng được)
-                        VoucherAdapter adapter = new VoucherAdapter(VoucherActivity.this, voucherList);
-                        rvVoucher.setLayoutManager(new LinearLayoutManager(VoucherActivity.this));
-                        rvVoucher.setAdapter(adapter);
-                    } else {
-                        Toast.makeText(VoucherActivity.this, "Không có voucher nào.", Toast.LENGTH_SHORT).show();
+                            adapter.updateData(unusedVouchers);
+
+                            if (unusedVouchers.isEmpty()) {
+                                Toast.makeText(VoucherActivity.this, "Không có voucher nào chưa dùng.", Toast.LENGTH_SHORT).show();
+                            }
+                            return;
+                        }
                     }
+                    Toast.makeText(VoucherActivity.this, "Không có dữ liệu voucher.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(VoucherActivity.this, "Không thể tải danh sách voucher.", Toast.LENGTH_SHORT).show();
-                    Log.e("VoucherAPI", "Phản hồi lỗi hoặc không có dữ liệu.");
+                    Log.e("VoucherAPI", "Phản hồi không thành công: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<APIResponse<ResVoucherDTO>> call, Throwable t) {
+            public void onFailure(Call<APIResponse<ResUserVoucherDTO>> call, Throwable t) {
                 Toast.makeText(VoucherActivity.this, "Lỗi kết nối đến máy chủ.", Toast.LENGTH_SHORT).show();
                 Log.e("VoucherAPI", "Lỗi: " + t.getMessage());
             }

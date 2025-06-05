@@ -79,7 +79,7 @@ public class VoucherDetailActivity extends AppCompatActivity {
 
         // Intent setup (phải nằm trong onCreate)
         btnAccount.setOnClickListener(v -> startActivity(new Intent(this, AccountActivity.class)));
-        btnHome.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        btnHome.setOnClickListener(v -> startActivity(new Intent(this, HomepageActivity.class)));
         btnCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
         btnNoti.setOnClickListener(v -> startActivity(new Intent(this, NotiActivity.class)));
         btnVoucher.setOnClickListener(v -> startActivity(new Intent(this, VoucherActivity.class)));

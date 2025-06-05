@@ -1,8 +1,11 @@
 package com.example.sweetori;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sweetori.adapter.ProductAdapter;
+import com.example.sweetori.content.ProductFetching;
 import com.example.sweetori.dto.response.ResLoginDTO;
 import com.example.sweetori.dto.response.ResProductDTO;
 import com.example.sweetori.dto.response.ResUserDTO;
@@ -25,6 +29,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomepageActivity extends AppCompatActivity {
     ImageView btnAccount, btnHome, btnCart, btnNoti, btnVoucher;
@@ -75,7 +83,7 @@ public class HomepageActivity extends AppCompatActivity {
         } else {
             tvUserName.setText("Guest");
         }
-
+        setUpProductFetching();
         btnAccount.setOnClickListener(v -> {
             Intent account = new Intent(HomepageActivity.this, AccountActivity.class);// user là ResUserDTO
             startActivity(account);
@@ -96,7 +104,6 @@ public class HomepageActivity extends AppCompatActivity {
             Intent more = new Intent(HomepageActivity.this, ProductActivity.class);
             startActivity(more);
         });
-
         // Auto-scroll banner
         bannerScrollView.post(() -> {
             int childCount = bannerContainer.getChildCount();
@@ -156,5 +163,29 @@ public class HomepageActivity extends AppCompatActivity {
         for (int i = 0; i < brandContainer.getChildCount(); i++) {
             brandContainer.getChildAt(i).setOnClickListener(onFilterClick);
         }
+    }
+    private void setUpProductFetching() {
+        ProductFetching productFetching = APIClient.getClient().create(ProductFetching.class);
+        productFetching.getAllProducts().enqueue(new Callback<APIResponse<ResProductDTO>>() {
+            @Override
+            public void onResponse(Call<APIResponse<ResProductDTO>> call, Response<APIResponse<ResProductDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ResProductDTO resProductDTO = response.body().getData();
+                    if (resProductDTO != null && resProductDTO.getData() != null) {
+                        ResProductDTO.ProductDataManager.getInstance().setProductList(resProductDTO.getData());
+                        Log.d(TAG, "Loaded product data: " + resProductDTO.getData().size() + " items.");
+                    } else {
+                        Log.w(TAG, "Product data is empty or null.");
+                    }
+                } else {
+                    Log.e(TAG, "API response error. Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse<ResProductDTO>> call, Throwable t) {
+                Log.e(TAG, "API call failed: " + t.getMessage(), t);
+            }
+        });
     }
 }

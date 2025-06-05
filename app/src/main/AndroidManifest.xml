@@ -20,6 +20,8 @@
         <activity
             android:name=".VoucherActivity"
             android:exported="false" />
+        <activity android:name=".VoucherDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".NotiActivity"
             android:exported="false" />
