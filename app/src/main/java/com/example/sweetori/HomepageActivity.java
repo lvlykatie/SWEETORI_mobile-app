@@ -28,6 +28,7 @@ import com.example.sweetori.dto.response.ResUserDTO;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,7 +44,10 @@ public class HomepageActivity extends AppCompatActivity {
     private ImageView searchIcon;
     private ProductAdapter productAdapter;
     private ResUserDTO currentUser;
-
+    // best sellerAdd commentMore actions
+    private RecyclerView recyclerHighlyRec;
+    private ProductAdapter bestSellerAdapter;
+    private static final int HIGHLY_REC_LIMIT = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Kiểm tra token, chuyển tới SignIn nếu null
@@ -163,7 +167,49 @@ public class HomepageActivity extends AppCompatActivity {
         for (int i = 0; i < brandContainer.getChildCount(); i++) {
             brandContainer.getChildAt(i).setOnClickListener(onFilterClick);
         }
+        // Ánh xạ RecyclerView highly recommendAdd commentMore actions
+        recyclerHighlyRec = findViewById(R.id.recyclerBestSeller);
+        LinearLayoutManager lm = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerHighlyRec.setLayoutManager(lm);
+        bestSellerAdapter = new ProductAdapter(new ArrayList<>(), this);
+        recyclerHighlyRec.setAdapter(bestSellerAdapter);
+        recyclerHighlyRec.setNestedScrollingEnabled(false);
+        recyclerHighlyRec.setHasFixedSize(true);
+
+
+        loadBestSellerProducts();
     }
+
+    private void loadBestSellerProducts() {
+        APIClient.getClientWithToken(
+                        SharedPref.getAccessTokenWithUserId(this).first
+                ).create(ProductFetching.class)
+                .getAllProducts()
+                .enqueue(new Callback<APIResponse<ResProductDTO>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<ResProductDTO>> call,
+                                           Response<APIResponse<ResProductDTO>> res) {
+                        if (!res.isSuccessful() || res.body() == null) return;
+//                        List<ResProductDTO.ProductData> all = res.body().getData().getProducts();
+                        List<ResProductDTO.ProductData> all = res.body().getData().getData();
+                        // Sắp xếp theo avgRate giảm dần, rồi quantity giảm dần
+                        Collections.sort(all, (a, b) -> Double.compare(b.getAvgRate(), a.getAvgRate()));
+                        // Lấy top N
+                        List<ResProductDTO.ProductData> top = all.size() > HIGHLY_REC_LIMIT
+                                ? all.subList(0, HIGHLY_REC_LIMIT)
+                                : all;
+                        // Cập nhật adapter
+                        bestSellerAdapter.updateProductList(top);
+                    }
+
+                    @Override
+                    public void onFailure(Call<APIResponse<ResProductDTO>> call, Throwable t) {
+                        // Log hoặc hiển thị lỗi
+                    }
+                });
+    }
+
     private void setUpProductFetching() {
         ProductFetching productFetching = APIClient.getClient().create(ProductFetching.class);
         productFetching.getAllProducts().enqueue(new Callback<APIResponse<ResProductDTO>>() {
